@@ -1,0 +1,125 @@
+<div class="login-page">
+  <main class="login-shell" aria-label="Tela de login">
+    <section class="login-card" aria-labelledby="login-card-title">
+      <header class="login-header">
+        <div class="brand-mark" aria-hidden="true">
+          <lucide-icon [name]="Scale" class="h-[1.15rem] w-[1.15rem]"></lucide-icon>
+        </div>
+
+        <div class="brand-copy">
+          <p class="brand-kicker">Acesso da equipe</p>
+          <h2 id="login-card-title">Entrar no Precify</h2>
+          <p>Use suas credenciais corporativas para continuar.</p>
+        </div>
+      </header>
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form" novalidate>
+        @if (error()) {
+          <section class="login-alert login-alert--error" role="alert" aria-live="polite">
+            <div class="login-alert__icon">
+              <lucide-icon [name]="TriangleAlert" class="h-4 w-4"></lucide-icon>
+            </div>
+            <div class="login-alert__content">
+              <h2>Erro no login</h2>
+              <p>{{ error() }}</p>
+            </div>
+          </section>
+        }
+
+        <div class="field-group">
+          <label for="email">Email</label>
+          <div
+            class="field-control"
+            [class.field-control--invalid]="emailControl.invalid && emailControl.touched"
+          >
+            <lucide-icon [name]="Mail" class="field-icon h-4 w-4"></lucide-icon>
+            <input
+              id="email"
+              type="email"
+              formControlName="email"
+              placeholder="seu@email.com"
+              autocomplete="email"
+              inputmode="email"
+              autocapitalize="none"
+              spellcheck="false"
+              required
+              [attr.aria-invalid]="emailControl.invalid && emailControl.touched"
+              [attr.aria-describedby]="
+                emailControl.invalid && emailControl.touched ? 'email-error' : null
+              "
+            />
+          </div>
+          @if (emailControl.invalid && emailControl.touched) {
+            <p id="email-error" class="field-message field-message--error">
+              Por favor, informe um email valido.
+            </p>
+          }
+        </div>
+
+        <div class="field-group">
+          <div class="field-group__header">
+            <label for="password">Senha</label>
+          </div>
+          <div
+            class="field-control"
+            [class.field-control--invalid]="passwordControl.invalid && passwordControl.touched"
+          >
+            <lucide-icon [name]="Lock" class="field-icon h-4 w-4"></lucide-icon>
+            <input
+              id="password"
+              [type]="showPassword() ? 'text' : 'password'"
+              formControlName="senha"
+              placeholder="••••••••"
+              autocomplete="current-password"
+              required
+              [attr.aria-invalid]="passwordControl.invalid && passwordControl.touched"
+              [attr.aria-describedby]="
+                passwordControl.invalid && passwordControl.touched ? 'password-error' : null
+              "
+            />
+            <button
+              type="button"
+              class="password-toggle"
+              (click)="togglePassword()"
+              [attr.aria-label]="showPassword() ? 'Ocultar senha' : 'Mostrar senha'"
+            >
+              <lucide-icon [name]="showPassword() ? EyeOff : Eye" class="h-4 w-4"></lucide-icon>
+            </button>
+          </div>
+          @if (passwordControl.invalid && passwordControl.touched) {
+            <p id="password-error" class="field-message field-message--error">
+              A senha deve ter pelo menos 6 caracteres.
+            </p>
+          }
+        </div>
+
+        <button
+          type="submit"
+          class="submit-button"
+          [disabled]="isLoading()"
+          [attr.aria-busy]="isLoading()"
+        >
+          @if (isLoading()) {
+            <lucide-icon [name]="Loader2" class="h-4 w-4 is-spinning"></lucide-icon>
+            <span>Autenticando...</span>
+          } @else {
+            <span>Entrar na plataforma</span>
+            <lucide-icon [name]="ArrowRight" class="h-4 w-4"></lucide-icon>
+          }
+        </button>
+
+        <p class="login-form__footnote">
+          Precisa redefinir sua senha ou solicitar acesso? Fale com o administrador da sua
+          organizacao.
+        </p>
+      </form>
+    </section>
+  </main>
+
+  <footer class="login-footer">
+    <p>
+      © {{ currentYear }} Precify Culinary Solutions. Interface de precificacao para operacoes
+      alimentares.
+    </p>
+  </footer>
+</div>
