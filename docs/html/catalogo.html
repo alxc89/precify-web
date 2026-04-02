@@ -1,0 +1,630 @@
+<!doctype html>
+
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Precify - Catálogo de Ingredientes</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              surface: '#e7fff2',
+              secondary: '#9c4400',
+              'on-surface': '#002116',
+              'surface-container-low': '#cefee8',
+              'outline-variant': '#bec9c1',
+              'on-primary': '#ffffff',
+              'on-error-container': '#93000a',
+              'secondary-fixed-dim': '#ffb68f',
+              'primary-fixed-dim': '#8ad6b3',
+              'surface-tint': '#1a6b4f',
+              'secondary-fixed': '#ffdbca',
+              'error-container': '#ffdad6',
+              'tertiary-fixed': '#80fb9d',
+              'secondary-container': '#fc853b',
+              'on-background': '#002116',
+              'on-tertiary-container': '#73ee90',
+              'surface-container-highest': '#beedd7',
+              'primary-fixed': '#a5f2ce',
+              'on-tertiary': '#ffffff',
+              outline: '#6f7973',
+              'inverse-on-surface': '#ccfbe5',
+              'surface-dim': '#b5e4cf',
+              'inverse-primary': '#8ad6b3',
+              'surface-bright': '#e7fff2',
+              error: '#ba1a1a',
+              'on-error': '#ffffff',
+              'on-primary-fixed-variant': '#005139',
+              'surface-container': '#c9f8e2',
+              'tertiary-container': '#006b30',
+              'surface-container-high': '#c3f3dd',
+              'on-primary-container': '#99e6c2',
+              background: '#e7fff2',
+              'tertiary-fixed-dim': '#63de83',
+              'on-secondary-fixed-variant': '#773200',
+              'primary-container': '#17694d',
+              'on-tertiary-fixed': '#00210a',
+              'on-surface-variant': '#3f4943',
+              'on-primary-fixed': '#002115',
+              'surface-container-lowest': '#ffffff',
+              'on-tertiary-fixed-variant': '#005323',
+              'inverse-surface': '#073829',
+              primary: '#004f38',
+              tertiary: '#005022',
+              'surface-variant': '#beedd7',
+              'on-secondary-fixed': '#331200',
+              'on-secondary-container': '#652a00',
+              'on-secondary': '#ffffff',
+            },
+            fontFamily: {
+              headline: ['Manrope'],
+              body: ['Inter'],
+              label: ['Inter'],
+            },
+            borderRadius: { DEFAULT: '0.25rem', lg: '0.5rem', xl: '0.75rem', full: '9999px' },
+          },
+        },
+      };
+    </script>
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings:
+          'FILL' 0,
+          'wght' 400,
+          'GRAD' 0,
+          'opsz' 24;
+      }
+      .glass-effect {
+        backdrop-filter: blur(12px);
+        background: rgba(231, 255, 242, 0.8);
+      }
+      body {
+        background-color: #e7fff2;
+        color: #002116;
+        font-family: 'Inter', sans-serif;
+      }
+    </style>
+  </head>
+  <body class="min-h-screen">
+    <!-- SideNavBar -->
+    <aside
+      class="h-screen w-64 fixed left-0 top-0 z-50 bg-[#f0fff7] flex flex-col p-4 space-y-2 border-r border-emerald-100/10 font-['Inter'] font-medium text-sm"
+    >
+      <div class="flex items-center gap-3 mb-6 px-2">
+        <div
+          class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white shadow-lg shadow-emerald-900/20"
+        >
+          <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1"
+            >restaurant</span
+          >
+        </div>
+        <div>
+          <h1 class="text-2xl font-black text-[#004f38] leading-tight">Precify</h1>
+          <p class="text-[10px] uppercase tracking-widest text-emerald-800/50 font-bold">
+            Digital Sommelier
+          </p>
+        </div>
+      </div>
+      <nav class="flex-1 space-y-1">
+        <a
+          class="flex items-center gap-3 px-4 py-3 text-emerald-800/70 hover:bg-emerald-100 transition-all rounded-xl active:translate-x-1 duration-200"
+          href="#"
+        >
+          <span class="material-symbols-outlined">dashboard</span>
+          <span>Dashboard</span>
+        </a>
+        <a
+          class="flex items-center gap-3 px-4 py-3 bg-[#004f38] text-white rounded-xl shadow-lg shadow-emerald-900/20 active:translate-x-1 duration-200"
+          href="#"
+        >
+          <span class="material-symbols-outlined">restaurant</span>
+          <span>Ingredientes</span>
+        </a>
+        <a
+          class="flex items-center gap-3 px-4 py-3 text-emerald-800/70 hover:bg-emerald-100 transition-all rounded-xl active:translate-x-1 duration-200"
+          href="#"
+        >
+          <span class="material-symbols-outlined">calculate</span>
+          <span>Custo</span>
+        </a>
+        <a
+          class="flex items-center gap-3 px-4 py-3 text-emerald-800/70 hover:bg-emerald-100 transition-all rounded-xl active:translate-x-1 duration-200"
+          href="#"
+        >
+          <span class="material-symbols-outlined">receipt_long</span>
+          <span>Vendas</span>
+        </a>
+        <a
+          class="flex items-center gap-3 px-4 py-3 text-emerald-800/70 hover:bg-emerald-100 transition-all rounded-xl active:translate-x-1 duration-200"
+          href="#"
+        >
+          <span class="material-symbols-outlined">settings</span>
+          <span>Configurações</span>
+        </a>
+      </nav>
+      <div class="pt-4 border-t border-emerald-100/20">
+        <a
+          class="flex items-center gap-3 px-4 py-3 text-emerald-800/70 hover:bg-emerald-100 transition-all rounded-xl"
+          href="#"
+        >
+          <span class="material-symbols-outlined">contact_support</span>
+          <span>Suporte</span>
+        </a>
+      </div>
+    </aside>
+    <!-- TopNavBar -->
+    <header
+      class="fixed top-0 right-0 left-64 flex justify-between items-center px-8 py-3 h-16 bg-[#e7fff2] z-40 shadow-[0px_4px_20px_-4px_rgba(0,79,56,0.06)] font-['Manrope'] font-medium text-sm"
+    >
+      <div class="flex items-center gap-4 flex-1">
+        <div class="relative w-full max-w-md">
+          <span
+            class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-emerald-800/40"
+            >search</span
+          >
+          <input
+            class="w-full bg-surface-container-high border-none rounded-xl py-2 pl-10 pr-4 text-on-surface placeholder:text-emerald-800/30 focus:ring-2 focus:ring-primary transition-all"
+            placeholder="Buscar insumos ou categorias..."
+            type="text"
+          />
+        </div>
+      </div>
+      <div class="flex items-center gap-6">
+        <div
+          class="flex items-center gap-2 px-3 py-1.5 bg-primary-container/10 rounded-full border border-primary/10"
+        >
+          <span class="material-symbols-outlined text-primary text-lg">store</span>
+          <span class="text-primary font-bold">Unidade Matriz</span>
+        </div>
+        <div class="flex items-center gap-4">
+          <button
+            class="text-emerald-800/60 hover:bg-emerald-100/50 p-2 rounded-full transition-colors relative"
+          >
+            <span class="material-symbols-outlined">notifications</span>
+            <span
+              class="absolute top-2 right-2 w-2 h-2 bg-secondary rounded-full border-2 border-surface"
+            ></span>
+          </button>
+          <button
+            class="text-emerald-800/60 hover:bg-emerald-100/50 p-2 rounded-full transition-colors"
+          >
+            <span class="material-symbols-outlined">help</span>
+          </button>
+          <div class="h-8 w-[1px] bg-emerald-100/30"></div>
+          <div class="flex items-center gap-3">
+            <div class="text-right">
+              <p class="text-xs font-bold text-on-surface leading-none">Chef Gastão</p>
+              <p class="text-[10px] text-emerald-800/50">Administrador</p>
+            </div>
+            <img
+              alt="Avatar do Chef"
+              class="w-10 h-10 rounded-full border-2 border-primary/20 object-cover"
+              data-alt="close-up portrait of a professional chef in white uniform with a confident expression in a bright kitchen"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCaXYw2dIPlEPygM5ZV4mixXyd-KxJd01tNhtiC0mJoCIhhoNpMV6XKaHYH0E53vB7-J_yMRrAxnH0pVeL-VJuMRvAq7CaF2VaihTWXKwMRGJDle72Jj53R9n3wT_VyycD5YUQV6jl66urkUZzjciGgmbn-IVF9BmCtBmBmlqt78edQMKaSk3muPM5mWRGM3hVelbSn27TZbRmX9G54Znls6QFyxcYYRHe2iVWGYgYiPNkLE0D9MnY2QBvJQ9l4NwM8M9IwiwG-t3w"
+            />
+          </div>
+        </div>
+      </div>
+    </header>
+    <!-- Main Content Canvas -->
+    <main class="ml-64 pt-20 p-8 min-h-screen">
+      <!-- Hero / Header Section -->
+      <div class="flex justify-between items-end mb-10">
+        <div>
+          <nav
+            class="flex gap-2 text-[11px] font-bold text-emerald-800/40 uppercase tracking-tighter mb-2"
+          >
+            <span>Início</span>
+            <span>/</span>
+            <span class="text-primary">Catálogo de Ingredientes</span>
+          </nav>
+          <h2 class="text-4xl font-extrabold font-headline text-on-surface tracking-tight">
+            Gestão de Insumos
+          </h2>
+          <p class="text-on-surface-variant max-w-lg mt-1">
+            Controle o custo unitário e acompanhe a variação de preços dos seus ingredientes em
+            tempo real.
+          </p>
+        </div>
+        <button
+          class="bg-primary text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 shadow-xl shadow-emerald-900/20 hover:scale-[1.02] transition-transform active:scale-95"
+        >
+          <span class="material-symbols-outlined">add_circle</span>
+          Novo Ingrediente
+        </button>
+      </div>
+      <!-- Filters & Stats Bento Grid -->
+      <div class="grid grid-cols-12 gap-6 mb-8">
+        <!-- Quick Filters Card -->
+        <div
+          class="col-span-8 bg-surface-container-lowest rounded-xl p-6 shadow-sm flex flex-wrap gap-3 items-center"
+        >
+          <span class="text-xs font-bold text-emerald-800/40 uppercase mr-2">Filtrar por:</span>
+          <button class="px-4 py-2 bg-primary text-white rounded-lg text-sm font-semibold">
+            Todos
+          </button>
+          <button
+            class="px-4 py-2 bg-surface-container text-on-surface-variant hover:bg-emerald-100 rounded-lg text-sm font-semibold transition-colors"
+          >
+            Proteínas
+          </button>
+          <button
+            class="px-4 py-2 bg-surface-container text-on-surface-variant hover:bg-emerald-100 rounded-lg text-sm font-semibold transition-colors"
+          >
+            Laticínios
+          </button>
+          <button
+            class="px-4 py-2 bg-surface-container text-on-surface-variant hover:bg-emerald-100 rounded-lg text-sm font-semibold transition-colors"
+          >
+            Hortifruti
+          </button>
+          <button
+            class="px-4 py-2 bg-surface-container text-on-surface-variant hover:bg-emerald-100 rounded-lg text-sm font-semibold transition-colors"
+          >
+            Mercearia
+          </button>
+          <div class="ml-auto flex items-center gap-2">
+            <span class="text-sm text-on-surface-variant">Status:</span>
+            <select
+              class="bg-surface border-none rounded-lg text-sm font-semibold text-primary focus:ring-1 focus:ring-primary py-1 pr-8"
+            >
+              <option>Ativos</option>
+              <option>Inativos</option>
+            </select>
+          </div>
+        </div>
+        <!-- Impact Stats -->
+        <div
+          class="col-span-4 bg-primary-container text-on-primary-container rounded-xl p-6 shadow-sm relative overflow-hidden"
+        >
+          <div class="relative z-10">
+            <p class="text-xs font-bold uppercase opacity-70 mb-1">Custo Médio do Inventário</p>
+            <p class="text-3xl font-black font-headline">R$ 14.280,50</p>
+            <div
+              class="mt-4 flex items-center gap-2 text-xs font-bold bg-white/10 w-fit px-2 py-1 rounded"
+            >
+              <span class="material-symbols-outlined text-xs">trending_up</span>
+              <span>+4.2% este mês</span>
+            </div>
+          </div>
+          <span class="material-symbols-outlined absolute -bottom-4 -right-4 text-9xl opacity-10"
+            >payments</span
+          >
+        </div>
+      </div>
+      <!-- Unified Ingredients Table -->
+      <div class="bg-surface-container-lowest rounded-2xl shadow-sm overflow-hidden">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr
+              class="bg-surface-container/50 border-b border-outline-variant/10 text-emerald-900/40 text-[11px] font-bold uppercase tracking-wider"
+            >
+              <th class="px-8 py-5">Insumo</th>
+              <th class="px-6 py-5">Categoria</th>
+              <th class="px-6 py-5">Unidade</th>
+              <th class="px-6 py-5">Preço Atual</th>
+              <th class="px-6 py-5">Histórico (30d)</th>
+              <th class="px-6 py-5">Status</th>
+              <th class="px-8 py-5 text-right">Ações</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-outline-variant/10">
+            <!-- Row 1: Organisation Level -->
+            <tr class="hover:bg-emerald-50/50 transition-colors group">
+              <td class="px-8 py-4">
+                <div class="flex items-center gap-4">
+                  <img
+                    alt="Salmão Chileno"
+                    class="w-12 h-12 rounded-xl object-cover shadow-sm group-hover:scale-105 transition-transform"
+                    data-alt="close-up of fresh organic salmon fillet with vibrant orange color and marble texture"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnvtUdFf2XTwJBgl55OyHD5kRWdIYC7kxuZYMRTMKUTAsq1xZds5cipOlhyL9W0lG9c_bn14ZrmDDYFRTPUmfL6Sk1XRMxG7eQn9pbqYKZ1vzgWfbOCeSwqXFLuxzQF7OvwLskUKELMauJBwJejjkeCFoVH75m5OMYEVXFr4hZYYfAndVTrwnOY0-QGcHGmWy2SopqJLSSto9xoxxVALYmxHi1WuV78vrGMrGSqB2ZE2QTCGExdJg4XtiK73w_gmnhzs-Evo3lDOE"
+                  />
+                  <div>
+                    <p class="text-sm font-bold text-on-surface">Salmão Chileno Fresh</p>
+                    <p class="text-[10px] text-emerald-800/40 font-mono">ID: 002491</p>
+                  </div>
+                </div>
+              </td>
+              <td class="px-6 py-4">
+                <span class="text-xs font-semibold px-2 py-1 bg-blue-100 text-blue-700 rounded-md"
+                  >Proteínas</span
+                >
+              </td>
+              <td class="px-6 py-4 text-sm text-on-surface-variant font-medium">kg</td>
+              <td class="px-6 py-4">
+                <div class="flex flex-col">
+                  <span class="text-sm font-extrabold text-primary">R$ 89,90</span>
+                  <span
+                    class="text-[9px] font-bold text-white bg-primary px-1.5 py-0.5 rounded-sm w-fit mt-1"
+                    >ORGANIZAÇÃO</span
+                  >
+                </div>
+              </td>
+              <td class="px-6 py-4">
+                <!-- Mini Sparkline Representation -->
+                <div class="flex items-end gap-0.5 h-6">
+                  <div class="w-1 bg-primary/20 h-3"></div>
+                  <div class="w-1 bg-primary/20 h-4"></div>
+                  <div class="w-1 bg-primary/20 h-5"></div>
+                  <div class="w-1 bg-primary h-6"></div>
+                  <div class="w-1 bg-primary h-4"></div>
+                  <div class="w-1 bg-primary h-5"></div>
+                </div>
+              </td>
+              <td class="px-6 py-4">
+                <span
+                  class="flex items-center gap-1.5 text-[10px] font-black uppercase text-emerald-600"
+                >
+                  <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
+                  Ativo
+                </span>
+              </td>
+              <td class="px-8 py-4 text-right">
+                <button class="text-emerald-800/40 hover:text-primary transition-colors">
+                  <span class="material-symbols-outlined">more_vert</span>
+                </button>
+              </td>
+            </tr>
+            <!-- Row 2: Store Level -->
+            <tr class="hover:bg-emerald-50/50 transition-colors group">
+              <td class="px-8 py-4">
+                <div class="flex items-center gap-4">
+                  <img
+                    alt="Tomate Cereja"
+                    class="w-12 h-12 rounded-xl object-cover shadow-sm group-hover:scale-105 transition-transform"
+                    data-alt="vibrant bunch of fresh red tomatoes on a rustic wooden table with natural lighting"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuCoZkuI9yjD8R7TErSXb4DMfyKsFcIrztXa-aAuEqbAkeeJXnlqzbFaiZgP4RDKIXumXrlgxrd947XIVhJitpdXh9bPIN-RF8Gstp0riPobTAMkfTXFEtjtT1w7T6hy6oQQHaUeVECovB5QpxQRKtB5Iu5vS5veYqSC-_-DwG6FOGnFrhIIx53nHNLQB6IdN0NXi8s0Lw1voJEEkCuMpla0diop-miBRYOi6wZHPcIWy55inkhxk6N9UAVNdu4X9gtUOnvWmnMO9lc"
+                  />
+                  <div>
+                    <p class="text-sm font-bold text-on-surface">Tomate Cereja Sweet</p>
+                    <p class="text-[10px] text-emerald-800/40 font-mono">ID: 001122</p>
+                  </div>
+                </div>
+              </td>
+              <td class="px-6 py-4">
+                <span class="text-xs font-semibold px-2 py-1 bg-green-100 text-green-700 rounded-md"
+                  >Hortifruti</span
+                >
+              </td>
+              <td class="px-6 py-4 text-sm text-on-surface-variant font-medium">caixa 5kg</td>
+              <td class="px-6 py-4">
+                <div class="flex flex-col">
+                  <span class="text-sm font-extrabold text-secondary">R$ 45,00</span>
+                  <span
+                    class="text-[9px] font-bold text-white bg-secondary px-1.5 py-0.5 rounded-sm w-fit mt-1"
+                    >ESTA LOJA</span
+                  >
+                </div>
+              </td>
+              <td class="px-6 py-4">
+                <div class="flex items-end gap-0.5 h-6">
+                  <div class="w-1 bg-secondary h-6"></div>
+                  <div class="w-1 bg-secondary h-5"></div>
+                  <div class="w-1 bg-secondary/30 h-3"></div>
+                  <div class="w-1 bg-secondary/30 h-2"></div>
+                  <div class="w-1 bg-secondary h-4"></div>
+                  <div class="w-1 bg-secondary h-4"></div>
+                </div>
+              </td>
+              <td class="px-6 py-4">
+                <span
+                  class="flex items-center gap-1.5 text-[10px] font-black uppercase text-emerald-600"
+                >
+                  <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
+                  Ativo
+                </span>
+              </td>
+              <td class="px-8 py-4 text-right">
+                <button class="text-emerald-800/40 hover:text-primary transition-colors">
+                  <span class="material-symbols-outlined">more_vert</span>
+                </button>
+              </td>
+            </tr>
+            <!-- Row 3 -->
+            <tr class="hover:bg-emerald-50/50 transition-colors group">
+              <td class="px-8 py-4">
+                <div class="flex items-center gap-4">
+                  <img
+                    alt="Queijo Brie"
+                    class="w-12 h-12 rounded-xl object-cover shadow-sm group-hover:scale-105 transition-transform"
+                    data-alt="block of artisanal white cheese on a dark stone board with some crumbs nearby"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8kXzw8I_9J70Y3kMI-Xw9hiA06Ypu1pg0rUSPOnLxoRATGBL89-c-rhQwI9jAMbIvCmKOx-lB95z8lheK4SQlkhRb6qa6TvNJtRfA3Kl6SZQ7wS34AaresPgxkg6-6DjheT2YLK2CL_MWQ968Z3aGB3rywkxwEGGgDD38TSFurJOqwqZUB_guZXpVZSjQcyZP2hnenCwr7JEocBj0qMp7-gTWY0O0P1rfvYrY8Ac_2Kxw3kcA--z4TU4jeCaLvB4mqVs_s0tIU0A"
+                  />
+                  <div>
+                    <p class="text-sm font-bold text-on-surface">Queijo Brie President</p>
+                    <p class="text-[10px] text-emerald-800/40 font-mono">ID: 005582</p>
+                  </div>
+                </div>
+              </td>
+              <td class="px-6 py-4">
+                <span
+                  class="text-xs font-semibold px-2 py-1 bg-yellow-100 text-yellow-700 rounded-md"
+                  >Laticínios</span
+                >
+              </td>
+              <td class="px-6 py-4 text-sm text-on-surface-variant font-medium">und 125g</td>
+              <td class="px-6 py-4">
+                <div class="flex flex-col">
+                  <span class="text-sm font-extrabold text-primary">R$ 22,15</span>
+                  <span
+                    class="text-[9px] font-bold text-white bg-primary px-1.5 py-0.5 rounded-sm w-fit mt-1"
+                    >ORGANIZAÇÃO</span
+                  >
+                </div>
+              </td>
+              <td class="px-6 py-4">
+                <div class="flex items-end gap-0.5 h-6">
+                  <div class="w-1 bg-primary/20 h-4"></div>
+                  <div class="w-1 bg-primary/20 h-4"></div>
+                  <div class="w-1 bg-primary/20 h-4"></div>
+                  <div class="w-1 bg-primary/20 h-4"></div>
+                  <div class="w-1 bg-primary/20 h-4"></div>
+                  <div class="w-1 bg-primary/20 h-4"></div>
+                </div>
+              </td>
+              <td class="px-6 py-4">
+                <span
+                  class="flex items-center gap-1.5 text-[10px] font-black uppercase text-emerald-600"
+                >
+                  <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
+                  Ativo
+                </span>
+              </td>
+              <td class="px-8 py-4 text-right">
+                <button class="text-emerald-800/40 hover:text-primary transition-colors">
+                  <span class="material-symbols-outlined">more_vert</span>
+                </button>
+              </td>
+            </tr>
+            <!-- Row 4: Inactive -->
+            <tr class="hover:bg-emerald-50/50 transition-colors group opacity-60 grayscale">
+              <td class="px-8 py-4">
+                <div class="flex items-center gap-4">
+                  <img
+                    alt="Cenoura Baby"
+                    class="w-12 h-12 rounded-xl object-cover shadow-sm group-hover:scale-105 transition-transform"
+                    data-alt="stack of fresh orange carrots with green tops on a white background"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuAI4Sm2N-e4sKs5HbDoDFoVA1VDEtRgNMwekvTB9Uwx57M2sP4eC9-xyAq7pjY-NPKXALTetLicAMAuBzBFEhW-T-Cn73y24Tn1cMp-OzHU0XQjJP4uqZC9kLQdjeN_vhIScH8LbMjYiSwK1kINe1Jx2rEG9xOpLzwnC9d3HpBN7N85kyXA7t_R-qt8HCTTWjKv-X6IuUMrMX4O6GTUpcfV0Rl2qlGB8VPNTmfiQJMeFYlqw1Xbr_lC540yF-vz5e5zZwNlz4jlIlk"
+                  />
+                  <div>
+                    <p class="text-sm font-bold text-on-surface">Cenoura Baby Orgânica</p>
+                    <p class="text-[10px] text-emerald-800/40 font-mono">ID: 001923</p>
+                  </div>
+                </div>
+              </td>
+              <td class="px-6 py-4">
+                <span class="text-xs font-semibold px-2 py-1 bg-green-100 text-green-700 rounded-md"
+                  >Hortifruti</span
+                >
+              </td>
+              <td class="px-6 py-4 text-sm text-on-surface-variant font-medium">kg</td>
+              <td class="px-6 py-4">
+                <div class="flex flex-col">
+                  <span class="text-sm font-extrabold text-primary">R$ 12,50</span>
+                  <span
+                    class="text-[9px] font-bold text-white bg-primary px-1.5 py-0.5 rounded-sm w-fit mt-1"
+                    >ORGANIZAÇÃO</span
+                  >
+                </div>
+              </td>
+              <td class="px-6 py-4">
+                <div class="flex items-end gap-0.5 h-6">
+                  <div class="w-1 bg-slate-300 h-2"></div>
+                  <div class="w-1 bg-slate-300 h-2"></div>
+                  <div class="w-1 bg-slate-300 h-2"></div>
+                  <div class="w-1 bg-slate-300 h-2"></div>
+                  <div class="w-1 bg-slate-300 h-2"></div>
+                  <div class="w-1 bg-slate-300 h-2"></div>
+                </div>
+              </td>
+              <td class="px-6 py-4">
+                <span
+                  class="flex items-center gap-1.5 text-[10px] font-black uppercase text-slate-500"
+                >
+                  <span class="w-1.5 h-1.5 bg-slate-400 rounded-full"></span>
+                  Inativo
+                </span>
+              </td>
+              <td class="px-8 py-4 text-right">
+                <button class="text-emerald-800/40 hover:text-primary transition-colors">
+                  <span class="material-symbols-outlined">more_vert</span>
+                </button>
+              </td>
+            </tr>
+            <!-- Row 5: Filé de Frango -->
+            <tr class="hover:bg-emerald-50/50 transition-colors group">
+              <td class="px-8 py-4">
+                <div class="flex items-center gap-4">
+                  <img
+                    alt="Filé de Frango"
+                    class="w-12 h-12 rounded-xl object-cover shadow-sm group-hover:scale-105 transition-transform"
+                    data-alt="raw fresh chicken breast fillets on a wooden board"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHXb_7W-0wM6jQn1m-9_o9lVbI-R2L8z7f6_0v8l2n8j-k-l-m-n-o-p-q-r-s-t-u-v-w-x-y-z"
+                  />
+                  <div>
+                    <p class="text-sm font-bold text-on-surface">Filé de Frango</p>
+                    <p class="text-[10px] text-emerald-800/40 font-mono">ID: 008742</p>
+                  </div>
+                </div>
+              </td>
+              <td class="px-6 py-4">
+                <span class="text-xs font-semibold px-2 py-1 bg-blue-100 text-blue-700 rounded-md"
+                  >Proteínas</span
+                >
+              </td>
+              <td class="px-6 py-4 text-sm text-on-surface-variant font-medium">kg</td>
+              <td class="px-6 py-4">
+                <div class="flex flex-col">
+                  <span class="text-sm font-extrabold text-primary">R$ 24,90</span>
+                  <span
+                    class="text-[9px] font-bold text-white bg-primary px-1.5 py-0.5 rounded-sm w-fit mt-1"
+                    >ORGANIZAÇÃO</span
+                  >
+                </div>
+              </td>
+              <td class="px-6 py-4">
+                <div class="flex items-end gap-0.5 h-6">
+                  <div class="w-1 bg-primary h-3"></div>
+                  <div class="w-1 bg-primary h-4"></div>
+                  <div class="w-1 bg-primary/40 h-5"></div>
+                  <div class="w-1 bg-primary h-6"></div>
+                  <div class="w-1 bg-primary/60 h-4"></div>
+                  <div class="w-1 bg-primary h-5"></div>
+                </div>
+              </td>
+              <td class="px-6 py-4">
+                <span
+                  class="flex items-center gap-1.5 text-[10px] font-black uppercase text-emerald-600"
+                >
+                  <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
+                  Ativo
+                </span>
+              </td>
+              <td class="px-8 py-4 text-right">
+                <button class="text-emerald-800/40 hover:text-primary transition-colors">
+                  <span class="material-symbols-outlined">more_vert</span>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- Table Footer / Pagination -->
+        <div
+          class="bg-surface-container/30 px-8 py-4 flex justify-between items-center text-xs font-bold text-emerald-800/50 uppercase tracking-wider"
+        >
+          <span>Mostrando 5 de 128 ingredientes</span>
+          <div class="flex items-center gap-4">
+            <button class="flex items-center gap-1 hover:text-primary transition-colors">
+              <span class="material-symbols-outlined text-sm">chevron_left</span> Anterior
+            </button>
+            <div class="flex gap-2">
+              <span class="text-primary bg-primary/10 px-2 py-0.5 rounded">1</span>
+              <span class="hover:text-primary cursor-pointer px-2 py-0.5 rounded transition-colors"
+                >2</span
+              >
+              <span class="hover:text-primary cursor-pointer px-2 py-0.5 rounded transition-colors"
+                >3</span
+              >
+            </div>
+            <button class="flex items-center gap-1 hover:text-primary transition-colors">
+              Próximo <span class="material-symbols-outlined text-sm">chevron_right</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- Sidebar Right Floating Panel Placeholder (Analysis) -->
+    </main>
+  </body>
+</html>

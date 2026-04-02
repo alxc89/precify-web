@@ -1,0 +1,123 @@
+<section class="overflow-hidden rounded-[1rem] bg-white shadow-sm">
+  <div class="overflow-x-auto">
+    <table class="min-w-full border-collapse text-left">
+      <thead>
+        <tr
+          class="border-b border-[#bec9c1]/10 bg-[#c9f8e2]/50 text-[11px] font-bold uppercase tracking-[0.2em] text-emerald-900/40"
+        >
+          <th class="px-8 py-5">Insumo</th>
+          <th class="px-6 py-5">Categoria</th>
+          <th class="px-6 py-5">Unidade</th>
+          <th class="px-6 py-5">Preco Atual</th>
+          <th class="px-6 py-5">Historico (30d)</th>
+          <th class="px-6 py-5">Status</th>
+          <th class="px-8 py-5 text-right">Acoes</th>
+        </tr>
+      </thead>
+
+      <tbody class="divide-y divide-[#bec9c1]/10">
+        @if (loading()) {
+          <tr>
+            <td class="px-8 py-14 text-center text-sm text-emerald-900/50" colspan="7">
+              Carregando catalogo de ingredientes...
+            </td>
+          </tr>
+        } @else if (error()) {
+          <tr>
+            <td class="px-8 py-14 text-center text-sm font-semibold text-red-700" colspan="7">
+              {{ error() }}
+            </td>
+          </tr>
+        } @else if (rows().length === 0) {
+          <tr>
+            <td class="px-8 py-14 text-center text-sm text-emerald-900/50" colspan="7">
+              {{ emptyMessage() }}
+            </td>
+          </tr>
+        } @else {
+          @for (row of rows(); track row.id) {
+            <tr
+              [class.grayscale]="!row.isActive"
+              [class.opacity-60]="!row.isActive"
+              class="group transition-colors hover:bg-emerald-50/50"
+            >
+              <td class="px-8 py-4">
+                <div class="flex items-center gap-4">
+                  @if (row.thumbnailUrl) {
+                    <img
+                      [alt]="row.name"
+                      [src]="row.thumbnailUrl"
+                      class="h-12 w-12 rounded-xl object-cover shadow-sm transition-transform group-hover:scale-105"
+                    />
+                  } @else {
+                    <div
+                      [attr.aria-label]="'Sem imagem para ' + row.name"
+                      class="flex h-12 w-12 items-center justify-center rounded-xl bg-[#c9f8e2] text-sm font-black uppercase text-[#004f38] shadow-sm"
+                      role="img"
+                    >
+                      {{ initials(row.name) }}
+                    </div>
+                  }
+
+                  <div>
+                    <p class="text-sm font-bold text-[#002116]">{{ row.name }}</p>
+                    <p class="font-mono text-[10px] text-emerald-800/40">ID: {{ row.code }}</p>
+                  </div>
+                </div>
+              </td>
+
+              <td class="px-6 py-4">
+                <app-category-badge [label]="row.categoryLabel" />
+              </td>
+
+              <td class="px-6 py-4 text-sm font-medium text-[#3f4943]">{{ row.baseUnitLabel }}</td>
+
+              <td class="px-6 py-4">
+                <div class="flex flex-col">
+                  <span
+                    [class.font-extrabold]="row.hasPrice"
+                    [class.text-[#004f38]]="row.priceScope === 'organization'"
+                    [class.text-[#9c4400]]="row.priceScope === 'store'"
+                    class="text-sm text-emerald-900/45"
+                  >
+                    {{ row.priceLabel }}
+                  </span>
+                  <app-price-scope-badge [scope]="row.priceScope" />
+                </div>
+              </td>
+
+              <td class="px-6 py-4">
+                <app-sparkline
+                  [emptyLabel]="row.history.label"
+                  [points]="row.history.points"
+                />
+              </td>
+
+              <td class="px-6 py-4">
+                <app-status-badge [active]="row.isActive" />
+              </td>
+
+              <td class="px-8 py-4 text-right">
+                <button
+                  [disabled]="!row.actionsEnabled"
+                  [attr.aria-label]="'Abrir acoes para ' + row.name"
+                  class="text-emerald-800/40 transition-colors hover:text-[#004f38] focus:outline-none focus:ring-2 focus:ring-[#004f38] disabled:cursor-not-allowed disabled:opacity-40"
+                  type="button"
+                >
+                  <lucide-icon [img]="EllipsisVertical" class="ml-auto h-4 w-4" />
+                </button>
+              </td>
+            </tr>
+          }
+        }
+      </tbody>
+    </table>
+  </div>
+
+  @if (!loading() && !error() && pagination().totalItems > 0) {
+    <app-ingredients-pagination
+      [pagination]="pagination()"
+      (pageChange)="pageChange.emit($event)"
+    />
+  }
+</section>

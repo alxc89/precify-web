@@ -1,0 +1,27 @@
+<div class="min-h-full">
+  <app-ingredients-page-header
+    title="Gestao de Insumos"
+    (createIngredient)="onCreateIngredient()"
+  />
+
+  <div class="mb-8 grid grid-cols-12 gap-6">
+    <app-ingredients-filters
+      [categories]="vm().categories"
+      [selectedCategoryId]="vm().selectedCategoryId"
+      [statusFilter]="vm().statusFilter"
+      (categoryChange)="facade.setCategory($event)"
+      (statusChange)="facade.setStatusFilter($event)"
+    />
+
+    <app-inventory-stats-card [vm]="vm().inventoryStats" />
+  </div>
+
+  <app-ingredients-table
+    [emptyMessage]="vm().emptyMessage"
+    [error]="vm().error"
+    [loading]="vm().loading"
+    [pagination]="vm().pagination"
+    [rows]="vm().rows"
+    (pageChange)="facade.setPage($event)"
+  />
+</div>

@@ -1,0 +1,13 @@
+:host {
+  display: block;
+}
+
+.ingredients-filters__status-select {
+  appearance: none;
+  min-width: 10.5rem;
+  padding: 0.6rem 2.7rem 0.6rem 0.95rem;
+}
+
+.ingredients-filters__status-select option {
+  padding: 0.55rem 0.9rem;
+}

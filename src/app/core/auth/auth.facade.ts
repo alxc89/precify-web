@@ -24,7 +24,7 @@ export class AuthFacade {
           this.router.navigate(['/alterar-senha']);
           return res;
         }
-        this.router.navigate(['/app/dashboard']);
+        this.router.navigate(['/app/ingredientes']);
         return res;
       })
     );

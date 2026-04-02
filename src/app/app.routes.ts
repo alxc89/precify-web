@@ -26,13 +26,20 @@ export const routes: Routes = [
   {
     path: 'app',
     canActivate: [authGuard],
+    loadComponent: () =>
+      import('./core/layout/app-shell/app-shell.component').then((m) => m.AppShellComponent),
     children: [
+      {
+        path: 'ingredientes',
+        loadChildren: () =>
+          import('./features/ingredients/ingredients.routes').then((m) => m.INGREDIENTS_ROUTES),
+      },
       {
         path: 'dashboard',
         loadComponent: () =>
           import('./features/dashboard/dashboard.component').then((m) => m.DashboardComponent),
       },
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: '', redirectTo: 'ingredientes', pathMatch: 'full' },
     ],
   },
   { path: '**', redirectTo: '', pathMatch: 'full' },

@@ -1,0 +1,33 @@
+<header
+  class="fixed left-0 right-0 top-0 z-40 flex h-16 items-center justify-between bg-[#e7fff2] px-4 py-3 font-['Manrope'] text-sm font-medium shadow-[0px_4px_20px_-4px_rgba(0,79,56,0.06)] lg:left-64 lg:px-8"
+>
+  <div class="flex min-w-0 flex-1 items-center gap-4">
+    @if (searchConfig().visible) {
+      <app-search-input
+        class="max-w-2xl flex-1"
+        [ariaLabel]="searchConfig().ariaLabel"
+        [placeholder]="searchConfig().placeholder"
+        [value]="searchConfig().query"
+        (valueChange)="updateQuery($event)"
+      />
+    } @else {
+      <div class="w-full max-w-2xl"></div>
+    }
+  </div>
+
+  <div class="ml-4 flex shrink-0 items-center gap-3 lg:gap-6">
+    <div
+      class="hidden items-center gap-2 rounded-full border border-[#004f38]/10 bg-[#17694d]/10 px-3 py-1.5 lg:flex"
+    >
+      <lucide-icon [img]="Store" class="h-4 w-4 text-[#004f38]" />
+      <span class="font-bold text-[#004f38]">Catalogo global</span>
+    </div>
+
+    <div class="flex items-center gap-2 lg:gap-4">
+      <app-icon-button [icon]="Bell" label="Notificacoes" [showIndicator]="true" />
+      <app-icon-button [icon]="CircleHelp" label="Ajuda" />
+      <div class="hidden h-8 w-px bg-emerald-100/30 lg:block"></div>
+      <app-user-profile-summary [name]="userName()" [subtitle]="userSubtitle()" />
+    </div>
+  </div>
+</header>
