@@ -6,7 +6,7 @@ export const routes: Routes = [
   {
     path: '',
     loadComponent: () =>
-      import('./features/home/landing.component').then((m) => m.LandingComponent),
+      import('./features/landing-page/landing.component').then((m) => m.LandingComponent),
     canActivate: [guestGuard],
   },
   {
