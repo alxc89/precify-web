@@ -22,6 +22,8 @@
     [loading]="vm().loading"
     [pagination]="vm().pagination"
     [rows]="vm().rows"
+    (deleteIngredient)="onDeleteIngredient($event)"
+    (editIngredient)="onEditIngredient($event)"
     (pageChange)="facade.setPage($event)"
   />
 </div>

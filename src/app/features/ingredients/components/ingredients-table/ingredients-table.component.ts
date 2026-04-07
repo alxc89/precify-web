@@ -1,5 +1,6 @@
+import { CdkMenu, CdkMenuItem, CdkMenuTrigger } from '@angular/cdk/menu';
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
-import { LucideAngularModule, EllipsisVertical } from 'lucide-angular';
+import { EllipsisVertical, LucideAngularModule, Pencil, Trash2 } from 'lucide-angular';
 import { CategoryBadgeComponent } from '../../../../shared/ui/category-badge/category-badge.component';
 import { PriceScopeBadgeComponent } from '../../../../shared/ui/price-scope-badge/price-scope-badge.component';
 import { SparklineComponent } from '../../../../shared/ui/sparkline/sparkline.component';
@@ -12,6 +13,9 @@ import { IngredientsPaginationComponent } from '../ingredients-pagination/ingred
   selector: 'app-ingredients-table',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
+    CdkMenu,
+    CdkMenuItem,
+    CdkMenuTrigger,
     CategoryBadgeComponent,
     IngredientsPaginationComponent,
     LucideAngularModule,
@@ -29,9 +33,13 @@ export class IngredientsTableComponent {
   readonly pagination = input.required<IngredientsCatalogPaginationVm>();
   readonly rows = input.required<readonly IngredientListItem[]>();
 
+  readonly deleteIngredient = output<IngredientListItem>();
+  readonly editIngredient = output<IngredientListItem>();
   readonly pageChange = output<number>();
 
   protected readonly EllipsisVertical = EllipsisVertical;
+  protected readonly Pencil = Pencil;
+  protected readonly Trash2 = Trash2;
 
   protected initials(name: string) {
     return name

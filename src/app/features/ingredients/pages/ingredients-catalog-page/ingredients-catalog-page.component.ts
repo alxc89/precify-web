@@ -4,6 +4,7 @@ import { IngredientsCatalogFacade } from '../../facades/ingredients-catalog.faca
 import { IngredientsFiltersComponent } from '../../components/ingredients-filters/ingredients-filters.component';
 import { IngredientsPageHeaderComponent } from '../../components/ingredients-page-header/ingredients-page-header.component';
 import { IngredientsTableComponent } from '../../components/ingredients-table/ingredients-table.component';
+import { IngredientListItem } from '../../models/ingredient.model';
 import { InventoryStatsCardComponent } from '../../components/inventory-stats-card/inventory-stats-card.component';
 
 @Component({
@@ -43,4 +44,8 @@ export class IngredientsCatalogPageComponent {
   }
 
   protected onCreateIngredient() {}
+
+  protected onDeleteIngredient(_ingredient: IngredientListItem) {}
+
+  protected onEditIngredient(_ingredient: IngredientListItem) {}
 }

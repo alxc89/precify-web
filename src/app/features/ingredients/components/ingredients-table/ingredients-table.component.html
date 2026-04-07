@@ -98,14 +98,45 @@
               </td>
 
               <td class="px-8 py-4 text-right">
-                <button
-                  [disabled]="!row.actionsEnabled"
-                  [attr.aria-label]="'Abrir acoes para ' + row.name"
-                  class="text-emerald-800/40 transition-colors hover:text-[#004f38] focus:outline-none focus:ring-2 focus:ring-[#004f38] disabled:cursor-not-allowed disabled:opacity-40"
-                  type="button"
-                >
-                  <lucide-icon [img]="EllipsisVertical" class="ml-auto h-4 w-4" />
-                </button>
+                <div class="inline-flex">
+                  <button
+                    [disabled]="!row.actionsEnabled"
+                    [attr.aria-label]="'Abrir acoes para ' + row.name"
+                    [cdkMenuTriggerFor]="actionsMenu"
+                    class="rounded-lg p-1 text-emerald-800/40 transition-colors hover:bg-emerald-50 hover:text-[#004f38] focus:outline-none focus:ring-2 focus:ring-[#004f38] disabled:cursor-not-allowed disabled:opacity-40"
+                    type="button"
+                  >
+                    <lucide-icon [img]="EllipsisVertical" class="ml-auto h-4 w-4" />
+                  </button>
+                </div>
+
+                <ng-template #actionsMenu>
+                  <div
+                    cdkMenu
+                    aria-label="Acoes do ingrediente"
+                    class="min-w-44 rounded-xl bg-white p-1.5 shadow-[0_24px_40px_-16px_rgba(0,79,56,0.2)] outline-none"
+                  >
+                    <button
+                      cdkMenuItem
+                      class="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-medium text-[#002116] transition-colors hover:bg-emerald-50/70 focus:bg-emerald-50/70 focus:outline-none"
+                      type="button"
+                      (click)="editIngredient.emit(row)"
+                    >
+                      <lucide-icon [img]="Pencil" class="h-4 w-4 text-emerald-800/60" />
+                      <span>Editar</span>
+                    </button>
+
+                    <button
+                      cdkMenuItem
+                      class="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-medium text-[#8a2900] transition-colors hover:bg-[#fff2ea] focus:bg-[#fff2ea] focus:outline-none"
+                      type="button"
+                      (click)="deleteIngredient.emit(row)"
+                    >
+                      <lucide-icon [img]="Trash2" class="h-4 w-4 text-[#8a2900]/70" />
+                      <span>Excluir</span>
+                    </button>
+                  </div>
+                </ng-template>
               </td>
             </tr>
           }

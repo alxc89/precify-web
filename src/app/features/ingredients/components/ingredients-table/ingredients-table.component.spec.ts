@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { vi } from 'vitest';
 import { IngredientsCatalogPaginationVm } from '../../models/ingredient-filter.model';
 import { IngredientListItem } from '../../models/ingredient.model';
 import { IngredientsTableComponent } from './ingredients-table.component';
@@ -97,5 +98,34 @@ describe('IngredientsTableComponent', () => {
     fixture.detectChanges();
 
     expect(fixture.nativeElement.textContent).toContain('Falha ao carregar');
+  });
+
+  it('opens the row actions menu and emits edit for the selected ingredient', async () => {
+    const fixture = TestBed.createComponent(IngredientsTableComponent);
+    const editSpy = vi.spyOn(fixture.componentInstance.editIngredient, 'emit');
+    fixture.componentRef.setInput('emptyMessage', 'Nenhum item');
+    fixture.componentRef.setInput('error', null);
+    fixture.componentRef.setInput('loading', false);
+    fixture.componentRef.setInput('pagination', PAGINATION);
+    fixture.componentRef.setInput('rows', ROWS);
+    fixture.detectChanges();
+
+    const trigger = fixture.nativeElement.querySelector(
+      '[aria-label="Abrir acoes para Salmao Chileno"]',
+    ) as HTMLButtonElement;
+    trigger.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const editButton = Array.from(document.body.querySelectorAll('button')).find((button) =>
+      button.textContent?.includes('Editar'),
+    ) as HTMLButtonElement | undefined;
+
+    expect(editButton).toBeTruthy();
+
+    editButton?.click();
+    fixture.detectChanges();
+
+    expect(editSpy).toHaveBeenCalledWith(ROWS[0]);
   });
 });
