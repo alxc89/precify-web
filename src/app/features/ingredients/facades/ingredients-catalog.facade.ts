@@ -144,6 +144,10 @@ export class IngredientsCatalogFacade {
     this.loadCatalog();
   }
 
+  refresh() {
+    this.loadCatalog();
+  }
+
   setCategory(categoryId: string) {
     this.filterState.update((current) => ({
       ...current,

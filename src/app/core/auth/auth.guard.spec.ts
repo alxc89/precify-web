@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
-import { signal } from '@angular/core';
 import { ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, provideRouter } from '@angular/router';
 import { firstValueFrom, Observable, of } from 'rxjs';
+import { signal } from '@angular/core';
 import { vi } from 'vitest';
 import { SessionService } from '../session/session.service';
-import { guestGuard } from './guest.guard';
+import { authGuard } from './auth.guard';
 
-describe('guestGuard', () => {
+describe('authGuard', () => {
   const isAuthenticated = signal(false);
   const mustChangePassword = signal(false);
   const bootstrap = vi.fn(() => of(null));
@@ -33,17 +33,14 @@ describe('guestGuard', () => {
     });
   });
 
-  it('redirects authenticated users to /app/ingredientes', async () => {
-    bootstrap.mockReturnValue(of({} as never));
-    isAuthenticated.set(true);
-
+  it('redirects anonymous users to /login', async () => {
     const result = (await firstValueFrom(
       TestBed.runInInjectionContext(() =>
-        guestGuard({} as ActivatedRouteSnapshot, {} as RouterStateSnapshot),
+        authGuard({} as ActivatedRouteSnapshot, { url: '/app/ingredientes' } as RouterStateSnapshot),
       ) as Observable<unknown>,
     )) as UrlTree;
 
-    expect(result.toString()).toBe('/app/ingredientes');
+    expect(result.toString()).toBe('/login');
   });
 
   it('redirects authenticated users with mandatory password change to /alterar-senha', async () => {
@@ -53,17 +50,20 @@ describe('guestGuard', () => {
 
     const result = (await firstValueFrom(
       TestBed.runInInjectionContext(() =>
-        guestGuard({} as ActivatedRouteSnapshot, {} as RouterStateSnapshot),
+        authGuard({} as ActivatedRouteSnapshot, { url: '/app/ingredientes' } as RouterStateSnapshot),
       ) as Observable<unknown>,
     )) as UrlTree;
 
     expect(result.toString()).toBe('/alterar-senha');
   });
 
-  it('allows anonymous users to stay on public routes', async () => {
+  it('allows authenticated users with a resolved session', async () => {
+    bootstrap.mockReturnValue(of({} as never));
+    isAuthenticated.set(true);
+
     const result = await firstValueFrom(
       TestBed.runInInjectionContext(() =>
-        guestGuard({} as ActivatedRouteSnapshot, {} as RouterStateSnapshot),
+        authGuard({} as ActivatedRouteSnapshot, { url: '/app/ingredientes' } as RouterStateSnapshot),
       ) as Observable<unknown>,
     );
 

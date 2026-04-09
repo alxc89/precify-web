@@ -137,6 +137,97 @@
         }
       }
     },
+    "/api/v1/auth/session": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Resolve o bootstrap da sessão autenticada para o frontend.",
+        "description": "Retorna a identidade básica do usuário autenticado, a flag de troca obrigatória de senha, o papel global de plataforma e os vínculos ativos por escopo disponíveis até o momento.",
+        "responses": {
+          "200": {
+            "description": "Sessão resolvida com sucesso.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionContextResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionContextResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionContextResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Requisição sem autenticação válida.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Usuário autenticado sem permissão para continuar usando a sessão ou indisponível no contexto atual.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Identidade correspondente ao usuário autenticado não encontrada.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/auth/alterar-senha": {
       "post": {
         "tags": [
@@ -2187,6 +2278,148 @@
           },
           "404": {
             "description": "Organização inexistente/inativa, ingrediente inexistente ou entry não encontrada.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/organizacoes/{organizationId}/ingredientes/{ingredientId}/gestao": {
+      "get": {
+        "tags": [
+          "OrganizationManagedIngredients"
+        ],
+        "summary": "Obtém um ingrediente com histórico agregado de preços para a tela de gestão.",
+        "description": "Sem `storeId`, o retorno contém apenas o histórico organizacional. Com `storeId`, o retorno agrega o histórico da organização e da loja informada, sem incluir entries de outras lojas.",
+        "parameters": [
+          {
+            "name": "organizationId",
+            "in": "path",
+            "description": "Identificador da organização âncora da consulta.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "ingredientId",
+            "in": "path",
+            "description": "Identificador do ingrediente consultado.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "storeId",
+            "in": "query",
+            "description": "Identificador opcional da loja cujo histórico deve ser somado ao histórico organizacional.",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Consulta realizada com sucesso.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ManagedIngredientResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ManagedIngredientResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ManagedIngredientResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Identificadores inválidos na rota ou na query string.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Requisição sem autenticação válida.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Usuário autenticado sem permissão para o escopo informado.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Organização, ingrediente ou loja inexistentes ou inativos.",
             "content": {
               "text/plain": {
                 "schema": {
@@ -6697,6 +6930,108 @@
         "additionalProperties": false,
         "description": "Resposta de autenticação com token JWT e dados resumidos do usuário autenticado."
       },
+      "ManagedIngredientHistoryPriceResponse": {
+        "type": "object",
+        "properties": {
+          "entryId": {
+            "type": "string",
+            "description": "Identificador da entry de preço.",
+            "format": "uuid"
+          },
+          "source": {
+            "$ref": "#/components/schemas/IngredientPriceSourceResponse"
+          },
+          "purchaseUnit": {
+            "type": "string",
+            "description": "Unidade em que a compra foi realizada, como `cx`, `kg`, `l` ou `pct`.",
+            "nullable": true
+          },
+          "purchaseQuantity": {
+            "type": "number",
+            "description": "Quantidade comprada na unidade informada em Precify.API.Contracts.V1.Catalog.ManagedIngredientHistoryPriceResponse.PurchaseUnit.",
+            "format": "double"
+          },
+          "convertedBaseQuantity": {
+            "type": "number",
+            "description": "Quantidade equivalente convertida para a unidade base do ingrediente.",
+            "format": "double"
+          },
+          "purchasePrice": {
+            "type": "number",
+            "description": "Valor total pago na compra representada pela entry.",
+            "format": "double"
+          },
+          "baseUnitCost": {
+            "type": "number",
+            "description": "Custo por unidade base do ingrediente.",
+            "format": "double"
+          },
+          "supplier": {
+            "type": "string",
+            "description": "Nome do fornecedor associado à compra.",
+            "nullable": true
+          },
+          "note": {
+            "type": "string",
+            "description": "Observação livre sobre a compra ou sobre a vigência da entry.",
+            "nullable": true
+          },
+          "isCurrent": {
+            "type": "boolean",
+            "description": "Indica se esta entry é a vigente no respectivo escopo."
+          },
+          "validFrom": {
+            "type": "string",
+            "description": "Data de início da vigência da entry.",
+            "format": "date-time"
+          },
+          "validTo": {
+            "type": "string",
+            "description": "Data de fim da vigência da entry, quando houver.",
+            "format": "date-time",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean",
+            "description": "Indica se a entry permanece ativa no histórico."
+          }
+        },
+        "additionalProperties": false,
+        "description": "Item do histórico agregado de preços na visão de gestão do ingrediente."
+      },
+      "ManagedIngredientResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Identificador do ingrediente.",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "description": "Nome canônico do ingrediente.",
+            "nullable": true
+          },
+          "baseUnit": {
+            "type": "string",
+            "description": "Unidade base estrutural do ingrediente.",
+            "nullable": true
+          },
+          "category": {
+            "$ref": "#/components/schemas/IngredientCategorySummaryResponse"
+          },
+          "historyPrices": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ManagedIngredientHistoryPriceResponse"
+            },
+            "description": "Histórico agregado de preços elegíveis para a consulta.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Resposta agregada da gestão detalhada de um ingrediente."
+      },
       "OrganizationLinkResponse": {
         "type": "object",
         "properties": {
@@ -7037,6 +7372,135 @@
         },
         "additionalProperties": false,
         "description": "Dados resumidos do usuário criado no fluxo scoped."
+      },
+      "SessionContextResponse": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "$ref": "#/components/schemas/SessionUserResponse"
+          },
+          "mustChangePassword": {
+            "type": "boolean",
+            "description": "Indica se o usuário precisa alterar a senha antes de continuar usando o sistema."
+          },
+          "isPlatformAdmin": {
+            "type": "boolean",
+            "description": "Indica se o usuário possui papel global de plataforma."
+          },
+          "organizationMemberships": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SessionOrganizationMembershipResponse"
+            },
+            "description": "Vínculos organizacionais ativos e elegíveis do usuário autenticado.",
+            "nullable": true
+          },
+          "storeMemberships": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SessionStoreMembershipResponse"
+            },
+            "description": "Vínculos de loja ativos e elegíveis do usuário autenticado.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Resposta de bootstrap da sessão autenticada."
+      },
+      "SessionOrganizationMembershipResponse": {
+        "type": "object",
+        "properties": {
+          "organizationId": {
+            "type": "string",
+            "description": "Identificador da organização do vínculo.",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "description": "Nome da organização.",
+            "nullable": true
+          },
+          "code": {
+            "type": "string",
+            "description": "Código operacional opcional da organização.",
+            "nullable": true
+          },
+          "type": {
+            "$ref": "#/components/schemas/OrganizationType"
+          },
+          "role": {
+            "$ref": "#/components/schemas/OrganizationScopedAccessRole"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Membership organizacional ativo do usuário autenticado."
+      },
+      "SessionStoreMembershipResponse": {
+        "type": "object",
+        "properties": {
+          "storeId": {
+            "type": "string",
+            "description": "Identificador da loja do vínculo.",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "description": "Nome da loja.",
+            "nullable": true
+          },
+          "code": {
+            "type": "string",
+            "description": "Código operacional opcional da loja.",
+            "nullable": true
+          },
+          "businessType": {
+            "type": "string",
+            "description": "Tipo de negócio opcional da loja.",
+            "nullable": true
+          },
+          "organizationId": {
+            "type": "string",
+            "description": "Identificador da organização à qual a loja pertence.",
+            "format": "uuid"
+          },
+          "organizationName": {
+            "type": "string",
+            "description": "Nome da organização dona da loja.",
+            "nullable": true
+          },
+          "organizationCode": {
+            "type": "string",
+            "description": "Código operacional opcional da organização dona da loja.",
+            "nullable": true
+          },
+          "role": {
+            "$ref": "#/components/schemas/StoreScopedAccessRole"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Membership ativo de loja do usuário autenticado."
+      },
+      "SessionUserResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Identificador do usuário autenticado.",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "description": "Nome exibido do usuário autenticado.",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "description": "E-mail do usuário autenticado.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Dados do usuário autenticado para bootstrap do shell do frontend."
       },
       "StoreCatalogIngredientResponse": {
         "type": "object",
@@ -7395,6 +7859,10 @@
     {
       "name": "OrganizationIngredientPrices",
       "description": "Expõe as operações HTTP do histórico de preços de ingrediente no escopo organizacional."
+    },
+    {
+      "name": "OrganizationManagedIngredients",
+      "description": "Expõe a leitura agregada de gestão detalhada do ingrediente no contexto organizacional."
     },
     {
       "name": "OrganizationProductIngredients",

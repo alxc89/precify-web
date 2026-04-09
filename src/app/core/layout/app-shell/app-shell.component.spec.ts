@@ -1,6 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { provideRouter, RouterOutlet } from '@angular/router';
+import { vi } from 'vitest';
+import { AuthService } from '../../api/generated';
 import { AppShellComponent } from './app-shell.component';
 import { TopbarSearchService } from '../topbar/topbar-search.service';
 
@@ -10,7 +12,15 @@ describe('AppShellComponent', () => {
 
     await TestBed.configureTestingModule({
       imports: [AppShellComponent],
-      providers: [provideRouter([])],
+      providers: [
+        provideRouter([]),
+        {
+          provide: AuthService,
+          useValue: {
+            apiV1AuthSessionGet: vi.fn(),
+          },
+        },
+      ],
     }).compileComponents();
   });
 

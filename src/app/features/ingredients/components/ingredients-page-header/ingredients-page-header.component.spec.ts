@@ -13,7 +13,6 @@ describe('IngredientsPageHeaderComponent', () => {
     const emitted: boolean[] = [];
 
     fixture.componentInstance.createIngredient.subscribe(() => emitted.push(true));
-    fixture.componentRef.setInput('description', 'Descricao do catalogo');
     fixture.componentRef.setInput('title', 'Gestao de Insumos');
     fixture.detectChanges();
 

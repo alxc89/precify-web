@@ -26,4 +26,35 @@
     (editIngredient)="onEditIngredient($event)"
     (pageChange)="facade.setPage($event)"
   />
+
+  @if (isManagementModalOpen()) {
+    <app-ingredient-management-modal
+      [categories]="editableCategories()"
+      [error]="managementError()"
+      [ingredient]="managementDetail()"
+      [loading]="managementLoading()"
+      [mode]="managementMode()!"
+      [saving]="managementSaving()"
+      (close)="closeManagementModal()"
+      (deactivateIngredient)="onDeactivateIngredient()"
+      (deactivatePrice)="onDeactivatePrice($event)"
+      (editPrice)="onEditPrice($event)"
+      (openNewPrice)="openNewPriceModal()"
+      (saveIngredient)="onSaveIngredient($event)"
+    />
+  }
+
+  @if (isPriceModalOpen()) {
+    <app-ingredient-price-modal
+      [baseUnit]="priceModalBaseUnit()"
+      [error]="priceError()"
+      [hasStoreContext]="hasStoreContext()"
+      [ingredientName]="priceModalIngredientName()"
+      [mode]="priceModalMode()!"
+      [price]="selectedPriceEntry()"
+      [saving]="priceSaving()"
+      (close)="closePriceModal()"
+      (savePrice)="onSavePrice($event)"
+    />
+  }
 </div>

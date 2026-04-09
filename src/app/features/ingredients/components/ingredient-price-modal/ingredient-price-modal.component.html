@@ -1,0 +1,176 @@
+<div
+  aria-labelledby="ingredient-price-title"
+  aria-modal="true"
+  class="fixed inset-0 z-[60] flex items-start justify-center bg-[#002116]/45 p-4 pt-8 backdrop-blur-sm"
+  role="dialog"
+  (click)="close.emit()"
+>
+  <div
+    class="flex max-h-[calc(100vh-4rem)] w-full max-w-[44rem] flex-col overflow-hidden rounded-[1.5rem] bg-[#f4fff8] shadow-[0_32px_60px_-24px_rgba(0,33,22,0.55)]"
+    (click)="$event.stopPropagation()"
+  >
+    <div class="flex items-start justify-between gap-4 border-b border-emerald-900/10 px-5 py-4">
+      <div>
+        <p class="text-[0.6875rem] font-bold uppercase tracking-[0.22em] text-emerald-900/35">
+          Historico de precos
+        </p>
+        <h2 id="ingredient-price-title" class="mt-1 font-['Manrope'] text-[1.75rem] font-black text-[#002116]">
+          {{ dialogTitle() }}
+        </h2>
+        <p class="mt-1 text-[0.8125rem] text-emerald-900/55">{{ ingredientName() }}</p>
+      </div>
+
+      <button
+        aria-label="Fechar modal"
+        class="rounded-full p-2 text-emerald-900/45 transition-colors hover:bg-white hover:text-[#004f38] focus:outline-none focus:ring-2 focus:ring-[#004f38]"
+        type="button"
+        (click)="close.emit()"
+      >
+        <lucide-icon [img]="X" class="h-5 w-5" />
+      </button>
+    </div>
+
+    <form class="flex-1 space-y-4 overflow-y-auto px-5 py-5" [formGroup]="priceForm" (ngSubmit)="submit()">
+      @if (error()) {
+        <div class="rounded-2xl bg-[#fff2ea] px-4 py-3 text-sm font-medium text-[#8a2900]">
+          {{ error() }}
+        </div>
+      }
+
+      <div class="grid gap-4 md:grid-cols-2">
+        <label class="block">
+          <span class="mb-1.5 block text-sm font-semibold text-[#002116]">Origem</span>
+          <select
+            class="w-full rounded-xl border-none bg-[#e7fff2] px-4 py-2.5 text-sm text-[#002116] outline-none focus:ring-2 focus:ring-[#004f38]"
+            formControlName="source"
+          >
+            <option value="organization">Organizacao</option>
+            @if (hasStoreContext()) {
+              <option value="store">Loja</option>
+            }
+          </select>
+        </label>
+
+        <label class="block">
+          <span class="mb-1.5 block text-sm font-semibold text-[#002116]">Unidade Base</span>
+          <div class="rounded-xl bg-white px-4 py-2.5 text-sm font-semibold text-emerald-900/60 shadow-sm">
+            {{ baseUnit() }}
+          </div>
+        </label>
+
+        <label class="block">
+          <span class="mb-1.5 block text-sm font-semibold text-[#002116]">Unidade de Compra</span>
+          <input
+            class="w-full rounded-xl border-none bg-[#e7fff2] px-4 py-2.5 text-sm text-[#002116] outline-none placeholder:text-emerald-900/30 focus:ring-2 focus:ring-[#004f38]"
+            formControlName="purchaseUnit"
+            placeholder="Ex.: cx"
+            type="text"
+          />
+        </label>
+
+        <label class="block">
+          <span class="mb-1.5 block text-sm font-semibold text-[#002116]">Quantidade Comprada</span>
+          <input
+            class="w-full rounded-xl border-none bg-[#e7fff2] px-4 py-2.5 text-sm text-[#002116] outline-none focus:ring-2 focus:ring-[#004f38]"
+            formControlName="purchaseQuantity"
+            min="0"
+            step="0.0001"
+            type="number"
+          />
+        </label>
+
+        <label class="block">
+          <span class="mb-1.5 block text-sm font-semibold text-[#002116]">
+            Quantidade Convertida para {{ baseUnit() }}
+          </span>
+          <input
+            class="w-full rounded-xl border-none bg-[#e7fff2] px-4 py-2.5 text-sm text-[#002116] outline-none focus:ring-2 focus:ring-[#004f38]"
+            formControlName="convertedBaseQuantity"
+            min="0"
+            step="0.0001"
+            type="number"
+          />
+        </label>
+
+        <label class="block">
+          <span class="mb-1.5 block text-sm font-semibold text-[#002116]">Valor Pago</span>
+          <input
+            class="w-full rounded-xl border-none bg-[#e7fff2] px-4 py-2.5 text-sm text-[#002116] outline-none focus:ring-2 focus:ring-[#004f38]"
+            formControlName="purchasePrice"
+            min="0"
+            step="0.01"
+            type="number"
+          />
+        </label>
+
+        <label class="block md:col-span-2">
+          <span class="mb-1.5 block text-sm font-semibold text-[#002116]">Custo por Unidade Base</span>
+          <div class="rounded-xl bg-white px-4 py-2.5 shadow-sm">
+            <p class="font-['Manrope'] text-xl font-black text-[#002116]">{{ baseUnitCostLabel() }}</p>
+            <p class="mt-1 text-xs font-medium uppercase tracking-[0.16em] text-emerald-900/35">
+              Calculado automaticamente
+            </p>
+          </div>
+        </label>
+
+        <label class="block">
+          <span class="mb-1.5 block text-sm font-semibold text-[#002116]">Fornecedor</span>
+          <input
+            class="w-full rounded-xl border-none bg-[#e7fff2] px-4 py-2.5 text-sm text-[#002116] outline-none placeholder:text-emerald-900/30 focus:ring-2 focus:ring-[#004f38]"
+            formControlName="supplier"
+            placeholder="Ex.: IB Foods"
+            type="text"
+          />
+        </label>
+
+        <label class="block">
+          <span class="mb-1.5 block text-sm font-semibold text-[#002116]">Valido Inicial</span>
+          <input
+            class="w-full rounded-xl border-none bg-[#e7fff2] px-4 py-2.5 text-sm text-[#002116] outline-none focus:ring-2 focus:ring-[#004f38]"
+            formControlName="validFrom"
+            type="datetime-local"
+          />
+        </label>
+
+        <label class="block">
+          <span class="mb-1.5 block text-sm font-semibold text-[#002116]">Validade Final</span>
+          <input
+            class="w-full rounded-xl border-none bg-[#e7fff2] px-4 py-2.5 text-sm text-[#002116] outline-none focus:ring-2 focus:ring-[#004f38]"
+            formControlName="validTo"
+            type="datetime-local"
+          />
+        </label>
+
+        <label class="block md:col-span-2">
+          <span class="mb-1.5 block text-sm font-semibold text-[#002116]">Observacao</span>
+          <textarea
+            class="min-h-20 w-full rounded-xl border-none bg-[#e7fff2] px-4 py-2.5 text-sm text-[#002116] outline-none placeholder:text-emerald-900/30 focus:ring-2 focus:ring-[#004f38]"
+            formControlName="note"
+            placeholder="Observacoes sobre a compra ou vigencia"
+          ></textarea>
+        </label>
+      </div>
+
+      <div class="flex items-center justify-end gap-3 border-t border-emerald-900/10 pt-4">
+        <button
+          class="rounded-xl border border-[#004f38]/10 px-4 py-2.5 text-sm font-semibold text-[#004f38] transition-colors hover:bg-[#e7fff2] focus:outline-none focus:ring-2 focus:ring-[#004f38]"
+          type="button"
+          (click)="close.emit()"
+        >
+          Cancelar
+        </button>
+
+        <button
+          [disabled]="saving()"
+          class="inline-flex items-center gap-2 rounded-xl bg-[#004f38] px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#00563d] focus:outline-none focus:ring-2 focus:ring-[#004f38] disabled:cursor-not-allowed disabled:opacity-60"
+          type="submit"
+        >
+          @if (saving()) {
+            <lucide-icon [img]="Loader2" class="h-4 w-4 animate-spin" />
+          }
+          {{ mode() === 'create' ? 'Salvar preco' : 'Salvar' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

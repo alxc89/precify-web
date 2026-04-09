@@ -26,6 +26,12 @@ export class TopbarComponent {
   protected readonly CircleHelp = CircleHelp;
   protected readonly Store = Store;
   protected readonly searchConfig = this.topbarSearch.config;
+  protected readonly currentContextLabel = computed(
+    () =>
+      this.session.currentStore()?.name?.trim() ||
+      this.session.currentOrganization()?.name?.trim() ||
+      'Catalogo global',
+  );
 
   protected readonly userName = computed(() => this.session.user()?.name?.trim() || 'Conta Precify');
   protected readonly userSubtitle = computed(

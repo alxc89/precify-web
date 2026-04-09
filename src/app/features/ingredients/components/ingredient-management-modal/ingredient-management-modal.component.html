@@ -1,0 +1,274 @@
+<div
+  aria-labelledby="ingredient-management-title"
+  aria-modal="true"
+  class="fixed inset-0 z-50 flex items-start justify-center bg-[#002116]/35 p-4 pt-8 backdrop-blur-sm"
+  role="dialog"
+  (click)="close.emit()"
+>
+  <div
+    class="flex max-h-[calc(100vh-4rem)] w-full max-w-6xl flex-col overflow-hidden rounded-[1.5rem] bg-[#f4fff8] shadow-[0_32px_60px_-24px_rgba(0,33,22,0.45)]"
+    (click)="$event.stopPropagation()"
+  >
+    <div class="flex items-start justify-between gap-4 border-b border-emerald-900/10 px-6 py-5">
+      <div>
+        <p class="text-[0.6875rem] font-bold uppercase tracking-[0.22em] text-emerald-900/35">
+          Gestao de ingrediente
+        </p>
+        <h2 id="ingredient-management-title" class="mt-1 font-['Manrope'] text-2xl font-black text-[#002116]">
+          {{ dialogTitle() }}
+        </h2>
+      </div>
+
+      <button
+        aria-label="Fechar modal"
+        class="rounded-full p-2 text-emerald-900/45 transition-colors hover:bg-white hover:text-[#004f38] focus:outline-none focus:ring-2 focus:ring-[#004f38]"
+        type="button"
+        (click)="close.emit()"
+      >
+        <lucide-icon [img]="X" class="h-5 w-5" />
+      </button>
+    </div>
+
+    <div class="flex-1 overflow-y-auto px-6 py-6">
+      @if (error()) {
+        <div class="mb-5 rounded-2xl bg-[#fff2ea] px-4 py-3 text-sm font-medium text-[#8a2900]">
+          {{ error() }}
+        </div>
+      }
+
+      @if (loading()) {
+        <div class="flex min-h-80 items-center justify-center gap-3 rounded-[1.25rem] bg-white/80 text-sm font-semibold text-[#004f38] shadow-sm">
+          <lucide-icon [img]="Loader2" class="h-4 w-4 animate-spin" />
+          Carregando detalhes do ingrediente...
+        </div>
+      } @else {
+        <form class="rounded-[1.25rem] bg-white p-6 shadow-sm" [formGroup]="ingredientForm" (ngSubmit)="submit()">
+          <div class="grid gap-5 md:grid-cols-2">
+            <label class="block">
+              <span class="mb-2 block text-sm font-semibold text-[#002116]">Preço atual</span>
+              <div class="rounded-xl bg-[#eef8f2] px-4 py-3">
+                <div class="flex flex-wrap items-center gap-3">
+                  <span class="font-['Manrope'] text-xl font-black text-[#002116]">
+                    {{ currentPriceLabel() }}
+                  </span>
+                  @if (currentPriceScope()) {
+                    <app-price-scope-badge [scope]="currentPriceScope()" />
+                  }
+                </div>
+              </div>
+            </label>
+
+            @if (mode() === 'edit' && ingredient(); as ingredientVm) {
+              <div class="block">
+                <span class="mb-2 block text-sm font-semibold text-[#002116]">Status</span>
+                <div class="rounded-xl bg-[#eef8f2] px-4 py-3">
+                  <div class="flex items-center justify-between gap-3">
+                    <p class="text-xs font-medium leading-none text-emerald-900/50">
+                      {{ statusHelperLabel() }}
+                    </p>
+
+                    <button
+                      [attr.aria-label]="statusToggleAriaLabel()"
+                      [attr.aria-pressed]="ingredientVm.isActive"
+                      [class]="
+                        ingredientVm.isActive
+                          ? 'relative inline-flex h-7 w-14 items-center rounded-full bg-[#004f38] p-0.5 transition-colors focus:outline-none focus:ring-2 focus:ring-[#004f38] disabled:cursor-not-allowed disabled:opacity-60'
+                          : 'relative inline-flex h-7 w-14 items-center rounded-full bg-[#c8d5ce] p-0.5 transition-colors disabled:cursor-not-allowed disabled:opacity-80'
+                      "
+                      [disabled]="saving() || !ingredientVm.isActive"
+                      type="button"
+                      (click)="deactivateIngredient.emit()"
+                    >
+                      <span class="sr-only">{{ statusToggleAriaLabel() }}</span>
+                      <span
+                        [class]="
+                          ingredientVm.isActive
+                            ? 'inline-block h-6 w-6 translate-x-7 rounded-full bg-white shadow-sm transition-transform'
+                            : 'inline-block h-6 w-6 translate-x-0 rounded-full bg-white shadow-sm transition-transform'
+                        "
+                      ></span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            }
+
+            <label class="block md:col-span-2">
+              <span class="mb-2 block text-sm font-semibold text-[#002116]">Nome</span>
+              <input
+                class="w-full rounded-xl border-none bg-[#e7fff2] px-4 py-3 text-sm text-[#002116] outline-none ring-0 placeholder:text-emerald-900/30 focus:ring-2 focus:ring-[#004f38]"
+                formControlName="name"
+                placeholder="Ex.: Biscoito Negresco"
+                type="text"
+              />
+            </label>
+
+            <label class="block">
+              <span class="mb-2 block text-sm font-semibold text-[#002116]">Categoria</span>
+              <select
+                class="w-full rounded-xl border-none bg-[#e7fff2] px-4 py-3 text-sm text-[#002116] outline-none focus:ring-2 focus:ring-[#004f38]"
+                formControlName="ingredientCategoryId"
+              >
+                @for (category of categories(); track category.id) {
+                  <option [value]="category.id">{{ category.label }}</option>
+                }
+              </select>
+            </label>
+
+            <label class="block">
+              <span class="mb-2 block text-sm font-semibold text-[#002116]">Unidade Base</span>
+              <input
+                class="w-full rounded-xl border-none bg-[#e7fff2] px-4 py-3 text-sm text-[#002116] outline-none placeholder:text-emerald-900/30 focus:ring-2 focus:ring-[#004f38]"
+                formControlName="baseUnit"
+                placeholder="Ex.: kg"
+                type="text"
+              />
+            </label>
+          </div>
+
+          <section class="mt-8 border-t border-emerald-900/10 pt-6">
+            <div class="flex flex-col gap-3 border-b border-emerald-900/10 pb-4 md:flex-row md:items-center md:justify-between">
+              <button
+                [attr.aria-expanded]="historySectionExpanded()"
+                [attr.aria-label]="historySectionAriaLabel()"
+                class="flex min-w-0 flex-1 items-center justify-between gap-4 text-left focus:outline-none"
+                type="button"
+                (click)="toggleHistorySection()"
+              >
+                <div>
+                  <p class="text-[0.6875rem] font-bold uppercase tracking-[0.22em] text-emerald-900/35">
+                    Historico de precos
+                  </p>
+                  <h3 class="mt-1 text-lg font-bold text-[#002116]">Entries de preco do ingrediente</h3>
+                </div>
+
+                <div class="flex items-center gap-2 text-emerald-900/45">
+                  <span class="text-[0.6875rem] font-bold uppercase tracking-[0.18em]">
+                    {{ historySectionExpanded() ? 'Ocultar' : 'Mostrar' }}
+                  </span>
+                  <lucide-icon
+                    [img]="ChevronDown"
+                    class="h-4 w-4 transition-transform"
+                    [class.rotate-180]="historySectionExpanded()"
+                  />
+                </div>
+              </button>
+
+              <button
+                [disabled]="!canManageHistory() || saving() || statusButtonDisabled()"
+                class="inline-flex items-center gap-2 rounded-xl bg-[#004f38] px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#00563d] focus:outline-none focus:ring-2 focus:ring-[#004f38] disabled:cursor-not-allowed disabled:opacity-60"
+                type="button"
+                (click)="openNewPrice.emit()"
+              >
+                <lucide-icon [img]="Plus" class="h-4 w-4" />
+                Novo preco
+              </button>
+            </div>
+
+            @if (historySectionExpanded()) {
+              @if (!canManageHistory()) {
+                <div class="py-10 text-center text-sm text-emerald-900/45">
+                  Salve o ingrediente para gerenciar o historico de precos.
+                </div>
+              } @else if (historyPrices().length === 0) {
+                <div class="py-10 text-center text-sm text-emerald-900/45">
+                  Nenhuma entry de preco foi cadastrada para este ingrediente.
+                </div>
+              } @else {
+                <div class="mt-4 overflow-x-auto">
+                  <table class="min-w-full border-collapse text-left">
+                    <thead>
+                      <tr class="border-b border-emerald-900/10 text-[0.6875rem] font-bold uppercase tracking-[0.2em] text-emerald-900/35">
+                        <th class="px-4 py-3">Preco</th>
+                        <th class="px-4 py-3">Origem</th>
+                        <th class="px-4 py-3">Valido Inicial</th>
+                        <th class="px-4 py-3">Validade Final</th>
+                        <th class="px-4 py-3">Status</th>
+                        <th class="px-4 py-3 text-right">Acoes</th>
+                      </tr>
+                    </thead>
+
+                    <tbody class="divide-y divide-emerald-900/10">
+                      @for (price of historyPrices(); track price.entryId) {
+                        <tr [class.opacity-60]="!price.isActive">
+                          <td class="px-4 py-4">
+                            <div class="flex flex-col">
+                              <span class="text-sm font-bold text-[#002116]">{{ price.baseUnitCostLabel }}</span>
+                              <span class="text-xs text-emerald-900/45">{{ price.purchaseSummaryLabel }}</span>
+                            </div>
+                          </td>
+                          <td class="px-4 py-4">
+                            <div class="flex flex-col gap-1">
+                              <span class="text-sm font-semibold text-[#002116]">{{ price.sourceLabel }}</span>
+                              @if (price.supplier) {
+                                <span class="text-xs text-emerald-900/45">{{ price.supplier }}</span>
+                              }
+                            </div>
+                          </td>
+                          <td class="px-4 py-4 text-sm text-[#3f4943]">{{ price.validFromLabel }}</td>
+                          <td class="px-4 py-4 text-sm text-[#3f4943]">{{ price.validToLabel }}</td>
+                          <td class="px-4 py-4">
+                            <div class="flex flex-col gap-2">
+                              <app-status-badge [active]="price.isActive" />
+                              @if (price.isCurrent) {
+                                <span class="text-[0.625rem] font-bold uppercase tracking-[0.18em] text-emerald-700/70">
+                                  Vigente
+                                </span>
+                              }
+                            </div>
+                          </td>
+                          <td class="px-4 py-4">
+                            <div class="flex justify-end gap-2">
+                              <button
+                                [disabled]="!price.isActive || saving()"
+                                class="rounded-lg px-3 py-2 text-sm font-semibold text-[#004f38] transition-colors hover:bg-[#e7fff2] focus:outline-none focus:ring-2 focus:ring-[#004f38] disabled:cursor-not-allowed disabled:opacity-50"
+                                type="button"
+                                (click)="editPrice.emit(price)"
+                              >
+                                Editar
+                              </button>
+
+                              <button
+                                [disabled]="!price.isActive || saving()"
+                                class="rounded-lg px-3 py-2 text-sm font-semibold text-[#8a2900] transition-colors hover:bg-[#fff2ea] focus:outline-none focus:ring-2 focus:ring-[#8a2900] disabled:cursor-not-allowed disabled:opacity-50"
+                                type="button"
+                                (click)="deactivatePrice.emit(price)"
+                              >
+                                Desativar
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+                </div>
+              }
+            }
+          </section>
+
+          <div class="mt-6 flex items-center justify-end gap-3">
+            <button
+              class="rounded-xl border border-[#004f38]/10 px-4 py-2.5 text-sm font-semibold text-[#004f38] transition-colors hover:bg-[#e7fff2] focus:outline-none focus:ring-2 focus:ring-[#004f38]"
+              type="button"
+              (click)="close.emit()"
+            >
+              Fechar
+            </button>
+
+            <button
+              [disabled]="saving()"
+              class="inline-flex items-center gap-2 rounded-xl bg-[#004f38] px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#00563d] focus:outline-none focus:ring-2 focus:ring-[#004f38] disabled:cursor-not-allowed disabled:opacity-60"
+              type="submit"
+            >
+              @if (saving()) {
+                <lucide-icon [img]="Loader2" class="h-4 w-4 animate-spin" />
+              }
+              {{ mode() === 'create' ? 'Salvar ingrediente' : 'Salvar' }}
+            </button>
+          </div>
+        </form>
+      }
+    </div>
+  </div>
+</div>
