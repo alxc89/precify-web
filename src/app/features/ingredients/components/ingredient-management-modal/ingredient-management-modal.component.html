@@ -161,7 +161,7 @@
                 (click)="openNewPrice.emit()"
               >
                 <lucide-icon [img]="Plus" class="h-4 w-4" />
-                Novo preco
+                Novo
               </button>
             </div>
 
@@ -175,9 +175,9 @@
                   Nenhuma entry de preco foi cadastrada para este ingrediente.
                 </div>
               } @else {
-                <div class="mt-4 overflow-x-auto">
+                <div class="mt-4 max-h-[12rem] overflow-auto rounded-2xl border border-emerald-900/10">
                   <table class="min-w-full border-collapse text-left">
-                    <thead>
+                    <thead class="sticky top-0 bg-[#f4fff8]">
                       <tr class="border-b border-emerald-900/10 text-[0.6875rem] font-bold uppercase tracking-[0.2em] text-emerald-900/35">
                         <th class="px-4 py-3">Preco</th>
                         <th class="px-4 py-3">Origem</th>

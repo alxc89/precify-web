@@ -106,9 +106,9 @@ export class IngredientsCatalogFacade {
     if (pricedRows.length === 0) {
       return {
         hasData: false,
-        helperLabel: 'Defina um contexto de loja para resolver precos reais.',
-        title: 'Custo Medio do Inventario',
-        trendLabel: 'Aguardando precificacao',
+        helperLabel: 'Defina um contexto de loja para resolver preços reais.',
+        title: 'Custo Médio do Inventário',
+        trendLabel: 'Aguardando precificação',
         valueLabel: 'Sem dados',
       };
     }
@@ -119,7 +119,7 @@ export class IngredientsCatalogFacade {
     return {
       hasData: true,
       helperLabel: `${pricedRows.length} insumos com custo vigente`,
-      title: 'Custo Medio do Inventario',
+      title: 'Custo Médio do Inventário',
       trendLabel: 'Baseado no contexto atual',
       valueLabel: this.formatCurrency(averagePrice),
     };
@@ -203,7 +203,7 @@ export class IngredientsCatalogFacade {
         error: () => {
           this.categories.set([]);
           this.ingredients.set([]);
-          this.errorMessage.set('Nao foi possivel carregar o catalogo de ingredientes.');
+          this.errorMessage.set('Não foi possível carregar o catálogo de ingredientes.');
           this.loadingState.set(false);
         },
       });
@@ -215,6 +215,10 @@ export class IngredientsCatalogFacade {
     const categoryLabel = ingredient.category?.name?.trim() || 'Sem categoria';
     const name = ingredient.name?.trim() || 'Ingrediente sem nome';
     const baseUnitLabel = ingredient.baseUnit?.trim() || 'Sem unidade base';
+    const priceLabel = ingredient.currentPrice !== undefined && ingredient.currentPrice !== null
+      ? this.formatCurrency(ingredient.currentPrice)
+      : 'Sem preço definido';
+    const priceScope = ingredient.currentPriceScope || null;
 
     return {
       actionsEnabled: true,
@@ -224,14 +228,14 @@ export class IngredientsCatalogFacade {
       code: (ingredient.id ?? 'SEM-ID').slice(-6).toUpperCase(),
       hasPrice: false,
       history: {
-        label: 'Sem historico',
+        label: 'Sem histórico',
         points: null,
       },
       id,
       isActive: ingredient.isActive ?? false,
       name,
-      priceLabel: 'Sem preco definido',
-      priceScope: null,
+      priceLabel,
+      priceScope,
       priceValue: null,
       statusLabel: ingredient.isActive ? 'Ativo' : 'Inativo',
       thumbnailUrl: null,

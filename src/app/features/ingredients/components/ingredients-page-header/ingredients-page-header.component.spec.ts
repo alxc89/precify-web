@@ -13,11 +13,11 @@ describe('IngredientsPageHeaderComponent', () => {
     const emitted: boolean[] = [];
 
     fixture.componentInstance.createIngredient.subscribe(() => emitted.push(true));
-    fixture.componentRef.setInput('title', 'Gestao de Insumos');
+    fixture.componentRef.setInput('title', 'Gestão de Insumos');
     fixture.detectChanges();
 
     expect(fixture.nativeElement.textContent).toContain('Catalogo de Ingredientes');
-    expect(fixture.nativeElement.textContent).toContain('Gestao de Insumos');
+    expect(fixture.nativeElement.textContent).toContain('Gestão de Insumos');
 
     const button = fixture.nativeElement.querySelector('button') as HTMLButtonElement;
     button.click();

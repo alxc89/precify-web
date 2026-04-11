@@ -34,9 +34,11 @@ export class IngredientsDataService {
   private readonly storeIngredientPricesApi = inject(StoreIngredientPricesService);
 
   getCatalogSnapshot() {
+    const currentOrganizationId = this.session.currentOrganizationId();
+    const currentStoreId = this.session.currentStoreId();
     return forkJoin({
       categories: this.categoriesApi.apiV1CategoriasIngredienteGet(true),
-      ingredients: this.ingredientsApi.apiV1IngredientesGet(true),
+      ingredients: this.ingredientsApi.apiV1IngredientesGet(true, currentOrganizationId ?? "", currentStoreId ?? ""),
     });
   }
 

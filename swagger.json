@@ -1166,7 +1166,7 @@
           "Ingredients"
         ],
         "summary": "Lista ingredientes, retornando apenas ativos por padrão.",
-        "description": "A listagem é autenticada e retorna a categoria resumida do ingrediente na resposta.",
+        "description": "A listagem é autenticada e retorna a categoria resumida do ingrediente na resposta.\r\nQuando `organizationId` ou `storeId` são informados, a API também preenche `currentPrice` e `currentPriceScope` conforme o escopo resolvido.",
         "parameters": [
           {
             "name": "includeInactive",
@@ -1174,6 +1174,24 @@
             "description": "Quando `true`, inclui ingredientes inativos na listagem.",
             "schema": {
               "type": "boolean"
+            }
+          },
+          {
+            "name": "organizationId",
+            "in": "query",
+            "description": "Identificador opcional da organização para resolver o preço atual organizacional.",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "storeId",
+            "in": "query",
+            "description": "Identificador opcional da loja para resolver o preço atual efetivo da loja.",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -1209,6 +1227,46 @@
           },
           "401": {
             "description": "Requisição sem autenticação válida.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Usuário autenticado sem acesso ao escopo organizacional ou da loja informados.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Organização ou loja inexistentes ou inativas.",
             "content": {
               "text/plain": {
                 "schema": {
@@ -6870,6 +6928,15 @@
           },
           "category": {
             "$ref": "#/components/schemas/IngredientCategorySummaryResponse"
+          },
+          "currentPrice": {
+            "type": "number",
+            "description": "Preço atual contextualizado do ingrediente, expresso como custo por unidade base.\r\nFica nulo quando a consulta não informa contexto ou quando não há preço vigente no escopo resolvido.",
+            "format": "double",
+            "nullable": true
+          },
+          "currentPriceScope": {
+            "$ref": "#/components/schemas/IngredientPriceSourceResponse"
           },
           "isActive": {
             "type": "boolean",

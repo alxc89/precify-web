@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { IngredientPriceSourceResponse } from './ingredientPriceSourceResponse';
 import { IngredientCategorySummaryResponse } from './ingredientCategorySummaryResponse';
 
 
@@ -28,6 +29,11 @@ export interface IngredientResponse {
     baseUnit?: string | null;
     category?: IngredientCategorySummaryResponse;
     /**
+     * Preço atual contextualizado do ingrediente, expresso como custo por unidade base.  Fica nulo quando a consulta não informa contexto ou quando não há preço vigente no escopo resolvido.
+     */
+    currentPrice?: number | null;
+    currentPriceScope?: IngredientPriceSourceResponse;
+    /**
      * Indica se o ingrediente permanece ativo no catálogo global.
      */
     isActive?: boolean;
@@ -40,4 +46,7 @@ export interface IngredientResponse {
      */
     updatedAt?: string;
 }
+export namespace IngredientResponse {
+}
+
 

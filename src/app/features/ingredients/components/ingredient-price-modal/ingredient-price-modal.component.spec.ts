@@ -118,6 +118,7 @@ describe('IngredientPriceModalComponent', () => {
 
     expect(sourceSelect.disabled).toBe(true);
     expect(purchaseUnitInput.value).toBe('cx');
-    expect(fixture.nativeElement.textContent).toContain('Editar preco');
+    expect(fixture.nativeElement.textContent).toContain('Editar preço');
+    expect(fixture.nativeElement.textContent).toContain(formatCurrency(30));
   });
 });

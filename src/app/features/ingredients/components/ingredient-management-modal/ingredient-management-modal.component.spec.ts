@@ -104,7 +104,7 @@ describe('IngredientManagementModalComponent', () => {
     fixture.detectChanges();
 
     const buttons = Array.from(fixture.nativeElement.querySelectorAll('button')) as HTMLButtonElement[];
-    const newPriceButton = buttons.find((button) => button.textContent?.includes('Novo preco'));
+    const newPriceButton = buttons.find((button) => button.textContent?.includes('Novo'));
     const editButton = buttons.find((button) => button.textContent?.trim() === 'Editar');
     const deactivateButton = buttons.find((button) => button.textContent?.trim() === 'Desativar');
 

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, input, output, signal } from '@angular/core';
 import { ReactiveFormsModule, Validators, FormControl, FormGroup } from '@angular/forms';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { startWith } from 'rxjs';
@@ -66,15 +66,18 @@ export class IngredientPriceModalComponent {
     this.priceForm.valueChanges.pipe(startWith(this.priceForm.getRawValue())),
     { initialValue: this.priceForm.getRawValue() },
   );
+  private readonly formSyncVersion = signal(0);
 
   protected readonly Loader2 = Loader2;
   protected readonly X = X;
   protected readonly dialogTitle = computed(() =>
-    this.mode() === 'create' ? 'Novo preco' : 'Editar preco',
+    this.mode() === 'create' ? 'Novo preço' : 'Editar preço',
   );
   protected readonly baseUnitCost = computed(() => {
-    const purchasePrice = this.formValue().purchasePrice;
-    const convertedBaseQuantity = this.formValue().convertedBaseQuantity;
+    this.formSyncVersion();
+    this.formValue();
+
+    const { convertedBaseQuantity, purchasePrice } = this.priceForm.getRawValue();
 
     if (
       purchasePrice === null ||
@@ -123,6 +126,7 @@ export class IngredientPriceModalComponent {
           { emitEvent: false },
         );
         this.priceForm.controls.source.disable({ emitEvent: false });
+        this.syncFormComputedState();
         return;
       }
 
@@ -141,6 +145,7 @@ export class IngredientPriceModalComponent {
         { emitEvent: false },
       );
       this.priceForm.controls.source.enable({ emitEvent: false });
+      this.syncFormComputedState();
     });
   }
 
@@ -196,5 +201,9 @@ export class IngredientPriceModalComponent {
 
     const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60_000);
     return localDate.toISOString().slice(0, 16);
+  }
+
+  private syncFormComputedState() {
+    this.formSyncVersion.update((value) => value + 1);
   }
 }

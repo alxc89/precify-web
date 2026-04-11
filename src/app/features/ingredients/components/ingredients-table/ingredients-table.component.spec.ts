@@ -23,13 +23,13 @@ const ROWS: readonly IngredientListItem[] = [
     code: 'ABC123',
     hasPrice: false,
     history: {
-      label: 'Sem historico',
+      label: 'Sem histórico',
       points: null,
     },
     id: 'ingredient-1',
     isActive: true,
     name: 'Salmao Chileno',
-    priceLabel: 'Sem preco definido',
+    priceLabel: 'Sem preço definido',
     priceScope: null,
     priceValue: null,
     statusLabel: 'Ativo',
@@ -43,13 +43,13 @@ const ROWS: readonly IngredientListItem[] = [
     code: 'XYZ999',
     hasPrice: false,
     history: {
-      label: 'Sem historico',
+      label: 'Sem histórico',
       points: null,
     },
     id: 'ingredient-2',
     isActive: false,
     name: 'Cenoura Baby',
-    priceLabel: 'Sem preco definido',
+    priceLabel: 'Sem preço definido',
     priceScope: null,
     priceValue: null,
     statusLabel: 'Inativo',
@@ -73,8 +73,8 @@ describe('IngredientsTableComponent', () => {
     fixture.componentRef.setInput('rows', ROWS);
     fixture.detectChanges();
 
-    expect(fixture.nativeElement.textContent).toContain('Sem preco definido');
-    expect(fixture.nativeElement.textContent).toContain('Sem historico');
+    expect(fixture.nativeElement.textContent).toContain('Sem preço definido');
+    expect(fixture.nativeElement.textContent).toContain('Sem histórico');
     expect(fixture.nativeElement.textContent).toContain('SC');
     expect(fixture.nativeElement.textContent).toContain('CB');
 
@@ -91,7 +91,7 @@ describe('IngredientsTableComponent', () => {
     fixture.componentRef.setInput('error', null);
     fixture.detectChanges();
 
-    expect(fixture.nativeElement.textContent).toContain('Carregando catalogo de ingredientes');
+    expect(fixture.nativeElement.textContent).toContain('Carregando catálogo de ingredientes');
 
     fixture.componentRef.setInput('loading', false);
     fixture.componentRef.setInput('error', 'Falha ao carregar');
