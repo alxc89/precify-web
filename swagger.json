@@ -1166,7 +1166,7 @@
           "Ingredients"
         ],
         "summary": "Lista ingredientes, retornando apenas ativos por padrão.",
-        "description": "A listagem é autenticada e retorna a categoria resumida do ingrediente na resposta.\r\nQuando `organizationId` ou `storeId` são informados, a API também preenche `currentPrice` e `currentPriceScope` conforme o escopo resolvido.",
+        "description": "A listagem é autenticada e retorna a categoria resumida do ingrediente na resposta.\r\nQuando `organizationId` ou `storeId` são informados, a API também preenche `currentPrice`, `currentPriceScope` e `historyPrices` conforme o escopo resolvido.\r\nO histórico sempre inclui todas as entries elegíveis, inclusive inativas.",
         "parameters": [
           {
             "name": "includeInactive",
@@ -6937,6 +6937,14 @@
           },
           "currentPriceScope": {
             "$ref": "#/components/schemas/IngredientPriceSourceResponse"
+          },
+          "historyPrices": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ManagedIngredientHistoryPriceResponse"
+            },
+            "description": "Histórico de preços elegível para o contexto informado na consulta.\r\nSem contexto, a coleção vem vazia.\r\nCom `organizationId`, retorna todas as entries da organização, inclusive inativas.\r\nCom `storeId`, agrega organização + loja informada, sem vazar outras lojas.",
+            "nullable": true
           },
           "isActive": {
             "type": "boolean",

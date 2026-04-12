@@ -38,7 +38,11 @@ export class IngredientsDataService {
     const currentStoreId = this.session.currentStoreId();
     return forkJoin({
       categories: this.categoriesApi.apiV1CategoriasIngredienteGet(true),
-      ingredients: this.ingredientsApi.apiV1IngredientesGet(true, currentOrganizationId ?? "", currentStoreId ?? ""),
+      ingredients: this.ingredientsApi.apiV1IngredientesGet(
+        true,
+        currentOrganizationId ?? '',
+        currentStoreId ?? '',
+      ),
     });
   }
 
@@ -135,7 +139,11 @@ export class IngredientsDataService {
     );
   }
 
-  deactivateIngredientPriceEntry(ingredientId: string, entryId: string, source: IngredientPriceScope) {
+  deactivateIngredientPriceEntry(
+    ingredientId: string,
+    entryId: string,
+    source: IngredientPriceScope,
+  ) {
     if (source === IngredientPriceSourceResponse.Organization) {
       const organizationId = this.session.currentOrganizationId();
 

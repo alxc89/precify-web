@@ -8,6 +8,7 @@
  * Do not edit the class manually.
  */
 import { IngredientPriceSourceResponse } from './ingredientPriceSourceResponse';
+import { ManagedIngredientHistoryPriceResponse } from './managedIngredientHistoryPriceResponse';
 import { IngredientCategorySummaryResponse } from './ingredientCategorySummaryResponse';
 
 
@@ -33,6 +34,10 @@ export interface IngredientResponse {
      */
     currentPrice?: number | null;
     currentPriceScope?: IngredientPriceSourceResponse;
+    /**
+     * Histórico de preços elegível para o contexto informado na consulta.  Sem contexto, a coleção vem vazia.  Com `organizationId`, retorna todas as entries da organização, inclusive inativas.  Com `storeId`, agrega organização + loja informada, sem vazar outras lojas.
+     */
+    historyPrices?: Array<ManagedIngredientHistoryPriceResponse> | null;
     /**
      * Indica se o ingrediente permanece ativo no catálogo global.
      */

@@ -1,7 +1,11 @@
 import { DestroyRef, Injectable, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IngredientCategoryResponse, IngredientResponse } from '../../../core/api/generated';
-import { IngredientCategoryFilterOption, IngredientFilterState, IngredientsCatalogPageVm } from '../models/ingredient-filter.model';
+import {
+  IngredientCategoryFilterOption,
+  IngredientFilterState,
+  IngredientsCatalogPageVm,
+} from '../models/ingredient-filter.model';
 import { IngredientInventoryStatsVm, IngredientListItem } from '../models/ingredient.model';
 import { IngredientsDataService } from '../services/ingredients.service';
 
@@ -67,7 +71,12 @@ export class IngredientsCatalogFacade {
           return true;
         }
 
-        return [ingredient.name, ingredient.categoryLabel, ingredient.baseUnitLabel, ingredient.code]
+        return [
+          ingredient.name,
+          ingredient.categoryLabel,
+          ingredient.baseUnitLabel,
+          ingredient.code,
+        ]
           .join(' ')
           .toLocaleLowerCase('pt-BR')
           .includes(searchTerm);
@@ -215,10 +224,21 @@ export class IngredientsCatalogFacade {
     const categoryLabel = ingredient.category?.name?.trim() || 'Sem categoria';
     const name = ingredient.name?.trim() || 'Ingrediente sem nome';
     const baseUnitLabel = ingredient.baseUnit?.trim() || 'Sem unidade base';
-    const priceLabel = ingredient.currentPrice !== undefined && ingredient.currentPrice !== null
-      ? this.formatCurrency(ingredient.currentPrice)
-      : 'Sem preço definido';
+    const priceLabel =
+      ingredient.currentPrice !== undefined && ingredient.currentPrice !== null
+        ? this.formatCurrency(ingredient.currentPrice)
+        : 'Sem preço definido';
     const priceScope = ingredient.currentPriceScope || null;
+    const priceValue =
+      ingredient.currentPrice !== undefined && ingredient.currentPrice !== null
+        ? ingredient.currentPrice
+        : null;
+    const historyPoints =
+      ingredient.historyPrices
+        ?.map((entry) => entry.purchasePrice)
+        .filter((value): value is number => value !== null && value !== undefined) ?? null;
+    const historyLabel =
+      historyPoints && historyPoints.length > 0 ? 'Histórico de preços' : 'Sem histórico';
 
     return {
       actionsEnabled: true,
@@ -226,17 +246,17 @@ export class IngredientsCatalogFacade {
       categoryId,
       categoryLabel,
       code: (ingredient.id ?? 'SEM-ID').slice(-6).toUpperCase(),
-      hasPrice: false,
+      hasPrice: priceValue !== null,
       history: {
-        label: 'Sem histórico',
-        points: null,
+        label: historyLabel,
+        points: historyPoints && historyPoints.length > 0 ? historyPoints : null,
       },
       id,
       isActive: ingredient.isActive ?? false,
       name,
       priceLabel,
       priceScope,
-      priceValue: null,
+      priceValue,
       statusLabel: ingredient.isActive ? 'Ativo' : 'Inativo',
       thumbnailUrl: null,
     };
