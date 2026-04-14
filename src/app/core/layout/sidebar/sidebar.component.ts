@@ -6,6 +6,7 @@ import {
   LifeBuoy,
   LucideAngularModule,
   LucideIconData,
+  Package,
   ReceiptText,
   Settings,
   UtensilsCrossed,
@@ -44,6 +45,13 @@ export class SidebarComponent {
       icon: UtensilsCrossed,
       label: 'Ingredientes',
       path: '/app/ingredientes',
+    },
+    {
+      enabled: true,
+      exact: true,
+      icon: Package,
+      label: 'Produtos',
+      path: '/app/produtos',
     },
     {
       enabled: false,

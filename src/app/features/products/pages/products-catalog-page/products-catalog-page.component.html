@@ -1,0 +1,70 @@
+<div class="min-h-full">
+  <section class="mb-6 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+    <div>
+      <nav
+        aria-label="Breadcrumb"
+        class="mb-2 flex gap-2 text-[11px] font-bold uppercase tracking-tight text-emerald-800/40"
+      >
+        <span>Inicio</span>
+        <span>/</span>
+        <span class="text-[#004f38]">Catálogo de Produtos</span>
+      </nav>
+
+      <h1 class="font-['Manrope'] text-4xl font-extrabold tracking-tight text-[#002116]">
+        Catálogo de Produtos
+      </h1>
+    </div>
+
+    <button
+      class="inline-flex items-center gap-2 rounded-xl bg-[#004f38] px-6 py-3 font-bold text-white shadow-xl shadow-emerald-900/20 transition-transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-[#004f38] focus:ring-offset-2 focus:ring-offset-[#e7fff2] active:scale-95"
+      type="button"
+    >
+      <lucide-icon [img]="Plus" class="h-4 w-4" />
+      Novo Produto
+    </button>
+  </section>
+
+  <section
+    aria-labelledby="products-filters-title"
+    class="flex min-h-[8rem] flex-wrap items-center gap-3 rounded-xl bg-white px-6 py-7 shadow-sm"
+  >
+    <h2
+      id="products-filters-title"
+      class="mr-2 text-xs font-bold uppercase tracking-[0.2em] text-emerald-800/40"
+    >
+      Filtrar por:
+    </h2>
+
+    @for (category of categoryOptions; track category.value) {
+      <button
+        [attr.aria-pressed]="selectedCategory() === category.value"
+        [class]="categoryClass(category.value)"
+        type="button"
+        (click)="selectedCategory.set(category.value)"
+      >
+        {{ category.label }}
+      </button>
+    }
+
+    <div class="ml-auto flex items-center gap-2">
+      <label class="text-sm text-[#3f4943]" for="product-status-filter">Status:</label>
+      <div class="relative">
+        <select
+          id="product-status-filter"
+          [value]="selectedStatus()"
+          class="appearance-none rounded-lg border-none bg-[#e7fff2] py-2 pl-3 pr-10 text-sm font-semibold text-[#004f38] focus:outline-none focus:ring-1 focus:ring-[#004f38]"
+          (change)="onStatusChange($event)"
+        >
+          @for (option of statusOptions; track option.value) {
+            <option [value]="option.value">{{ option.label }}</option>
+          }
+        </select>
+
+        <lucide-icon
+          [img]="ChevronDown"
+          class="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-emerald-800/50"
+        />
+      </div>
+    </div>
+  </section>
+</div>
