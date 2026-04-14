@@ -1,0 +1,43 @@
+<section
+  aria-labelledby="products-filters-title"
+  class="flex min-h-[8rem] flex-wrap items-center gap-3 rounded-xl bg-white px-6 py-7 shadow-sm"
+>
+  <h2
+    id="products-filters-title"
+    class="mr-2 text-xs font-bold uppercase tracking-[0.2em] text-emerald-800/40"
+  >
+    Filtrar por:
+  </h2>
+
+  @for (category of categories(); track category.value) {
+    <button
+      [attr.aria-pressed]="selectedCategory() === category.value"
+      [class]="categoryClass(category.value)"
+      type="button"
+      (click)="categoryChange.emit(category.value)"
+    >
+      {{ category.label }}
+    </button>
+  }
+
+  <div class="ml-auto flex items-center gap-2">
+    <label class="text-sm text-[#3f4943]" for="product-status-filter">Status:</label>
+    <div class="relative">
+      <select
+        id="product-status-filter"
+        [value]="selectedStatus()"
+        class="appearance-none rounded-lg border-none bg-[#e7fff2] py-2 pl-3 pr-10 text-sm font-semibold text-[#004f38] focus:outline-none focus:ring-1 focus:ring-[#004f38]"
+        (change)="onStatusChange($event)"
+      >
+        @for (option of statusOptions(); track option.value) {
+          <option [value]="option.value">{{ option.label }}</option>
+        }
+      </select>
+
+      <lucide-icon
+        [img]="ChevronDown"
+        class="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-emerald-800/50"
+      />
+    </div>
+  </div>
+</section>

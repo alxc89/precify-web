@@ -1,29 +1,17 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
-import {
-  LucideAngularModule,
-  Plus,
-  ChevronDown,
-} from 'lucide-angular';
 import { TopbarSearchService } from '../../../../core/layout/topbar/topbar-search.service';
-import { hlm } from '../../../../lib/utils';
-
-interface ProductFilterOption {
-  readonly label: string;
-  readonly value: string;
-}
+import { ProductsFiltersComponent } from '../../components/products-filters/products-filters.component';
+import { ProductsPageHeaderComponent } from '../../components/products-page-header/products-page-header.component';
 
 @Component({
   selector: 'app-products-catalog-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [LucideAngularModule],
+  imports: [ProductsFiltersComponent, ProductsPageHeaderComponent],
   templateUrl: './products-catalog-page.component.html',
 })
 export class ProductsCatalogPageComponent {
   private readonly destroyRef = inject(DestroyRef);
   private readonly topbarSearch = inject(TopbarSearchService);
-
-  protected readonly ChevronDown = ChevronDown;
-  protected readonly Plus = Plus;
 
   protected readonly categoryOptions: readonly ProductFilterOption[] = [
     { label: 'Todas as Categorias', value: 'all' },
@@ -55,23 +43,14 @@ export class ProductsCatalogPageComponent {
     });
   }
 
-  protected onCategoryChange(event: Event) {
-    const value = (event.target as HTMLSelectElement | null)?.value ?? 'all';
-    this.selectedCategory.set(value);
-  }
+  protected onCreateProduct() {}
 
-  protected onStatusChange(event: Event) {
-    const value = (event.target as HTMLSelectElement | null)?.value ?? 'all';
+  protected onStatusChange(value: string) {
     this.selectedStatus.set(value);
   }
+}
 
-  protected categoryClass(categoryId: string) {
-    const active = this.selectedCategory() === categoryId;
-    return hlm(
-      'rounded-full px-4 py-2 text-sm font-semibold transition-colors',
-      active
-        ? 'bg-[#004f38] text-white shadow-lg shadow-emerald-900/20'
-        : 'bg-[#e7fff2] text-[#004f38] hover:bg-emerald-100',
-    );
-  }
+interface ProductFilterOption {
+  readonly label: string;
+  readonly value: string;
 }
