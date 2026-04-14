@@ -80,9 +80,13 @@ export class SidebarComponent {
     return hlm(
       'flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-200',
       active
-        ? 'bg-[#004f38] text-white shadow-lg shadow-emerald-900/20'
+        ? 'bg-[#004f38] text-white shadow-lg shadow-emerald-900/20 hover:bg-[#00563d]'
         : 'text-emerald-800/70',
-      enabled ? 'hover:bg-emerald-100 active:translate-x-1' : 'cursor-not-allowed opacity-50',
+      enabled
+        ? active
+          ? 'active:translate-x-1'
+          : 'hover:bg-emerald-100 active:translate-x-1'
+        : 'cursor-not-allowed opacity-50',
     );
   }
 }
