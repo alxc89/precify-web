@@ -4,12 +4,24 @@
     (createProduct)="onCreateProduct()"
   />
 
-  <app-products-filters
-    [categories]="categoryOptions"
-    [selectedCategory]="selectedCategory()"
-    [selectedStatus]="selectedStatus()"
-    [statusOptions]="statusOptions"
-    (categoryChange)="selectedCategory.set($event)"
-    (statusChange)="onStatusChange($event)"
-  />
+  <div class="grid grid-cols-12 gap-6">
+    <div class="col-span-12 xl:col-span-8">
+      <app-products-filters
+        [categories]="categoryOptions"
+        [selectedCategory]="selectedCategory()"
+        [selectedStatus]="selectedStatus()"
+        [statusOptions]="statusOptions"
+        (categoryChange)="selectedCategory.set($event)"
+        (statusChange)="onStatusChange($event)"
+      />
+    </div>
+
+    <div class="col-span-12 xl:col-span-4">
+      <app-products-summary-card
+        [activeProducts]="activeProducts()"
+        [inactiveProducts]="inactiveProducts()"
+        [totalProducts]="totalProducts()"
+      />
+    </div>
+  </div>
 </div>

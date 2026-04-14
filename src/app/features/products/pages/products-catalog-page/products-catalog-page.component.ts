@@ -2,11 +2,12 @@ import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '
 import { TopbarSearchService } from '../../../../core/layout/topbar/topbar-search.service';
 import { ProductsFiltersComponent } from '../../components/products-filters/products-filters.component';
 import { ProductsPageHeaderComponent } from '../../components/products-page-header/products-page-header.component';
+import { ProductsSummaryCardComponent } from '../../components/products-summary-card/products-summary-card.component';
 
 @Component({
   selector: 'app-products-catalog-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ProductsFiltersComponent, ProductsPageHeaderComponent],
+  imports: [ProductsFiltersComponent, ProductsPageHeaderComponent, ProductsSummaryCardComponent],
   templateUrl: './products-catalog-page.component.html',
 })
 export class ProductsCatalogPageComponent {
@@ -30,6 +31,9 @@ export class ProductsCatalogPageComponent {
 
   protected readonly selectedCategory = signal('all');
   protected readonly selectedStatus = signal('all');
+  protected readonly totalProducts = signal(128);
+  protected readonly activeProducts = signal(96);
+  protected readonly inactiveProducts = signal(12);
 
   constructor() {
     this.topbarSearch.configure({
