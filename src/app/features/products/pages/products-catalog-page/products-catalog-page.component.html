@@ -1,27 +1,36 @@
 <div class="min-h-full">
-  <app-products-page-header
-    title="Catálogo de Produtos"
-    (createProduct)="onCreateProduct()"
-  />
+  <app-products-page-header title="Catálogo de Produtos" (createProduct)="onCreateProduct()" />
 
-  <div class="grid grid-cols-12 gap-6">
+  <div class="mb-6 grid grid-cols-12 gap-6">
     <div class="col-span-12 xl:col-span-8">
       <app-products-filters
-        [categories]="categoryOptions"
-        [selectedCategory]="selectedCategory()"
-        [selectedStatus]="selectedStatus()"
-        [statusOptions]="statusOptions"
-        (categoryChange)="selectedCategory.set($event)"
+        [categories]="vm().categories"
+        [selectedCategory]="vm().selectedCategory"
+        [selectedStatus]="vm().selectedStatus"
+        [statusOptions]="vm().statusOptions"
+        (categoryChange)="onCategoryChange($event)"
         (statusChange)="onStatusChange($event)"
       />
     </div>
 
     <div class="col-span-12 xl:col-span-4">
       <app-products-summary-card
-        [activeProducts]="activeProducts()"
-        [inactiveProducts]="inactiveProducts()"
-        [totalProducts]="totalProducts()"
+        [activeProducts]="vm().activeProducts"
+        [inactiveProducts]="vm().inactiveProducts"
+        [totalProducts]="vm().totalProducts"
       />
     </div>
   </div>
+
+  <app-products-grid
+    [currentPage]="vm().currentPage"
+    [error]="vm().error"
+    [items]="vm().items"
+    [loading]="vm().loading"
+    [totalItems]="vm().filteredProducts"
+    [totalPages]="vm().totalPages"
+    [visibleItems]="vm().visibleProducts"
+    (openActions)="onOpenProductActions($event)"
+    (pageChange)="onPageChange($event)"
+  />
 </div>
