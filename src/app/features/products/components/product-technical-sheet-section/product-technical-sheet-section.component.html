@@ -1,0 +1,250 @@
+<section class="mt-8 border-t border-emerald-900/10 pt-6">
+  <div class="flex flex-col gap-3 border-b border-emerald-900/10 pb-4 md:flex-row md:items-center md:justify-between">
+    <button
+      [attr.aria-expanded]="expanded()"
+      [attr.aria-label]="sectionAriaLabel()"
+      class="flex min-w-0 flex-1 items-center justify-between gap-4 text-left focus:outline-none"
+      type="button"
+      (click)="toggleExpanded.emit()"
+    >
+          <div>
+        <p class="text-[0.6875rem] font-bold uppercase tracking-[0.22em] text-emerald-900/35">
+          Ficha tecnica
+        </p>
+        <h3 class="mt-1 text-lg font-bold text-[#002116]">Composicao do produto</h3>
+        <p class="mt-1 text-sm text-emerald-900/55">{{ sectionSummaryLabel() }}</p>
+      </div>
+
+      <div class="flex items-center gap-2 text-emerald-900/45">
+        <span class="text-[0.6875rem] font-bold uppercase tracking-[0.18em]">
+          {{ expanded() ? 'Ocultar' : 'Mostrar' }}
+        </span>
+        <lucide-icon
+          [img]="ChevronDown"
+          class="h-4 w-4 transition-transform"
+          [class.rotate-180]="expanded()"
+        />
+      </div>
+    </button>
+
+    <button
+      [disabled]="saving() || loading() || hasPendingItem()"
+      class="inline-flex items-center gap-2 rounded-xl bg-[#004f38] px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#00563d] focus:outline-none focus:ring-2 focus:ring-[#004f38] disabled:cursor-not-allowed disabled:opacity-60"
+      type="button"
+      (click)="addItem.emit()"
+    >
+      <lucide-icon [img]="Plus" class="h-4 w-4" />
+      Novo item
+    </button>
+  </div>
+
+  @if (expanded()) {
+    @if (ingredientOptions().length === 0) {
+      <div class="py-10 text-center text-sm text-emerald-900/45">
+        Nenhum ingrediente foi encontrado para compor a ficha tecnica.
+      </div>
+    } @else if (ingredientControls().length === 0 && !pendingIngredientControl()) {
+      <div class="py-10 text-center text-sm text-emerald-900/45">
+        Adicione os ingredientes que compoem este produto.
+      </div>
+    } @else {
+      <div class="mt-4 max-h-[18rem] overflow-auto rounded-2xl border border-emerald-900/10">
+        <table class="min-w-full border-collapse text-left">
+          <thead class="sticky top-0 bg-[#f4fff8]">
+            <tr class="border-b border-emerald-900/10 text-[0.6875rem] font-bold uppercase tracking-[0.2em] text-emerald-900/35">
+              <th class="w-[30%] px-4 py-3">Ingrediente</th>
+              <th class="px-4 py-3">Categoria</th>
+              <th class="px-4 py-3">Quantidade</th>
+              <th class="px-4 py-3">Unidade base</th>
+              <th class="px-4 py-3">Status</th>
+              <th class="px-4 py-3 text-right">Acoes</th>
+            </tr>
+          </thead>
+
+          <tbody class="divide-y divide-emerald-900/10 bg-white">
+            @if (pendingIngredientControl(); as pendingIngredientGroup) {
+              <tr class="bg-[#f8fffb]" [formGroup]="pendingIngredientGroup">
+                <td class="w-[30%] px-4 py-4 align-top">
+                  <label class="block">
+                    <span class="sr-only">Ingrediente</span>
+                    <select
+                      [class]="
+                        controlHasError(pendingIngredientGroup, 'ingredientId')
+                          ? 'w-full rounded-xl border border-[#ba1a1a]/30 bg-white pl-2 py-3 text-sm text-[#002116] outline-none focus:ring-2 focus:ring-[#ba1a1a]'
+                          : 'w-full rounded-xl border-none bg-[#e7fff2] pl-2 py-3 text-sm text-[#002116] outline-none focus:ring-2 focus:ring-[#004f38]'
+                      "
+                      formControlName="ingredientId"
+                    >
+                      <option value="">Selecione um ingrediente</option>
+                      @for (option of ingredientOptions(); track option.id) {
+                        <option [value]="option.id">
+                          {{ option.label }}{{ option.isActive ? '' : ' (inativo)' }}
+                        </option>
+                      }
+                    </select>
+                    @if (controlHasError(pendingIngredientGroup, 'ingredientId', 'required')) {
+                      <span class="mt-2 block text-xs font-medium text-[#ba1a1a]">
+                        Selecione um ingrediente para adicionar o item.
+                      </span>
+                    }
+                  </label>
+                </td>
+
+                <td class="w-[30%] px-4 py-4 align-top">
+                  @if (resolveIngredientOption(pendingIngredientGroup.controls['ingredientId']?.value); as option) {
+                    <span class="text-sm font-semibold text-[#002116]">{{ option.categoryLabel }}</span>
+                  } @else {
+                    <span class="text-sm text-emerald-900/45">Selecione um ingrediente</span>
+                  }
+                </td>
+
+                <td class="px-4 py-4 align-top">
+                  <label class="block">
+                    <span class="sr-only">Quantidade</span>
+                    <input
+                      [class]="
+                        controlHasError(pendingIngredientGroup, 'quantity')
+                          ? 'w-full min-w-28 rounded-xl border border-[#ba1a1a]/30 bg-white px-4 py-3 text-sm text-[#002116] outline-none focus:ring-2 focus:ring-[#ba1a1a]'
+                          : 'w-full min-w-28 rounded-xl border-none bg-[#e7fff2] px-4 py-3 text-sm text-[#002116] outline-none focus:ring-2 focus:ring-[#004f38]'
+                      "
+                      formControlName="quantity"
+                      inputmode="decimal"
+                      min="0.0001"
+                      placeholder="Ex.: 1,5"
+                      step="0.0001"
+                      type="number"
+                    />
+                    @if (controlHasError(pendingIngredientGroup, 'quantity', 'required')) {
+                      <span class="mt-2 block text-xs font-medium text-[#ba1a1a]">
+                        Informe a quantidade do ingrediente.
+                      </span>
+                    } @else if (controlHasError(pendingIngredientGroup, 'quantity', 'min')) {
+                      <span class="mt-2 block text-xs font-medium text-[#ba1a1a]">
+                        A quantidade deve ser maior que zero.
+                      </span>
+                    }
+                  </label>
+                </td>
+
+                <td class="px-4 py-4 align-top">
+                  @if (resolveIngredientOption(pendingIngredientGroup.controls['ingredientId']?.value); as option) {
+                    <span class="text-sm text-[#3f4943]">{{ option.baseUnit || 'Nao informada' }}</span>
+                  } @else {
+                    <span class="text-sm text-emerald-900/45">-</span>
+                  }
+                </td>
+
+                <td class="px-4 py-4 align-top">
+                  @if (resolveIngredientOption(pendingIngredientGroup.controls['ingredientId']?.value); as option) {
+                    <span
+                      [class]="
+                        option.isActive
+                          ? 'inline-flex rounded-full bg-[#e7fff2] px-3 py-1 text-[0.6875rem] font-bold uppercase tracking-[0.18em] text-[#004f38]'
+                          : 'inline-flex rounded-full bg-[#f1f3f2] px-3 py-1 text-[0.6875rem] font-bold uppercase tracking-[0.18em] text-[#59635d]'
+                      "
+                    >
+                      {{ option.isActive ? 'Ativo' : 'Inativo' }}
+                    </span>
+                  } @else {
+                    <span class="text-sm text-emerald-900/45">-</span>
+                  }
+                </td>
+
+                <td class="px-4 py-4 align-top">
+                  <div class="flex justify-end gap-2">
+                    <button
+                      [disabled]="saving()"
+                      class="rounded-lg px-3 py-2 text-sm font-semibold text-[#004f38] transition-colors hover:bg-[#e7fff2] focus:outline-none focus:ring-2 focus:ring-[#004f38] disabled:cursor-not-allowed disabled:opacity-50"
+                      type="button"
+                      (click)="cancelPendingItem.emit()"
+                    >
+                      Cancelar
+                    </button>
+
+                    <button
+                      [disabled]="saving() || pendingIngredientGroup.invalid"
+                      class="rounded-lg bg-[#004f38] px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#00563d] focus:outline-none focus:ring-2 focus:ring-[#004f38] disabled:cursor-not-allowed disabled:opacity-60"
+                      type="button"
+                      (click)="confirmPendingItem.emit()"
+                    >
+                      Salvar
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+
+            @for (ingredientGroup of ingredientControls(); track $index) {
+              <tr [class.opacity-60]="!resolveIngredientOption(ingredientGroup.controls['ingredientId']?.value)?.isActive">
+                <td class="px-4 py-4 align-top">
+                  @if (resolveIngredientOption(ingredientGroup.controls['ingredientId']?.value); as option) {
+                    <div class="flex flex-col gap-1">
+                      <span class="text-sm font-semibold text-[#002116]">{{ option.label }}</span>
+                      @if (!option.isActive) {
+                        <span class="text-xs text-emerald-900/45">Ingrediente inativo</span>
+                      }
+                    </div>
+                  } @else {
+                    <span class="text-sm text-emerald-900/45">Ingrediente nao encontrado</span>
+                  }
+                </td>
+
+                <td class="px-4 py-4 align-top">
+                  @if (resolveIngredientOption(ingredientGroup.controls['ingredientId']?.value); as option) {
+                    <span class="text-sm font-semibold text-[#002116]">{{ option.categoryLabel }}</span>
+                  } @else {
+                    <span class="text-sm text-emerald-900/45">Selecione um ingrediente</span>
+                  }
+                </td>
+
+                <td class="px-4 py-4 align-top">
+                  <span class="text-sm font-semibold text-[#002116]">
+                    {{ ingredientGroup.controls['quantity']?.value ?? '-' }}
+                  </span>
+                </td>
+
+                <td class="px-4 py-4 align-top">
+                  @if (resolveIngredientOption(ingredientGroup.controls['ingredientId']?.value); as option) {
+                    <span class="text-sm text-[#3f4943]">{{ option.baseUnit || 'Nao informada' }}</span>
+                  } @else {
+                    <span class="text-sm text-emerald-900/45">-</span>
+                  }
+                </td>
+
+                <td class="px-4 py-4 align-top">
+                  @if (resolveIngredientOption(ingredientGroup.controls['ingredientId']?.value); as option) {
+                    <span
+                      [class]="
+                        option.isActive
+                          ? 'inline-flex rounded-full bg-[#e7fff2] px-3 py-1 text-[0.6875rem] font-bold uppercase tracking-[0.18em] text-[#004f38]'
+                          : 'inline-flex rounded-full bg-[#f1f3f2] px-3 py-1 text-[0.6875rem] font-bold uppercase tracking-[0.18em] text-[#59635d]'
+                      "
+                    >
+                      {{ option.isActive ? 'Ativo' : 'Inativo' }}
+                    </span>
+                  } @else {
+                    <span class="text-sm text-emerald-900/45">-</span>
+                  }
+                </td>
+
+                <td class="px-4 py-4 align-top">
+                  <div class="flex justify-end gap-2">
+                    <button
+                      [attr.aria-label]="'Remover item ' + ($index + 1)"
+                      [disabled]="saving()"
+                      class="rounded-lg px-3 py-2 text-sm font-semibold text-[#8a2900] transition-colors hover:bg-[#fff2ea] focus:outline-none focus:ring-2 focus:ring-[#8a2900] disabled:cursor-not-allowed disabled:opacity-50"
+                      type="button"
+                      (click)="removeItem.emit($index)"
+                    >
+                      Remover
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  }
+</section>

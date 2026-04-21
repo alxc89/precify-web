@@ -128,116 +128,19 @@
             </label>
           </div>
 
-          <section class="mt-8 border-t border-emerald-900/10 pt-6">
-            <div class="flex flex-col gap-3 border-b border-emerald-900/10 pb-4 md:flex-row md:items-center md:justify-between">
-              <button
-                [attr.aria-expanded]="technicalSheetExpanded()"
-                [attr.aria-label]="technicalSheetSectionAriaLabel()"
-                class="flex min-w-0 flex-1 items-center justify-between gap-4 text-left focus:outline-none"
-                type="button"
-                (click)="toggleTechnicalSheetSection()"
-              >
-                <div>
-                  <p class="text-[0.6875rem] font-bold uppercase tracking-[0.22em] text-emerald-900/35">
-                    Ficha tecnica
-                  </p>
-                  <p class="mt-1 text-sm text-emerald-900/55">{{ technicalSheetSummaryLabel() }}</p>
-                </div>
-
-                <div class="flex items-center gap-2 text-emerald-900/45">
-                  <span class="text-[0.6875rem] font-bold uppercase tracking-[0.18em]">
-                    {{ technicalSheetExpanded() ? 'Ocultar' : 'Mostrar' }}
-                  </span>
-                  <lucide-icon
-                    [img]="ChevronDown"
-                    class="h-4 w-4 transition-transform"
-                    [class.rotate-180]="technicalSheetExpanded()"
-                  />
-                </div>
-              </button>
-
-              <button
-                [disabled]="saving() || loading()"
-                class="inline-flex items-center gap-2 rounded-xl bg-[#004f38] px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#00563d] focus:outline-none focus:ring-2 focus:ring-[#004f38] disabled:cursor-not-allowed disabled:opacity-60"
-                type="button"
-                (click)="addIngredientRow()"
-              >
-                <lucide-icon [img]="Plus" class="h-4 w-4" />
-                Novo item
-              </button>
-            </div>
-
-            @if (technicalSheetExpanded()) {
-              @if (ingredientOptions().length === 0) {
-                <div class="py-10 text-center text-sm text-emerald-900/45">
-                  Nenhum ingrediente foi encontrado para compor a ficha tecnica.
-                </div>
-              } @else if (ingredientControls().length === 0) {
-                <div class="py-10 text-center text-sm text-emerald-900/45">
-                  Adicione os ingredientes que compoem este produto.
-                </div>
-              } @else {
-                <div class="mt-4 space-y-4" formArrayName="ingredients">
-                  @for (ingredientGroup of ingredientControls(); track $index) {
-                    <div
-                      class="rounded-2xl border border-emerald-900/10 bg-[#f8fffb] p-4"
-                      [formGroupName]="$index"
-                    >
-                      <div class="grid gap-4 md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)_auto]">
-                        <label class="block">
-                          <span class="mb-2 block text-sm font-semibold text-[#002116]">Ingrediente</span>
-                          <select
-                            class="w-full rounded-xl border-none bg-white px-4 py-3 text-sm text-[#002116] outline-none focus:ring-2 focus:ring-[#004f38]"
-                            formControlName="ingredientId"
-                          >
-                            <option value="">Selecione um ingrediente</option>
-                            @for (option of ingredientOptions(); track option.id) {
-                              <option [value]="option.id">
-                                {{ option.label }}{{ option.isActive ? '' : ' (inativo)' }}
-                              </option>
-                            }
-                          </select>
-                        </label>
-
-                        <label class="block">
-                          <span class="mb-2 block text-sm font-semibold text-[#002116]">Quantidade</span>
-                          <input
-                            class="w-full rounded-xl border-none bg-white px-4 py-3 text-sm text-[#002116] outline-none focus:ring-2 focus:ring-[#004f38]"
-                            formControlName="quantity"
-                            min="0.0001"
-                            step="0.0001"
-                            type="number"
-                          />
-                        </label>
-
-                        <div class="flex items-end">
-                          <button
-                            [attr.aria-label]="'Remover item ' + ($index + 1)"
-                            [disabled]="saving()"
-                            class="inline-flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold text-[#8a2900] transition-colors hover:bg-[#fff2ea] focus:outline-none focus:ring-2 focus:ring-[#8a2900] disabled:cursor-not-allowed disabled:opacity-50"
-                            type="button"
-                            (click)="removeIngredientRow($index)"
-                          >
-                            <lucide-icon [img]="Trash2" class="h-4 w-4" />
-                            Remover
-                          </button>
-                        </div>
-                      </div>
-
-                      @if (resolveIngredientOption(ingredientGroup.controls.ingredientId.value); as option) {
-                        <div class="mt-3 flex flex-wrap gap-3 text-xs font-medium text-emerald-900/55">
-                          <span class="rounded-full bg-white px-3 py-1">Categoria: {{ option.categoryLabel }}</span>
-                          <span class="rounded-full bg-white px-3 py-1">
-                            Unidade base: {{ option.baseUnit || 'Nao informada' }}
-                          </span>
-                        </div>
-                      }
-                    </div>
-                  }
-                </div>
-              }
-            }
-          </section>
+          <app-product-technical-sheet-section
+            [expanded]="technicalSheetExpanded()"
+            [ingredientControls]="ingredientControls()"
+            [ingredientOptions]="ingredientOptions()"
+            [loading]="loading()"
+            [pendingIngredientControl]="pendingIngredientControl()"
+            [saving]="saving()"
+            (addItem)="addIngredientRow()"
+            (cancelPendingItem)="cancelPendingIngredient()"
+            (confirmPendingItem)="confirmPendingIngredient()"
+            (removeItem)="removeIngredientRow($event)"
+            (toggleExpanded)="toggleTechnicalSheetSection()"
+          />
 
           <div class="mt-6 flex items-center justify-end gap-3">
             <button

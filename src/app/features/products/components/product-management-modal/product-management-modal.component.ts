@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, input, output, signal } from '@angular/core';
-import { FormArray, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ChevronDown, Loader2, LucideAngularModule, Plus, RefreshCcw, Trash2, X } from 'lucide-angular';
+import { FormControl, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Loader2, LucideAngularModule, X } from 'lucide-angular';
+import { ProductTechnicalSheetSectionComponent } from '../product-technical-sheet-section/product-technical-sheet-section.component';
 import {
   ProductIngredientOption,
   ProductManagementDetailVm,
@@ -11,7 +12,7 @@ import {
 @Component({
   selector: 'app-product-management-modal',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [LucideAngularModule, ReactiveFormsModule],
+  imports: [LucideAngularModule, ProductTechnicalSheetSectionComponent, ReactiveFormsModule],
   templateUrl: './product-management-modal.component.html',
 })
 export class ProductManagementModalComponent {
@@ -36,30 +37,19 @@ export class ProductManagementModalComponent {
     photoUrl: ['', Validators.maxLength(500)],
   });
 
-  protected readonly ChevronDown = ChevronDown;
   protected readonly Loader2 = Loader2;
-  protected readonly Plus = Plus;
-  protected readonly RefreshCcw = RefreshCcw;
-  protected readonly Trash2 = Trash2;
   protected readonly X = X;
+  protected readonly pendingIngredientControl = signal<ReturnType<
+    ProductManagementModalComponent['createIngredientGroup']
+  > | null>(null);
   protected readonly technicalSheetExpanded = signal(true);
   protected readonly dialogTitle = computed(() =>
     this.mode() === 'create' ? 'Novo Produto' : 'Editar Produto',
-  );
-  protected readonly statusActionLabel = computed(() =>
-    this.product()?.isActive ? 'Desativar produto' : 'Reativar produto',
   );
   protected readonly statusHelperLabel = computed(() => 'Desativar Produto');
   protected readonly statusToggleAriaLabel = computed(() =>
     this.product()?.isActive ? 'Desativar produto' : 'Reativar produto',
   );
-  protected readonly technicalSheetSectionAriaLabel = computed(() =>
-    this.technicalSheetExpanded() ? 'Ocultar ficha técnica' : 'Mostrar ficha técnica',
-  );
-  protected readonly technicalSheetSummaryLabel = computed(() => {
-    const count = this.ingredientControls().length;
-    return count === 1 ? '1 item configurado' : `${count} itens configurados`;
-  });
 
   constructor() {
     effect(() => {
@@ -77,6 +67,7 @@ export class ProductManagementModalComponent {
           { emitEvent: false },
         );
         this.replaceIngredientRows([]);
+        this.pendingIngredientControl.set(null);
         return;
       }
 
@@ -93,10 +84,11 @@ export class ProductManagementModalComponent {
         },
         { emitEvent: false },
       );
+      this.pendingIngredientControl.set(null);
       this.replaceIngredientRows(
         product.technicalSheet.map((item) => ({
           ingredientId: item.ingredientId,
-          quantity: item.quantity ?? 0,
+          quantity: item.quantity ?? null,
         })),
       );
     });
@@ -107,7 +99,37 @@ export class ProductManagementModalComponent {
   }
 
   protected addIngredientRow() {
-    this.ingredientsArray.push(this.createIngredientGroup());
+    if (this.pendingIngredientControl()) {
+      return;
+    }
+
+    this.pendingIngredientControl.set(this.createIngredientGroup());
+  }
+
+  protected cancelPendingIngredient() {
+    this.pendingIngredientControl.set(null);
+  }
+
+  protected confirmPendingIngredient() {
+    const pendingIngredient = this.pendingIngredientControl();
+
+    if (!pendingIngredient) {
+      return;
+    }
+
+    if (pendingIngredient.invalid) {
+      pendingIngredient.markAllAsTouched();
+      return;
+    }
+
+    const value = pendingIngredient.getRawValue();
+    this.ingredientsArray.push(
+      this.createIngredientGroup({
+        ingredientId: value.ingredientId,
+        quantity: value.quantity ?? undefined,
+      }),
+    );
+    this.pendingIngredientControl.set(null);
   }
 
   protected removeIngredientRow(index: number) {
@@ -116,14 +138,6 @@ export class ProductManagementModalComponent {
 
   protected toggleTechnicalSheetSection() {
     this.technicalSheetExpanded.update((current) => !current);
-  }
-
-  protected resolveIngredientOption(ingredientId: string | null | undefined) {
-    if (!ingredientId) {
-      return null;
-    }
-
-    return this.ingredientOptions().find((option) => option.id === ingredientId) ?? null;
   }
 
   protected submit() {
@@ -140,7 +154,7 @@ export class ProductManagementModalComponent {
       description: value.description.trim() || null,
       ingredients: value.ingredients.map((item) => ({
         ingredientId: item.ingredientId,
-        quantity: item.quantity,
+        quantity: item.quantity ?? 0,
       })),
       name: value.name.trim(),
       photoUrl: value.photoUrl.trim() || null,
@@ -151,17 +165,17 @@ export class ProductManagementModalComponent {
     return this.productForm.controls.ingredients;
   }
 
-  private createIngredientGroup(value?: { ingredientId?: string; quantity?: number }) {
+  private createIngredientGroup(value?: { ingredientId?: string; quantity?: number | null }) {
     return this.fb.group({
       ingredientId: [value?.ingredientId ?? '', Validators.required],
-      quantity: [
-        value?.quantity ?? 1,
-        [Validators.required, Validators.min(0.0001)],
-      ],
+      quantity: new FormControl<number | null>(value?.quantity ?? null, [
+        Validators.required,
+        Validators.min(0.0001),
+      ]),
     });
   }
 
-  private replaceIngredientRows(values: readonly { ingredientId?: string; quantity?: number }[]) {
+  private replaceIngredientRows(values: readonly { ingredientId?: string; quantity?: number | null }[]) {
     this.ingredientsArray.clear();
 
     values.forEach((value) => {
