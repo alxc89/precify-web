@@ -111,7 +111,7 @@ export class OrganizationIngredientPricesService extends BaseService {
 
     /**
      * Cria uma nova entry de preço de ingrediente para a organização.
-     * Este endpoint aceita &#x60;platform_admin&#x60; ou &#x60;organization_admin&#x60; da própria organização.
+     * Cria uma nova entry de preço vinculada ao histórico organizacional informado.
      * @endpoint post /api/v1/organizacoes/{organizationId}/ingredientes/{ingredientId}/precos
      * @param organizationId Identificador da organização que receberá a entry de preço.
      * @param ingredientId Identificador do ingrediente ao qual a entry pertence.
@@ -330,7 +330,7 @@ export class OrganizationIngredientPricesService extends BaseService {
 
     /**
      * Atualiza uma entry de preço existente do histórico organizacional.
-     * Este endpoint aceita &#x60;platform_admin&#x60; ou &#x60;organization_admin&#x60; da própria organização.
+     * Atualiza uma entry existente do histórico organizacional informado.
      * @endpoint put /api/v1/organizacoes/{organizationId}/ingredientes/{ingredientId}/precos/{priceEntryId}
      * @param organizationId Identificador da organização do histórico.
      * @param ingredientId Identificador do ingrediente da entry.

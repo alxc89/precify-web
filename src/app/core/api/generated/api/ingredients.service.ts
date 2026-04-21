@@ -260,7 +260,7 @@ export class IngredientsService extends BaseService {
 
     /**
      * Atualiza os dados de um ingrediente.
-     * Este endpoint é restrito a &#x60;platform_admin&#x60; e exige categoria existente para reclassificação.
+     * Exige categoria existente para reclassificação.
      * @endpoint put /api/v1/ingredientes/{id}
      * @param id Identificador do ingrediente a ser editado.
      * @param updateIngredientRequest Novos dados do ingrediente.
@@ -335,7 +335,7 @@ export class IngredientsService extends BaseService {
 
     /**
      * Cria um novo ingrediente global ativo.
-     * Este endpoint é restrito a &#x60;platform_admin&#x60; e exige categoria existente e ativa.
+     * Exige categoria existente e ativa.
      * @endpoint post /api/v1/ingredientes
      * @param createIngredientRequest Dados do ingrediente a ser criado.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

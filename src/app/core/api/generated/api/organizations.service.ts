@@ -47,7 +47,7 @@ export class OrganizationsService extends BaseService {
 
     /**
      * Cria um usuário já vinculado a uma organização com um papel organizacional válido.
-     * Este endpoint cria o usuário, provisiona uma credencial provisória e já cria o vínculo organizacional inicial.  O escopo organizacional aceita apenas as roles &#x60;organization_admin&#x60; e &#x60;organization_analyst&#x60;.
+     * Este endpoint cria o usuário, provisiona uma credencial provisória e já cria o vínculo organizacional inicial.  Este endpoint cria o usuário, provisiona uma credencial provisória e já cria o vínculo organizacional inicial.
      * @endpoint post /api/v1/organizacoes/{organizationId}/usuarios
      * @param organizationId Identificador da organização que receberá o usuário criado.
      * @param createOrganizationUserRequest Dados de criação do usuário e da role inicial no escopo organizacional.
@@ -122,7 +122,7 @@ export class OrganizationsService extends BaseService {
 
     /**
      * Desativa um vínculo organizacional ativo entre um usuário e uma organização.
-     * A desativação de vínculo organizacional é restrita a &#x60;platform_admin&#x60; e não permite auto-desativação.
+     * A operação não permite auto-desativação.
      * @endpoint delete /api/v1/organizacoes/{organizationId}/usuarios/{userId}
      * @param organizationId Identificador da organização à qual o vínculo pertence.
      * @param userId Identificador do usuário que terá o vínculo desativado.
@@ -188,7 +188,7 @@ export class OrganizationsService extends BaseService {
 
     /**
      * Cria uma nova organização ativa.
-     * Este endpoint é restrito a usuários com a role &#x60;platform_admin&#x60;.
+     * A organização informada deve ser válida para o fluxo de criação.
      * @endpoint post /api/v1/organizacoes
      * @param createOrganizationRequest Dados da organização a ser criada.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

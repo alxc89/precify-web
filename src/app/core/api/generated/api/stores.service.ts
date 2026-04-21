@@ -47,7 +47,7 @@ export class StoresService extends BaseService {
 
     /**
      * Cria um usuário já vinculado a uma loja com um papel válido para o escopo da loja.
-     * Este endpoint cria o usuário, provisiona uma credencial provisória e já cria o vínculo inicial da loja.  O escopo de loja aceita apenas as roles &#x60;store_admin&#x60;, &#x60;store_manager&#x60; e &#x60;store_user&#x60;.
+     * Este endpoint cria o usuário, provisiona uma credencial provisória e já cria o vínculo inicial da loja.  Este endpoint cria o usuário, provisiona uma credencial provisória e já cria o vínculo inicial da loja.
      * @endpoint post /api/v1/lojas/{storeId}/usuarios
      * @param storeId Identificador da loja que receberá o usuário criado.
      * @param createStoreUserRequest Dados de criação do usuário e da role inicial no escopo da loja.
@@ -122,7 +122,7 @@ export class StoresService extends BaseService {
 
     /**
      * Desativa um vínculo ativo entre um usuário e uma loja.
-     * A operação é permitida para &#x60;platform_admin&#x60; e &#x60;store_admin&#x60; da própria loja. Auto-desativação não é permitida.
+     * Auto-desativação não é permitida.
      * @endpoint delete /api/v1/lojas/{storeId}/usuarios/{userId}
      * @param storeId Identificador da loja à qual o vínculo pertence.
      * @param userId Identificador do usuário que terá o vínculo desativado.
@@ -188,7 +188,7 @@ export class StoresService extends BaseService {
 
     /**
      * Cria uma nova loja associada a uma organização ativa.
-     * Este endpoint é restrito a &#x60;platform_admin&#x60;. A organização informada deve existir e estar ativa.
+     * A organização informada deve existir e estar ativa.
      * @endpoint post /api/v1/organizacoes/{organizationId}/lojas
      * @param organizationId Identificador da organização à qual a loja será vinculada.
      * @param createStoreRequest Dados da loja a ser criada.

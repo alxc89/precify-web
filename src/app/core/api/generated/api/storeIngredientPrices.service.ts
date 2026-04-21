@@ -111,7 +111,7 @@ export class StoreIngredientPricesService extends BaseService {
 
     /**
      * Cria uma nova entry de preço de ingrediente para a loja.
-     * Este endpoint aceita &#x60;platform_admin&#x60;, &#x60;store_admin&#x60; ou &#x60;store_manager&#x60; da própria loja.
+     * Cria uma nova entry de preço vinculada ao histórico da loja informada.
      * @endpoint post /api/v1/lojas/{storeId}/ingredientes/{ingredientId}/precos
      * @param storeId Identificador da loja que receberá a entry de preço.
      * @param ingredientId Identificador do ingrediente ao qual a entry pertence.
@@ -330,7 +330,7 @@ export class StoreIngredientPricesService extends BaseService {
 
     /**
      * Atualiza uma entry de preço existente do histórico da loja.
-     * Este endpoint aceita &#x60;platform_admin&#x60;, &#x60;store_admin&#x60; ou &#x60;store_manager&#x60; da própria loja.
+     * Atualiza uma entry existente do histórico da loja informada.
      * @endpoint put /api/v1/lojas/{storeId}/ingredientes/{ingredientId}/precos/{priceEntryId}
      * @param storeId Identificador da loja do histórico.
      * @param ingredientId Identificador do ingrediente da entry.

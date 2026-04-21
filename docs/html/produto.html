@@ -1,0 +1,687 @@
+<!doctype html>
+
+<html class="light" lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Catálogo de Produtos | Precify</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              'surface-tint': '#1a6b4f',
+              'secondary-fixed': '#ffdbca',
+              'primary-fixed-dim': '#8ad6b3',
+              'on-tertiary-fixed-variant': '#005323',
+              'on-primary-fixed': '#002115',
+              'primary-container': '#17694d',
+              'surface-container-highest': '#beedd7',
+              'surface-container': '#c9f8e2',
+              'on-secondary-fixed': '#331200',
+              'on-primary': '#ffffff',
+              'on-error': '#ffffff',
+              'surface-dim': '#b5e4cf',
+              tertiary: '#005022',
+              secondary: '#9c4400',
+              'on-surface': '#002116',
+              'primary-fixed': '#a5f2ce',
+              background: '#e7fff2',
+              'on-secondary-container': '#652a00',
+              'surface-bright': '#e7fff2',
+              'tertiary-fixed': '#80fb9d',
+              primary: '#004f38',
+              'on-tertiary-fixed': '#00210a',
+              'secondary-fixed-dim': '#ffb68f',
+              'surface-container-lowest': '#ffffff',
+              'outline-variant': '#bec9c1',
+              'on-tertiary-container': '#73ee90',
+              'on-primary-container': '#99e6c2',
+              'inverse-on-surface': '#ccfbe5',
+              'secondary-container': '#fc853b',
+              'on-background': '#002116',
+              'tertiary-container': '#006b30',
+              'on-error-container': '#93000a',
+              'inverse-surface': '#073829',
+              'on-secondary-fixed-variant': '#773200',
+              'error-container': '#ffdad6',
+              'tertiary-fixed-dim': '#63de83',
+              'surface-variant': '#beedd7',
+              'on-surface-variant': '#3f4943',
+              surface: '#e7fff2',
+              'inverse-primary': '#8ad6b3',
+              'surface-container-high': '#c3f3dd',
+              error: '#ba1a1a',
+              'surface-container-low': '#cefee8',
+              'on-secondary': '#ffffff',
+              'on-primary-fixed-variant': '#005139',
+              outline: '#6f7973',
+              'on-tertiary': '#ffffff',
+            },
+            fontFamily: {
+              headline: ['Manrope'],
+              body: ['Inter'],
+              label: ['Inter'],
+            },
+            borderRadius: { DEFAULT: '0.25rem', lg: '0.5rem', xl: '0.75rem', full: '9999px' },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        font-family: 'Inter', sans-serif;
+      }
+      h1,
+      h2,
+      h3,
+      .font-headline {
+        font-family: 'Manrope', sans-serif;
+      }
+      .material-symbols-outlined {
+        font-variation-settings:
+          'FILL' 0,
+          'wght' 400,
+          'GRAD' 0,
+          'opsz' 24;
+        vertical-align: middle;
+      }
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #bec9c1;
+        border-radius: 10px;
+      }
+    </style>
+  </head>
+  <body class="bg-background text-on-background min-h-screen flex overflow-hidden">
+    <!-- SideNavBar Component -->
+    <aside
+      class="h-screen w-64 hidden lg:flex flex-col fixed left-0 top-0 bg-[#e7fff2] dark:bg-emerald-950 p-4 space-y-2 z-50"
+    >
+      <div class="px-2 py-4 mb-6">
+        <div class="flex items-center gap-3">
+          <div
+            class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-on-primary shadow-lg"
+          >
+            <span class="material-symbols-outlined" data-icon="restaurant_menu"
+              >restaurant_menu</span
+            >
+          </div>
+          <div>
+            <h2 class="text-xl font-black text-emerald-900 dark:text-emerald-50 leading-tight">
+              Precify Admin
+            </h2>
+            <p class="text-[10px] uppercase tracking-widest text-emerald-800/60 font-bold">
+              Culinary SaaS
+            </p>
+          </div>
+        </div>
+      </div>
+      <nav class="flex-1 space-y-1 overflow-y-auto custom-scrollbar">
+        <a
+          class="flex items-center gap-3 px-4 py-3 text-emerald-800/70 hover:text-emerald-900 hover:translate-x-1 transition-all duration-300 font-manrope text-sm font-medium"
+          href="#"
+        >
+          <span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+          <span>Dashboard</span>
+        </a>
+        <a
+          class="flex items-center gap-3 px-4 py-3 text-emerald-800/70 hover:text-emerald-900 hover:translate-x-1 transition-all duration-300 font-manrope text-sm font-medium"
+          href="#"
+        >
+          <span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+          <span>Ingredientes</span>
+        </a>
+        <a
+          class="flex items-center gap-3 px-4 py-3 text-emerald-800/70 hover:text-emerald-900 hover:translate-x-1 transition-all duration-300 font-manrope text-sm font-medium"
+          href="#"
+        >
+          <span class="material-symbols-outlined" data-icon="payments">payments</span>
+          <span>Preços</span>
+        </a>
+        <a
+          class="flex items-center gap-3 px-4 py-3 text-emerald-900 bg-white/80 rounded-xl shadow-sm font-manrope text-sm font-bold border border-emerald-100/50"
+          href="#"
+        >
+          <span
+            class="material-symbols-outlined"
+            data-icon="set_meal"
+            style="font-variation-settings: 'FILL' 1"
+            >set_meal</span
+          >
+          <span>Catalog</span>
+        </a>
+        <a
+          class="flex items-center gap-3 px-4 py-3 text-emerald-800/70 hover:text-emerald-900 hover:translate-x-1 transition-all duration-300 font-manrope text-sm font-medium"
+          href="#"
+        >
+          <span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+          <span>Sortimento</span>
+        </a>
+      </nav>
+      <div class="pt-4 mt-4 border-t border-emerald-100/30 space-y-1">
+        <a
+          class="flex items-center gap-3 px-4 py-3 text-emerald-800/70 hover:text-emerald-900 transition-all text-sm font-medium"
+          href="#"
+        >
+          <span class="material-symbols-outlined" data-icon="help">help</span>
+          <span>Help</span>
+        </a>
+        <a
+          class="flex items-center gap-3 px-4 py-3 text-error hover:opacity-80 transition-all text-sm font-medium"
+          href="#"
+        >
+          <span class="material-symbols-outlined" data-icon="logout">logout</span>
+          <span>Logout</span>
+        </a>
+      </div>
+    </aside>
+    <!-- Main Content Canvas -->
+    <main
+      class="flex-1 lg:ml-64 min-h-screen flex flex-col relative overflow-y-auto custom-scrollbar"
+    >
+      <!-- TopNavBar Component -->
+      <header
+        class="sticky top-0 w-full z-40 bg-[#e7fff2] backdrop-blur-xl flex justify-between items-center px-8 h-20 shadow-[0_24px_40px_-4px_hsla(158,60%,6%,0.06)]"
+      >
+        <div class="flex items-center gap-4">
+          <div class="flex flex-col">
+            <span class="text-[10px] uppercase tracking-tighter text-on-surface-variant font-bold"
+              >Unidade Atual</span
+            >
+            <div class="flex items-center gap-2 cursor-pointer group">
+              <span class="font-headline font-extrabold text-emerald-900 text-lg tracking-tight"
+                >Matriz São Paulo</span
+              >
+              <span
+                class="material-symbols-outlined text-emerald-700 text-sm group-hover:translate-y-0.5 transition-transform"
+                data-icon="expand_more"
+                >expand_more</span
+              >
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center gap-6">
+          <div
+            class="hidden md:flex items-center bg-surface-container-high px-4 py-2 rounded-xl border border-outline-variant/10 focus-within:border-primary/30 transition-all"
+          >
+            <span class="material-symbols-outlined text-outline text-xl" data-icon="search"
+              >search</span
+            >
+            <input
+              class="bg-transparent border-none focus:ring-0 text-sm w-64 placeholder:text-outline/60"
+              placeholder="Buscar no catálogo..."
+              type="text"
+            />
+          </div>
+          <div class="flex items-center gap-2">
+            <button
+              class="p-2.5 rounded-xl hover:bg-emerald-100/50 transition-colors relative group"
+            >
+              <span class="material-symbols-outlined text-emerald-900" data-icon="notifications"
+                >notifications</span
+              >
+              <span
+                class="absolute top-2.5 right-2.5 w-2 h-2 bg-secondary rounded-full border-2 border-[#e7fff2]"
+              ></span>
+            </button>
+            <button class="p-2.5 rounded-xl hover:bg-emerald-100/50 transition-colors">
+              <span class="material-symbols-outlined text-emerald-900" data-icon="settings"
+                >settings</span
+              >
+            </button>
+          </div>
+          <div class="h-10 w-[1px] bg-emerald-100/50"></div>
+          <div class="flex items-center gap-3">
+            <div class="text-right hidden sm:block">
+              <p class="text-xs font-bold text-emerald-950 leading-none">Chef Ricardo M.</p>
+              <p class="text-[10px] text-emerald-700/70 font-medium">Administrador</p>
+            </div>
+            <img
+              alt="User profile avatar"
+              class="w-10 h-10 rounded-xl object-cover ring-2 ring-white shadow-sm"
+              data-alt="Close up portrait of a professional chef in a white uniform with a friendly expression in a kitchen setting"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDhpDRR7SmhXukExq4Q3C0rYmBYl0z-mbk13oSOUUBuPD-ZNYd945NuchHnSNuSzvaZDttcdn9cS_fOgOS4yyekXGiBH02jJ7Ynvlm-5VWpbAMt_9b84i_CwUmUMqdt4StWRGbst77EZqFVTEe7BGviWCgbKHk8z182ZbXxUdR5xsVcg5jKg7DzsZgXBHyl4RTZNp5dWZ4HyEhducoR09g0iqk4mQF9yJHpY2dMJmWgrvynJ3-WsWxFEZrT8uU_6CWTbLph1TXDf_I"
+            />
+          </div>
+        </div>
+      </header>
+      <!-- Page Content -->
+      <div class="p-8 max-w-[1400px] w-full mx-auto space-y-8">
+        <!-- Hero Header Section -->
+        <section class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <div class="space-y-1">
+            <nav
+              class="flex items-center gap-2 text-[10px] font-bold text-emerald-700/50 uppercase tracking-widest"
+            >
+              <span>Produtos</span>
+              <span class="material-symbols-outlined text-[12px]" data-icon="chevron_right"
+                >chevron_right</span
+              >
+              <span class="text-emerald-900">Catálogo Geral</span>
+            </nav>
+            <h1 class="text-4xl font-headline font-extrabold text-emerald-950 tracking-tight">
+              Catálogo de Produtos
+            </h1>
+            <p class="text-on-surface-variant text-sm max-w-lg">
+              Gerencie sua oferta gastronômica, ajuste preços técnicos e controle a disponibilidade
+              em tempo real.
+            </p>
+          </div>
+          <button
+            class="flex items-center gap-2 bg-gradient-to-br from-[#004f38] to-[#006b30] text-on-primary px-6 py-3.5 rounded-xl font-headline font-bold text-sm shadow-xl shadow-emerald-900/10 active:scale-95 transition-all"
+          >
+            <span class="material-symbols-outlined" data-icon="add">add</span>
+            Adicionar Produto
+          </button>
+        </section>
+        <!-- Filters Bar -->
+        <section class="flex flex-wrap items-center gap-4 bg-surface-container-low p-4 rounded-2xl">
+          <div
+            class="flex items-center gap-3 bg-white px-4 py-2.5 rounded-xl border border-emerald-100/50 flex-1 min-w-[240px]"
+          >
+            <span class="material-symbols-outlined text-emerald-800/40" data-icon="filter_list"
+              >filter_list</span
+            >
+            <select
+              class="bg-transparent border-none focus:ring-0 text-sm text-emerald-900 font-medium w-full"
+            >
+              <option>Todas as Categorias</option>
+              <option>Entradas</option>
+              <option>Pratos Principais</option>
+              <option>Sobremesas</option>
+              <option>Bebidas</option>
+            </select>
+          </div>
+          <div
+            class="flex items-center gap-3 bg-white px-4 py-2.5 rounded-xl border border-emerald-100/50 min-w-[180px]"
+          >
+            <span
+              class="material-symbols-outlined text-emerald-800/40"
+              data-icon="radio_button_checked"
+              >radio_button_checked</span
+            >
+            <select
+              class="bg-transparent border-none focus:ring-0 text-sm text-emerald-900 font-medium w-full"
+            >
+              <option>Status: Todos</option>
+              <option>Ativo</option>
+              <option>Inativo</option>
+              <option>Rascunho</option>
+            </select>
+          </div>
+          <div class="flex items-center gap-2 ml-auto">
+            <span class="text-xs font-bold text-emerald-800/40 uppercase tracking-widest mr-2"
+              >Visualização:</span
+            >
+            <button class="p-2 rounded-lg bg-emerald-900 text-white shadow-md">
+              <span class="material-symbols-outlined text-sm" data-icon="grid_view">grid_view</span>
+            </button>
+            <button
+              class="p-2 rounded-lg text-emerald-800/60 hover:bg-emerald-100 transition-colors"
+            >
+              <span class="material-symbols-outlined text-sm" data-icon="list">list</span>
+            </button>
+          </div>
+        </section>
+        <!-- Product Grid (Asymmetric Bento Style) -->
+        <section class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+          <!-- Product Card 1: Active -->
+          <article
+            class="group bg-surface-container-lowest rounded-[24px] overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_24px_48px_rgba(0,79,56,0.08)] transition-all duration-500 flex flex-col border border-emerald-50/50"
+          >
+            <div class="relative h-48 overflow-hidden">
+              <img
+                alt="Salmão Grelhado"
+                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                data-alt="A beautifully plated grilled salmon fillet with asparagus and lemon wedges on a white ceramic plate, professional food photography"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5DVvWxRneSqxMy2eTukPxdFcC6jG9jP1e7CQed-nqSWr9vmEfOf1Z--H62QWycJnlwiqz76HzohsRHasLR-G_PvZqWkNRReqRzVfSa1fFIh82DKIYiVudyKNhU6kExXDtl9FN61vv-GVQcdh_W2nEwIDseFyBejcf29LDSSzPm0SM4frCBTEel_-HMJfrj6y6w2QEADhQDRtjeLYmEUeEIrNkJRMyN_WrWf6i5sddHNnsGtfS97AWUItX7sZGrUGh6P-0hAregcM"
+              />
+              <div class="absolute top-4 left-4">
+                <span
+                  class="px-3 py-1 rounded-full bg-emerald-100/90 backdrop-blur-md text-emerald-900 text-[10px] font-bold uppercase tracking-wider"
+                  >Prato Principal</span
+                >
+              </div>
+              <div class="absolute top-4 right-4">
+                <span
+                  class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-900 text-white text-[10px] font-bold uppercase tracking-wider"
+                >
+                  <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full"></span>
+                  Ativo
+                </span>
+              </div>
+            </div>
+            <div class="p-6 flex-1 flex flex-col">
+              <div class="flex justify-between items-start mb-2">
+                <h3
+                  class="font-headline font-bold text-lg text-emerald-950 group-hover:text-primary transition-colors"
+                >
+                  Salmão ao Molho de Ervas
+                </h3>
+                <button class="text-emerald-800/30 hover:text-emerald-900 transition-colors">
+                  <span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+                </button>
+              </div>
+              <p class="text-[10px] font-mono text-emerald-800/40 mb-4 uppercase">
+                SKU: PRD-SLM-001
+              </p>
+              <div class="mt-auto space-y-4">
+                <div class="flex items-end justify-between">
+                  <div class="flex flex-col">
+                    <span class="text-[10px] font-bold text-emerald-800/40 uppercase"
+                      >Preço de Venda</span
+                    >
+                    <span class="text-2xl font-headline font-black text-emerald-900">R$ 89,90</span>
+                  </div>
+                  <div class="text-right">
+                    <span class="text-[10px] font-bold text-emerald-800/40 uppercase">Estoque</span>
+                    <p class="text-sm font-bold text-emerald-950">42 un</p>
+                  </div>
+                </div>
+                <!-- Margin Gauge Custom Component -->
+                <div class="space-y-1.5">
+                  <div class="flex justify-between items-center text-[10px] font-bold uppercase">
+                    <span class="text-emerald-800/60">Margem de Lucro</span>
+                    <span class="text-emerald-700">68%</span>
+                  </div>
+                  <div class="h-1.5 w-full bg-emerald-100 rounded-full overflow-hidden relative">
+                    <div class="h-full bg-primary w-[68%] rounded-full"></div>
+                    <div
+                      class="absolute top-0 left-[75%] h-full w-0.5 bg-secondary-fixed shadow-sm"
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+          <!-- Product Card 2: Draft -->
+          <article
+            class="group bg-surface-container-lowest rounded-[24px] overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_24px_48px_rgba(0,79,56,0.08)] transition-all duration-500 flex flex-col border border-emerald-50/50"
+          >
+            <div
+              class="relative h-48 overflow-hidden grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500"
+            >
+              <img
+                alt="Tiramisu"
+                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                data-alt="Close up of a classic tiramisu dessert in a glass bowl, layers of cream and cocoa powder, soft bakery lighting"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqEXD0WbNNSDbuxgIE9aVtaKuTuG7o87mnTuVc2ggcGamZ4jVdvV3s5y1AINRYImLAin4Fk5IRhLXM79PtJMQkjk5DL4MnJjWFr5GOZvrbc9AGmo9D-1VPhSH9JgG5zqBoe6Sp3Gs-fWJJvoq39uV8RT6RcYcLcMi4lR5jhK1hc17nwrHboiIFEiL-lsOJgRZWHk1XGCR25jQARMSwaKlabcWTCQvDB35mTxUXpL3WdwUgcgNiBi8SuW7LG-AQOwwsURvm4kUi_kA"
+              />
+              <div class="absolute top-4 left-4">
+                <span
+                  class="px-3 py-1 rounded-full bg-emerald-100/90 backdrop-blur-md text-emerald-900 text-[10px] font-bold uppercase tracking-wider"
+                  >Sobremesas</span
+                >
+              </div>
+              <div class="absolute top-4 right-4">
+                <span
+                  class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary-container text-white text-[10px] font-bold uppercase tracking-wider"
+                >
+                  <span class="w-1.5 h-1.5 bg-secondary-fixed rounded-full"></span>
+                  Rascunho
+                </span>
+              </div>
+            </div>
+            <div class="p-6 flex-1 flex flex-col">
+              <div class="flex justify-between items-start mb-2">
+                <h3
+                  class="font-headline font-bold text-lg text-emerald-950 group-hover:text-primary transition-colors"
+                >
+                  Tiramisù de Pistache
+                </h3>
+                <button class="text-emerald-800/30 hover:text-emerald-900 transition-colors">
+                  <span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+                </button>
+              </div>
+              <p class="text-[10px] font-mono text-emerald-800/40 mb-4 uppercase">
+                SKU: PRD-DES-015
+              </p>
+              <div class="mt-auto space-y-4">
+                <div class="flex items-end justify-between">
+                  <div class="flex flex-col">
+                    <span class="text-[10px] font-bold text-emerald-800/40 uppercase"
+                      >Preço Sugerido</span
+                    >
+                    <span class="text-2xl font-headline font-black text-emerald-800/30"
+                      >R$ --,--</span
+                    >
+                  </div>
+                  <div class="text-right">
+                    <span class="text-[10px] font-bold text-emerald-800/40 uppercase"
+                      >Disponibilidade</span
+                    >
+                    <p class="text-sm font-bold text-emerald-800/30">Pendente</p>
+                  </div>
+                </div>
+                <div class="space-y-1.5">
+                  <div class="flex justify-between items-center text-[10px] font-bold uppercase">
+                    <span class="text-emerald-800/60">Análise de Custo</span>
+                    <span class="text-secondary">Ajustar</span>
+                  </div>
+                  <div class="h-1.5 w-full bg-emerald-100 rounded-full overflow-hidden">
+                    <div class="h-full bg-secondary-container w-[15%] rounded-full"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+          <!-- Product Card 3: Inactive -->
+          <article
+            class="group bg-surface-container-lowest rounded-[24px] overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_24px_48px_rgba(0,79,56,0.08)] transition-all duration-500 flex flex-col border border-emerald-50/50"
+          >
+            <div class="relative h-48 overflow-hidden">
+              <img
+                alt="Coquetel"
+                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                data-alt="A sophisticated blue cocktail in a coupe glass garnished with a flower, elegant bar setting with bokeh lights"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_1V5F0QwrXYlvJFhvNVpTHCLCZMxam0GoNVAbUV5ugnvAU-AVq79yTEJ1hSJs2bSV6EEntvlnZGnp-99SHtWctPsLE7BzV_rUPsBEnKwVdS1f4F9vLXRzEMV8BawG6-I5M24Z7lOxjdN-PI83-IOUQKMBcCO_gR_q354WmYOkhLbWDkTUBsoNINpEVoGjp6Lyopqft1xh3Q-kzdDfDLhyU5eSDUc8csBeLcPGq8gyZi85KaPmkfJTziWQknYvLfdazCbYbps2j-M"
+              />
+              <div class="absolute top-4 left-4">
+                <span
+                  class="px-3 py-1 rounded-full bg-emerald-100/90 backdrop-blur-md text-emerald-900 text-[10px] font-bold uppercase tracking-wider"
+                  >Bebidas</span
+                >
+              </div>
+              <div class="absolute top-4 right-4">
+                <span
+                  class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-error text-white text-[10px] font-bold uppercase tracking-wider"
+                >
+                  <span class="w-1.5 h-1.5 bg-white rounded-full"></span>
+                  Inativo
+                </span>
+              </div>
+            </div>
+            <div class="p-6 flex-1 flex flex-col">
+              <div class="flex justify-between items-start mb-2">
+                <h3
+                  class="font-headline font-bold text-lg text-emerald-950 group-hover:text-primary transition-colors"
+                >
+                  Blue Sapphire Gin
+                </h3>
+                <button class="text-emerald-800/30 hover:text-emerald-900 transition-colors">
+                  <span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+                </button>
+              </div>
+              <p class="text-[10px] font-mono text-emerald-800/40 mb-4 uppercase">
+                SKU: PRD-DRK-009
+              </p>
+              <div class="mt-auto space-y-4">
+                <div class="flex items-end justify-between">
+                  <div class="flex flex-col">
+                    <span class="text-[10px] font-bold text-emerald-800/40 uppercase"
+                      >Preço de Venda</span
+                    >
+                    <span class="text-2xl font-headline font-black text-emerald-900">R$ 34,00</span>
+                  </div>
+                  <div class="text-right">
+                    <span class="text-[10px] font-bold text-emerald-800/40 uppercase">Estoque</span>
+                    <p class="text-sm font-bold text-error">Esgotado</p>
+                  </div>
+                </div>
+                <div class="space-y-1.5 opacity-50">
+                  <div class="flex justify-between items-center text-[10px] font-bold uppercase">
+                    <span class="text-emerald-800/60">Margem de Lucro</span>
+                    <span>--</span>
+                  </div>
+                  <div class="h-1.5 w-full bg-emerald-100 rounded-full"></div>
+                </div>
+              </div>
+            </div>
+          </article>
+          <!-- Product Card 4: Active -->
+          <article
+            class="group bg-surface-container-lowest rounded-[24px] overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_24px_48px_rgba(0,79,56,0.08)] transition-all duration-500 flex flex-col border border-emerald-50/50"
+          >
+            <div class="relative h-48 overflow-hidden">
+              <img
+                alt="Pizza Margherita"
+                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                data-alt="Artisanal sourdough pizza Margherita with melting buffalo mozzarella and fresh basil leaves, warm overhead lighting"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5hsw0QBnqohXPaIDEORxBwq7gJOt9jvCAqkzx0VIZMy92fmFborRR0149Y-yEyojSIXEqH6afou0zMunG4lEtwp9-zpjemlPHM2pB5ipLtjA5iy30mIyPB_OnMyihlRfjzErn7rEmBA5ih95TcmiVnuppXu8O6HbzacOZeMq-GXimiXMMhtNrPPVZmQGU6jKWLWLClIFT9debz6PtAVmz1VTwUvfhsD0KJhZqSeFU8aDauU3nUz8eRclDPF-YrBWmr7_Ss-kiflE"
+              />
+              <div class="absolute top-4 left-4">
+                <span
+                  class="px-3 py-1 rounded-full bg-emerald-100/90 backdrop-blur-md text-emerald-900 text-[10px] font-bold uppercase tracking-wider"
+                  >Entradas</span
+                >
+              </div>
+              <div class="absolute top-4 right-4">
+                <span
+                  class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-900 text-white text-[10px] font-bold uppercase tracking-wider"
+                >
+                  <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full"></span>
+                  Ativo
+                </span>
+              </div>
+            </div>
+            <div class="p-6 flex-1 flex flex-col">
+              <div class="flex justify-between items-start mb-2">
+                <h3
+                  class="font-headline font-bold text-lg text-emerald-950 group-hover:text-primary transition-colors"
+                >
+                  Bruschetta Clássica
+                </h3>
+                <button class="text-emerald-800/30 hover:text-emerald-900 transition-colors">
+                  <span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+                </button>
+              </div>
+              <p class="text-[10px] font-mono text-emerald-800/40 mb-4 uppercase">
+                SKU: PRD-ENT-022
+              </p>
+              <div class="mt-auto space-y-4">
+                <div class="flex items-end justify-between">
+                  <div class="flex flex-col">
+                    <span class="text-[10px] font-bold text-emerald-800/40 uppercase"
+                      >Preço de Venda</span
+                    >
+                    <span class="text-2xl font-headline font-black text-emerald-900">R$ 28,90</span>
+                  </div>
+                  <div class="text-right">
+                    <span class="text-[10px] font-bold text-emerald-800/40 uppercase">Estoque</span>
+                    <p class="text-sm font-bold text-emerald-950">120 un</p>
+                  </div>
+                </div>
+                <div class="space-y-1.5">
+                  <div class="flex justify-between items-center text-[10px] font-bold uppercase">
+                    <span class="text-emerald-800/60">Margem de Lucro</span>
+                    <span class="text-emerald-700">82%</span>
+                  </div>
+                  <div class="h-1.5 w-full bg-emerald-100 rounded-full overflow-hidden">
+                    <div class="h-full bg-primary w-[82%] rounded-full"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+        </section>
+        <!-- Bottom Pagination / Stats (Simplified) -->
+        <footer
+          class="flex flex-col md:flex-row items-center justify-between gap-4 py-8 border-t border-emerald-100/50"
+        >
+          <p class="text-xs font-medium text-emerald-800/60">
+            Mostrando <span class="text-emerald-950 font-bold">4 de 128</span> produtos registrados
+          </p>
+          <div class="flex items-center gap-2">
+            <button
+              class="w-10 h-10 rounded-xl bg-white border border-emerald-100 flex items-center justify-center text-emerald-900 disabled:opacity-30"
+              disabled=""
+            >
+              <span class="material-symbols-outlined" data-icon="chevron_left">chevron_left</span>
+            </button>
+            <button
+              class="w-10 h-10 rounded-xl bg-emerald-900 text-white font-bold text-sm shadow-md"
+            >
+              1
+            </button>
+            <button
+              class="w-10 h-10 rounded-xl bg-white border border-emerald-100 flex items-center justify-center text-emerald-900 font-bold text-sm"
+            >
+              2
+            </button>
+            <button
+              class="w-10 h-10 rounded-xl bg-white border border-emerald-100 flex items-center justify-center text-emerald-900 font-bold text-sm"
+            >
+              3
+            </button>
+            <button
+              class="w-10 h-10 rounded-xl bg-white border border-emerald-100 flex items-center justify-center text-emerald-900"
+            >
+              <span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+            </button>
+          </div>
+        </footer>
+      </div>
+    </main>
+    <!-- BottomNavBar (Mobile Only Responsive Pivot) -->
+    <nav
+      class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pt-3 pb-8 bg-white/90 dark:bg-emerald-950/90 backdrop-blur-lg lg:hidden rounded-t-[32px] shadow-[0_-10px_30px_rgba(0,79,56,0.08)] border-t border-emerald-100/10"
+    >
+      <a class="flex flex-col items-center justify-center text-emerald-800/50 px-5 py-2" href="#">
+        <span class="material-symbols-outlined text-2xl" data-icon="home">home</span>
+        <span class="text-[10px] font-medium font-inter">Home</span>
+      </a>
+      <a
+        class="flex flex-col items-center justify-center bg-emerald-100 text-emerald-900 rounded-2xl px-5 py-2"
+        href="#"
+      >
+        <span
+          class="material-symbols-outlined text-2xl"
+          data-icon="list_alt"
+          style="font-variation-settings: 'FILL' 1"
+          >list_alt</span
+        >
+        <span class="text-[10px] font-medium font-inter">Catalog</span>
+      </a>
+      <a class="flex flex-col items-center justify-center text-emerald-800/50 px-5 py-2" href="#">
+        <span class="material-symbols-outlined text-2xl" data-icon="receipt_long"
+          >receipt_long</span
+        >
+        <span class="text-[10px] font-medium font-inter">Pricing</span>
+      </a>
+      <a class="flex flex-col items-center justify-center text-emerald-800/50 px-5 py-2" href="#">
+        <span class="material-symbols-outlined text-2xl" data-icon="person">person</span>
+        <span class="text-[10px] font-medium font-inter">Profile</span>
+      </a>
+    </nav>
+  </body>
+</html>

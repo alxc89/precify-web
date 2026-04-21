@@ -24,7 +24,7 @@ export interface ManagedIngredientHistoryPriceResponse {
      */
     purchaseUnit?: string | null;
     /**
-     * Quantidade comprada na unidade informada em Precify.API.Contracts.V1.Catalog.ManagedIngredientHistoryPriceResponse.PurchaseUnit.
+     * Quantidade comprada na unidade informada em Precify.API.Contracts.V1.Ingredient.ManagedIngredientHistoryPriceResponse.PurchaseUnit.
      */
     purchaseQuantity?: number;
     /**

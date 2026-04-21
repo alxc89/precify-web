@@ -32,7 +32,7 @@ export interface EffectiveIngredientPriceResponse {
      */
     purchaseUnit?: string | null;
     /**
-     * Quantidade comprada na unidade informada em Precify.API.Contracts.V1.Catalog.EffectiveIngredientPriceResponse.PurchaseUnit.
+     * Quantidade comprada na unidade informada em Precify.API.Contracts.V1.Ingredient.EffectiveIngredientPriceResponse.PurchaseUnit.
      */
     purchaseQuantity?: number;
     /**

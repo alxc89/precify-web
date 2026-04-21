@@ -240,7 +240,7 @@ export class IngredientCategoriesService extends BaseService {
 
     /**
      * Atualiza o nome de uma categoria de ingrediente.
-     * Este endpoint é restrito a &#x60;platform_admin&#x60; e não altera o histórico lógico da categoria.
+     * Não altera o histórico lógico da categoria.
      * @endpoint put /api/v1/categorias-ingrediente/{id}
      * @param id Identificador da categoria de ingrediente a ser editada.
      * @param updateIngredientCategoryRequest Novo nome da categoria de ingrediente.
@@ -377,7 +377,7 @@ export class IngredientCategoriesService extends BaseService {
 
     /**
      * Cria uma nova categoria global de ingrediente.
-     * Este endpoint é restrito a &#x60;platform_admin&#x60; e cria uma categoria ativa no catálogo global.
+     * Cria uma categoria ativa no catálogo global.
      * @endpoint post /api/v1/categorias-ingrediente
      * @param createIngredientCategoryRequest Dados da categoria de ingrediente a ser criada.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
