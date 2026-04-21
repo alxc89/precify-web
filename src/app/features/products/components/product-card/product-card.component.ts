@@ -1,3 +1,4 @@
+import { CdkMenu, CdkMenuItem, CdkMenuTrigger } from '@angular/cdk/menu';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -7,25 +8,28 @@ import {
   output,
   signal,
 } from '@angular/core';
-import { LucideAngularModule, ImageOff, MoreVertical } from 'lucide-angular';
+import { ImageOff, LucideAngularModule, MoreVertical, Pencil, Trash2 } from 'lucide-angular';
 import { hlm } from '../../../../lib/utils';
 import { ProductCardVm } from '../../models/product.model';
 
 @Component({
   selector: 'app-product-card',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [LucideAngularModule],
+  imports: [CdkMenu, CdkMenuItem, CdkMenuTrigger, LucideAngularModule],
   templateUrl: './product-card.component.html',
 })
 export class ProductCardComponent {
   readonly item = input.required<ProductCardVm>();
 
-  readonly openActions = output<string>();
+  readonly deleteProduct = output<string>();
+  readonly editProduct = output<string>();
 
   private readonly imageFailed = signal(false);
 
   protected readonly ImageOff = ImageOff;
   protected readonly MoreVertical = MoreVertical;
+  protected readonly Pencil = Pencil;
+  protected readonly Trash2 = Trash2;
   protected readonly placeholderMonogram = computed(() => {
     const tokens = this.item()
       .name.split(/\s+/)
@@ -72,11 +76,19 @@ export class ProductCardComponent {
     this.imageFailed.set(true);
   }
 
-  protected onOpenActions() {
+  protected onDeleteProduct() {
     if (!this.item().actionsEnabled) {
       return;
     }
 
-    this.openActions.emit(this.item().id);
+    this.deleteProduct.emit(this.item().id);
+  }
+
+  protected onEditProduct() {
+    if (!this.item().actionsEnabled) {
+      return;
+    }
+
+    this.editProduct.emit(this.item().id);
   }
 }

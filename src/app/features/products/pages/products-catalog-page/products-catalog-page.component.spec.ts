@@ -22,9 +22,11 @@ describe('ProductsCatalogPageComponent', () => {
       },
     ]),
   );
+  const getIngredientOptions = vi.fn(() => of([]));
 
   beforeEach(async () => {
     getCatalogProducts.mockClear();
+    getIngredientOptions.mockClear();
 
     await TestBed.configureTestingModule({
       imports: [ProductsCatalogPageComponent],
@@ -33,6 +35,7 @@ describe('ProductsCatalogPageComponent', () => {
           provide: ProductsDataService,
           useValue: {
             getCatalogProducts,
+            getIngredientOptions,
           },
         },
       ],

@@ -18,6 +18,7 @@ export class ProductsGridComponent {
   readonly totalPages = input.required<number>();
   readonly visibleItems = input.required<number>();
 
-  readonly openActions = output<string>();
+  readonly deleteProduct = output<string>();
+  readonly editProduct = output<string>();
   readonly pageChange = output<number>();
 }

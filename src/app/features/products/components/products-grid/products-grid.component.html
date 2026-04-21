@@ -32,7 +32,11 @@
 } @else {
   <section class="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
     @for (item of items(); track item.id) {
-      <app-product-card [item]="item" (openActions)="openActions.emit($event)" />
+      <app-product-card
+        [item]="item"
+        (deleteProduct)="deleteProduct.emit($event)"
+        (editProduct)="editProduct.emit($event)"
+      />
     }
   </section>
 

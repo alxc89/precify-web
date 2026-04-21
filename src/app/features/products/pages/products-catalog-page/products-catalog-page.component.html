@@ -30,7 +30,22 @@
     [totalItems]="vm().filteredProducts"
     [totalPages]="vm().totalPages"
     [visibleItems]="vm().visibleProducts"
-    (openActions)="onOpenProductActions($event)"
+    (deleteProduct)="onDeleteProduct($event)"
+    (editProduct)="onEditProduct($event)"
     (pageChange)="onPageChange($event)"
   />
+
+  @if (isManagementModalOpen()) {
+    <app-product-management-modal
+      [error]="managementError()"
+      [ingredientOptions]="ingredientOptions()"
+      [loading]="managementLoading()"
+      [mode]="managementMode()!"
+      [product]="managementProduct()"
+      [saving]="managementSaving()"
+      (close)="closeManagementModal()"
+      (saveProduct)="onSaveProduct($event)"
+      (toggleProductStatus)="onToggleProductStatus()"
+    />
+  }
 </div>

@@ -59,16 +59,46 @@
         {{ item().name }}
       </h3>
 
-      <button
-        [attr.aria-label]="'Ações de ' + item().name"
-        [disabled]="!item().actionsEnabled"
-        class="text-emerald-800/30 transition-colors hover:text-emerald-900 disabled:cursor-default disabled:opacity-40"
-        type="button"
-        (click)="onOpenActions()"
-      >
-        <lucide-icon [img]="MoreVertical" class="h-4 w-4" />
-      </button>
+      <div class="inline-flex">
+        <button
+          [attr.aria-label]="'Abrir ações para ' + item().name"
+          [cdkMenuTriggerFor]="actionsMenu"
+          [disabled]="!item().actionsEnabled"
+          class="rounded-lg p-1 text-emerald-800/30 transition-colors hover:bg-emerald-50 hover:text-emerald-900 focus:outline-none focus:ring-2 focus:ring-[#004f38] disabled:cursor-default disabled:opacity-40"
+          type="button"
+        >
+          <lucide-icon [img]="MoreVertical" class="h-4 w-4" />
+        </button>
+      </div>
     </div>
+
+    <ng-template #actionsMenu>
+      <div
+        cdkMenu
+        aria-label="Ações do produto"
+        class="min-w-44 rounded-xl bg-white p-1.5 shadow-[0_24px_40px_-16px_rgba(0,79,56,0.2)] outline-none"
+      >
+        <button
+          cdkMenuItem
+          class="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-medium text-[#002116] transition-colors hover:bg-emerald-50/70 focus:bg-emerald-50/70 focus:outline-none"
+          type="button"
+          (click)="onEditProduct()"
+        >
+          <lucide-icon [img]="Pencil" class="h-4 w-4 text-emerald-800/60" />
+          <span>Editar</span>
+        </button>
+
+        <button
+          cdkMenuItem
+          class="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-medium text-[#8a2900] transition-colors hover:bg-[#fff2ea] focus:bg-[#fff2ea] focus:outline-none"
+          type="button"
+          (click)="onDeleteProduct()"
+        >
+          <lucide-icon [img]="Trash2" class="h-4 w-4 text-[#8a2900]/70" />
+          <span>Deletar</span>
+        </button>
+      </div>
+    </ng-template>
 
     <p class="mb-4 text-[10px] font-mono uppercase tracking-[0.18em] text-emerald-800/40">
       Código: {{ item().code }}

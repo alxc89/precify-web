@@ -1,6 +1,6 @@
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DestroyRef, Injectable, computed, effect, inject, signal } from '@angular/core';
-import { OrganizationProductResponse } from '../../../core/api/generated';
+import { ProductResponse } from '../../../core/api/generated';
 import { ProductCardVm, ProductFilterOption, ProductsCatalogPageVm } from '../models/product.model';
 import { ProductsDataService } from '../services/products.service';
 
@@ -168,14 +168,14 @@ export class ProductsCatalogFacade {
       });
   }
 
-  private mapProduct(product: OrganizationProductResponse, index: number): ProductCardVm {
+  private mapProduct(product: ProductResponse, index: number): ProductCardVm {
     const code = product.code?.trim() || `PRD-${String(index + 1).padStart(3, '0')}`;
     const name = product.name?.trim() || 'Produto sem nome';
     const updatedAtLabel = this.formatDate(product.updatedAt ?? product.createdAt);
     const isActive = product.isActive ?? false;
 
     return {
-      actionsEnabled: false,
+      actionsEnabled: true,
       categoryId: 'uncategorized',
       categoryLabel: 'Sem categoria',
       code,

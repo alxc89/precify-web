@@ -66,4 +66,37 @@ describe('ProductCardComponent', () => {
     expect(fixture.nativeElement.textContent).toContain('Sem imagem');
     expect(fixture.nativeElement.querySelector('img')).toBeNull();
   });
+
+  it('emits edit and delete actions from the cdk menu', () => {
+    const fixture = TestBed.createComponent(ProductCardComponent);
+    const editSpy = jasmine.createSpy('editSpy');
+    const deleteSpy = jasmine.createSpy('deleteSpy');
+
+    fixture.componentRef.setInput('item', {
+      actionsEnabled: true,
+      categoryId: 'entrees',
+      categoryLabel: 'Entradas',
+      code: 'PRD-003',
+      description: null,
+      id: 'product-3',
+      isActive: true,
+      name: 'Bruschetta',
+      photoUrl: null,
+      priceHeading: 'Preço de venda',
+      priceValueLabel: 'R$ 32,00',
+      secondaryLabel: 'Atualizado',
+      secondaryValueLabel: '14/04/2026',
+      statusLabel: 'Ativo',
+      statusTone: 'active',
+    });
+    fixture.componentInstance.editProduct.subscribe(editSpy);
+    fixture.componentInstance.deleteProduct.subscribe(deleteSpy);
+    fixture.detectChanges();
+
+    fixture.componentInstance['onEditProduct']();
+    fixture.componentInstance['onDeleteProduct']();
+
+    expect(editSpy).toHaveBeenCalledWith('product-3');
+    expect(deleteSpy).toHaveBeenCalledWith('product-3');
+  });
 });
