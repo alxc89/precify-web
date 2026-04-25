@@ -54,11 +54,11 @@ export class SidebarComponent {
       path: '/app/produtos',
     },
     {
-      enabled: false,
+      enabled: true,
       exact: false,
       icon: Calculator,
-      label: 'Custo',
-      path: null,
+      label: 'Custos',
+      path: '/app/custos',
     },
     {
       enabled: false,

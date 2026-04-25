@@ -1,0 +1,219 @@
+<div class="min-h-full">
+  <section class="mb-6 flex flex-col gap-4 rounded-[1.75rem] bg-[#004f38] px-6 py-6 text-white shadow-[0_26px_60px_-28px_rgba(0,79,56,0.7)]">
+    <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+      <div class="max-w-2xl">
+        <p class="text-[0.6875rem] font-bold uppercase tracking-[0.22em] text-white/65">Financeiro operacional</p>
+        <h1 class="mt-2 font-['Manrope'] text-3xl font-black">Custos da Loja</h1>
+        <p class="mt-3 text-sm leading-6 text-white/78">
+          Consolide custos fixos e variaveis da unidade ativa para apoiar precificacao e margem.
+        </p>
+      </div>
+
+      <div class="rounded-2xl border border-white/15 bg-white/10 px-4 py-3 backdrop-blur">
+        <p class="text-[0.6875rem] font-bold uppercase tracking-[0.2em] text-white/60">Loja em contexto</p>
+        <p class="mt-2 text-lg font-bold">
+          {{ currentStore()?.name ?? 'Nenhuma loja selecionada' }}
+        </p>
+      </div>
+    </div>
+
+    <div class="grid gap-4 md:grid-cols-3">
+      <article class="rounded-2xl border border-white/10 bg-white/10 p-4 backdrop-blur">
+        <p class="text-[0.6875rem] font-bold uppercase tracking-[0.2em] text-white/60">Custos fixos ativos</p>
+        <p class="mt-3 font-['Manrope'] text-3xl font-black">{{ activeFixedCosts() }}</p>
+      </article>
+
+      <article class="rounded-2xl border border-white/10 bg-white/10 p-4 backdrop-blur">
+        <p class="text-[0.6875rem] font-bold uppercase tracking-[0.2em] text-white/60">Custos variaveis ativos</p>
+        <p class="mt-3 font-['Manrope'] text-3xl font-black">{{ activeVariableCosts() }}</p>
+      </article>
+
+      <article class="rounded-2xl border border-white/10 bg-white/10 p-4 backdrop-blur">
+        <p class="text-[0.6875rem] font-bold uppercase tracking-[0.2em] text-white/60">Base mensal estimada</p>
+        <p class="mt-3 font-['Manrope'] text-3xl font-black">{{ estimatedMonthlyFixedCostLabel() }}</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="mb-6 flex flex-wrap items-center gap-3 rounded-[1.25rem] bg-white p-4 shadow-sm">
+    <span class="text-xs font-bold uppercase tracking-[0.18em] text-emerald-900/45">Status:</span>
+    <button [class]="statusButtonClass('all')" type="button" (click)="setStatusFilter('all')">Todos</button>
+    <button [class]="statusButtonClass('active')" type="button" (click)="setStatusFilter('active')">Ativos</button>
+    <button [class]="statusButtonClass('inactive')" type="button" (click)="setStatusFilter('inactive')">
+      Inativos
+    </button>
+  </section>
+
+  @if (!hasStoreContext()) {
+    <section class="rounded-[1.5rem] bg-white px-6 py-10 text-center shadow-sm">
+      <h2 class="font-['Manrope'] text-2xl font-black text-[#002116]">Selecione uma loja para continuar</h2>
+      <p class="mx-auto mt-3 max-w-xl text-sm leading-6 text-emerald-900/55">
+        O cadastro de custos depende do contexto da loja ativa na sessao. Assim que a loja estiver definida, esta
+        tela passa a listar e editar os dados gerados pela nova API.
+      </p>
+    </section>
+  } @else if (loading()) {
+    <section class="rounded-[1.5rem] bg-white px-6 py-12 text-center shadow-sm">
+      <p class="text-sm font-semibold text-[#004f38]">Carregando custos da loja...</p>
+    </section>
+  } @else {
+    @if (error()) {
+      <div class="mb-6 rounded-2xl bg-[#fff2ea] px-4 py-3 text-sm font-medium text-[#8a2900]">
+        {{ error() }}
+      </div>
+    }
+
+    <div class="grid gap-6 xl:grid-cols-2">
+      <section class="overflow-hidden rounded-[1.5rem] bg-white shadow-sm">
+        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-emerald-900/10 px-6 py-5">
+          <div>
+            <p class="text-[0.6875rem] font-bold uppercase tracking-[0.22em] text-emerald-900/35">Estrutura</p>
+            <h2 class="mt-1 font-['Manrope'] text-2xl font-black text-[#002116]">Custos Fixos</h2>
+          </div>
+
+          <button
+            class="rounded-xl bg-[#004f38] px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#00563d] focus:outline-none focus:ring-2 focus:ring-[#004f38]"
+            type="button"
+            (click)="openCreateFixedCost()"
+          >
+            Novo custo fixo
+          </button>
+        </div>
+
+        @if (filteredFixedCosts().length === 0) {
+          <div class="px-6 py-10 text-center text-sm text-emerald-900/45">
+            Nenhum custo fixo corresponde aos filtros aplicados.
+          </div>
+        } @else {
+          <div class="overflow-x-auto">
+            <table class="min-w-full border-collapse text-left">
+              <thead class="bg-[#f4fff8]">
+                <tr class="text-[0.6875rem] font-bold uppercase tracking-[0.2em] text-emerald-900/35">
+                  <th class="px-6 py-4">Nome</th>
+                  <th class="px-6 py-4">Valor</th>
+                  <th class="px-6 py-4">Mensal</th>
+                  <th class="px-6 py-4">Status</th>
+                  <th class="px-6 py-4 text-right">Acoes</th>
+                </tr>
+              </thead>
+
+              <tbody class="divide-y divide-emerald-900/10">
+                @for (cost of filteredFixedCosts(); track trackById($index, cost)) {
+                  <tr [class.opacity-60]="!cost.isActive">
+                    <td class="px-6 py-4">
+                      <div class="flex flex-col">
+                        <span class="text-sm font-bold text-[#002116]">{{ cost.name }}</span>
+                        <span class="text-xs text-emerald-900/45">{{ cost.category }} · {{ cost.periodicityLabel }}</span>
+                      </div>
+                    </td>
+                    <td class="px-6 py-4 text-sm font-semibold text-[#002116]">{{ cost.amountLabel }}</td>
+                    <td class="px-6 py-4 text-sm text-[#3f4943]">{{ cost.monthlyAmountLabel }}</td>
+                    <td class="px-6 py-4">
+                      <app-status-badge [active]="cost.isActive" />
+                    </td>
+                    <td class="px-6 py-4 text-right">
+                      <button
+                        class="rounded-lg px-3 py-2 text-sm font-semibold text-[#004f38] transition-colors hover:bg-[#e7fff2] focus:outline-none focus:ring-2 focus:ring-[#004f38]"
+                        type="button"
+                        (click)="openEditFixedCost(cost.id)"
+                      >
+                        Editar
+                      </button>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      </section>
+
+      <section class="overflow-hidden rounded-[1.5rem] bg-white shadow-sm">
+        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-emerald-900/10 px-6 py-5">
+          <div>
+            <p class="text-[0.6875rem] font-bold uppercase tracking-[0.22em] text-emerald-900/35">Margem</p>
+            <h2 class="mt-1 font-['Manrope'] text-2xl font-black text-[#002116]">Custos Variaveis</h2>
+          </div>
+
+          <button
+            class="rounded-xl bg-[#8c3b00] px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#9c4400] focus:outline-none focus:ring-2 focus:ring-[#8c3b00]"
+            type="button"
+            (click)="openCreateVariableCost()"
+          >
+            Novo custo variavel
+          </button>
+        </div>
+
+        @if (filteredVariableCosts().length === 0) {
+          <div class="px-6 py-10 text-center text-sm text-emerald-900/45">
+            Nenhum custo variavel corresponde aos filtros aplicados.
+          </div>
+        } @else {
+          <div class="overflow-x-auto">
+            <table class="min-w-full border-collapse text-left">
+              <thead class="bg-[#fff7ee]">
+                <tr class="text-[0.6875rem] font-bold uppercase tracking-[0.2em] text-[#8a2900]/55">
+                  <th class="px-6 py-4">Nome</th>
+                  <th class="px-6 py-4">Regra</th>
+                  <th class="px-6 py-4">Canal</th>
+                  <th class="px-6 py-4">Status</th>
+                  <th class="px-6 py-4 text-right">Acoes</th>
+                </tr>
+              </thead>
+
+              <tbody class="divide-y divide-orange-950/10">
+                @for (cost of filteredVariableCosts(); track trackById($index, cost)) {
+                  <tr [class.opacity-60]="!cost.isActive">
+                    <td class="px-6 py-4">
+                      <div class="flex flex-col">
+                        <span class="text-sm font-bold text-[#002116]">{{ cost.name }}</span>
+                        <span class="text-xs text-emerald-900/45">{{ cost.category }} · {{ cost.orderLabel }}</span>
+                      </div>
+                    </td>
+                    <td class="px-6 py-4">
+                      <div class="flex flex-col">
+                        <span class="text-sm font-semibold text-[#002116]">
+                          {{ variableKindLabel(cost.valueTypeLabel, cost.incidenceLabel) }}
+                        </span>
+                        <span class="text-xs text-emerald-900/45">{{ cost.amountLabel }}</span>
+                      </div>
+                    </td>
+                    <td class="px-6 py-4 text-sm text-[#3f4943]">{{ cost.salesChannelLabel }}</td>
+                    <td class="px-6 py-4">
+                      <app-status-badge [active]="cost.isActive" />
+                    </td>
+                    <td class="px-6 py-4 text-right">
+                      <button
+                        class="rounded-lg px-3 py-2 text-sm font-semibold text-[#8c3b00] transition-colors hover:bg-[#fff2ea] focus:outline-none focus:ring-2 focus:ring-[#8c3b00]"
+                        type="button"
+                        (click)="openEditVariableCost(cost.id)"
+                      >
+                        Editar
+                      </button>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      </section>
+    </div>
+  }
+
+  @if (isModalOpen()) {
+    <app-cost-management-modal
+      [error]="modalError()"
+      [fixedCost]="selectedFixedCost()"
+      [kind]="modalKind()!"
+      [loading]="false"
+      [mode]="modalMode()!"
+      [saving]="saving()"
+      [variableCost]="selectedVariableCost()"
+      (close)="closeModal()"
+      (deactivate)="deactivateSelectedCost()"
+      (saveFixedCost)="saveFixedCost($event)"
+      (saveVariableCost)="saveVariableCost($event)"
+    />
+  }
+</div>

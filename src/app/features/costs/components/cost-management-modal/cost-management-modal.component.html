@@ -1,0 +1,251 @@
+<div
+  aria-labelledby="cost-management-title"
+  aria-modal="true"
+  class="fixed inset-0 z-50 flex items-start justify-center bg-[#002116]/35 p-4 pt-8 backdrop-blur-sm"
+  role="dialog"
+  (click)="close.emit()"
+>
+  <div
+    class="flex max-h-[calc(100vh-4rem)] w-full max-w-3xl flex-col overflow-hidden rounded-[1.5rem] bg-[#f4fff8] shadow-[0_32px_60px_-24px_rgba(0,33,22,0.45)]"
+    (click)="$event.stopPropagation()"
+  >
+    <div class="flex items-start justify-between gap-4 border-b border-emerald-900/10 px-6 py-5">
+      <div>
+        <p class="text-[0.6875rem] font-bold uppercase tracking-[0.22em] text-emerald-900/35">
+          Gestao de custos
+        </p>
+        <h2 id="cost-management-title" class="mt-1 font-['Manrope'] text-2xl font-black text-[#002116]">
+          {{ dialogTitle() }}
+        </h2>
+        <p class="mt-2 text-sm text-emerald-900/55">{{ dialogSubtitle() }}</p>
+      </div>
+
+      <button
+        aria-label="Fechar modal"
+        class="rounded-full p-2 text-emerald-900/45 transition-colors hover:bg-white hover:text-[#004f38] focus:outline-none focus:ring-2 focus:ring-[#004f38]"
+        type="button"
+        (click)="close.emit()"
+      >
+        <lucide-icon [img]="X" class="h-5 w-5" />
+      </button>
+    </div>
+
+    <div class="flex-1 overflow-y-auto px-6 py-6">
+      @if (error()) {
+        <div class="mb-5 rounded-2xl bg-[#fff2ea] px-4 py-3 text-sm font-medium text-[#8a2900]">
+          {{ error() }}
+        </div>
+      }
+
+      @if (loading()) {
+        <div class="flex min-h-72 items-center justify-center gap-3 rounded-[1.25rem] bg-white/80 text-sm font-semibold text-[#004f38] shadow-sm">
+          <lucide-icon [img]="Loader2" class="h-4 w-4 animate-spin" />
+          Carregando dados do custo...
+        </div>
+      } @else {
+        <form
+          class="rounded-[1.25rem] bg-white p-6 shadow-sm"
+          [formGroup]="kind() === 'fixed' ? fixedCostForm : variableCostForm"
+          (ngSubmit)="submit()"
+        >
+          <div class="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-[#eef8f2] px-4 py-3">
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-[0.16em] text-emerald-900/45">Status</p>
+              <div class="mt-2 flex items-center gap-3">
+                <button
+                  [attr.aria-label]="statusToggleAriaLabel()"
+                  [attr.aria-pressed]="activeStatus()"
+                  [class]="
+                    activeStatus()
+                      ? 'relative inline-flex h-7 w-14 items-center rounded-full bg-[#004f38] p-0.5 transition-colors disabled:cursor-not-allowed disabled:opacity-80'
+                      : 'relative inline-flex h-7 w-14 items-center rounded-full bg-[#c8d5ce] p-0.5 transition-colors disabled:cursor-not-allowed disabled:opacity-80'
+                  "
+                  disabled
+                  type="button"
+                >
+                  <span class="sr-only">{{ statusToggleAriaLabel() }}</span>
+                  <span
+                    [class]="
+                      activeStatus()
+                        ? 'inline-block h-6 w-6 translate-x-7 rounded-full bg-white shadow-sm transition-transform'
+                        : 'inline-block h-6 w-6 translate-x-0 rounded-full bg-white shadow-sm transition-transform'
+                    "
+                  ></span>
+                </button>
+
+                <div class="flex flex-col gap-1">
+                  <app-status-badge [active]="activeStatus()" />
+                </div>
+              </div>
+            </div>
+
+            @if (isEditMode()) {
+              <button
+                [disabled]="deactivateDisabled()"
+                class="rounded-xl border border-[#d96b34]/20 px-4 py-2 text-sm font-bold text-[#8a2900] transition-colors hover:bg-[#fff2ea] focus:outline-none focus:ring-2 focus:ring-[#8a2900] disabled:cursor-not-allowed disabled:opacity-50"
+                type="button"
+                (click)="deactivate.emit()"
+              >
+                Desativar
+              </button>
+            }
+          </div>
+
+          @if (kind() === 'fixed') {
+            <div class="grid gap-5 md:grid-cols-2" [formGroup]="fixedCostForm">
+              <label class="block md:col-span-2">
+                <span class="mb-2 block text-sm font-semibold text-[#002116]">Nome</span>
+                <input
+                  class="w-full rounded-xl border-none bg-[#e7fff2] px-4 py-3 text-sm text-[#002116] outline-none placeholder:text-emerald-900/30 focus:ring-2 focus:ring-[#004f38]"
+                  formControlName="name"
+                  placeholder="Ex.: Aluguel da unidade"
+                  type="text"
+                />
+              </label>
+
+              <label class="block">
+                <span class="mb-2 block text-sm font-semibold text-[#002116]">Categoria</span>
+                <input
+                  class="w-full rounded-xl border-none bg-[#e7fff2] px-4 py-3 text-sm text-[#002116] outline-none placeholder:text-emerald-900/30 focus:ring-2 focus:ring-[#004f38]"
+                  formControlName="category"
+                  placeholder="Ex.: Estrutura"
+                  type="text"
+                />
+              </label>
+
+              <label class="block">
+                <span class="mb-2 block text-sm font-semibold text-[#002116]">Periodicidade</span>
+                <select
+                  class="w-full rounded-xl border-none bg-[#e7fff2] px-4 py-3 text-sm text-[#002116] outline-none focus:ring-2 focus:ring-[#004f38]"
+                  formControlName="periodicity"
+                >
+                  @for (option of periodicityOptions; track option) {
+                    <option [value]="option">{{ periodicityLabel(option) }}</option>
+                  }
+                </select>
+              </label>
+
+              <label class="block md:col-span-2">
+                <span class="mb-2 block text-sm font-semibold text-[#002116]">Valor</span>
+                <input
+                  class="w-full rounded-xl border-none bg-[#e7fff2] px-4 py-3 text-sm text-[#002116] outline-none placeholder:text-emerald-900/30 focus:ring-2 focus:ring-[#004f38]"
+                  formControlName="amount"
+                  min="0.01"
+                  placeholder="0,00"
+                  step="0.01"
+                  type="number"
+                />
+              </label>
+            </div>
+          } @else {
+            <div class="grid gap-5 md:grid-cols-2" [formGroup]="variableCostForm">
+              <label class="block md:col-span-2">
+                <span class="mb-2 block text-sm font-semibold text-[#002116]">Nome</span>
+                <input
+                  class="w-full rounded-xl border-none bg-[#e7fff2] px-4 py-3 text-sm text-[#002116] outline-none placeholder:text-emerald-900/30 focus:ring-2 focus:ring-[#004f38]"
+                  formControlName="name"
+                  placeholder="Ex.: Taxa do marketplace"
+                  type="text"
+                />
+              </label>
+
+              <label class="block">
+                <span class="mb-2 block text-sm font-semibold text-[#002116]">Categoria</span>
+                <input
+                  class="w-full rounded-xl border-none bg-[#e7fff2] px-4 py-3 text-sm text-[#002116] outline-none placeholder:text-emerald-900/30 focus:ring-2 focus:ring-[#004f38]"
+                  formControlName="category"
+                  placeholder="Ex.: Comissoes"
+                  type="text"
+                />
+              </label>
+
+              <label class="block">
+                <span class="mb-2 block text-sm font-semibold text-[#002116]">Tipo de valor</span>
+                <select
+                  class="w-full rounded-xl border-none bg-[#e7fff2] px-4 py-3 text-sm text-[#002116] outline-none focus:ring-2 focus:ring-[#004f38]"
+                  formControlName="valueType"
+                >
+                  @for (option of valueTypeOptions; track option) {
+                    <option [value]="option">{{ valueTypeLabel(option) }}</option>
+                  }
+                </select>
+              </label>
+
+              <label class="block">
+                <span class="mb-2 block text-sm font-semibold text-[#002116]">Incidencia</span>
+                <select
+                  class="w-full rounded-xl border-none bg-[#e7fff2] px-4 py-3 text-sm text-[#002116] outline-none focus:ring-2 focus:ring-[#004f38]"
+                  formControlName="incidenceType"
+                >
+                  @for (option of incidenceOptions; track option) {
+                    <option [value]="option">{{ incidenceTypeLabel(option) }}</option>
+                  }
+                </select>
+              </label>
+
+              <label class="block">
+                <span class="mb-2 block text-sm font-semibold text-[#002116]">
+                  Valor
+                </span>
+                <input
+                  class="w-full rounded-xl border-none bg-[#e7fff2] px-4 py-3 text-sm text-[#002116] outline-none placeholder:text-emerald-900/30 focus:ring-2 focus:ring-[#004f38]"
+                  formControlName="amount"
+                  min="0.01"
+                  placeholder="0,00"
+                  step="0.01"
+                  type="number"
+                />
+              </label>
+
+              <label class="block">
+                <span class="mb-2 block text-sm font-semibold text-[#002116]">Ordem de calculo</span>
+                <input
+                  class="w-full rounded-xl border-none bg-[#e7fff2] px-4 py-3 text-sm text-[#002116] outline-none placeholder:text-emerald-900/30 focus:ring-2 focus:ring-[#004f38]"
+                  formControlName="calculationOrder"
+                  min="0"
+                  step="1"
+                  type="number"
+                />
+              </label>
+
+              <label class="block md:col-span-2">
+                <span class="mb-2 block text-sm font-semibold text-[#002116]">Canal de venda</span>
+                <input
+                  aria-describedby="sales-channel-helper"
+                  class="w-full rounded-xl border-none bg-[#e7fff2] px-4 py-3 text-sm text-[#002116] outline-none placeholder:text-emerald-900/30 focus:ring-2 focus:ring-[#004f38]"
+                  formControlName="salesChannelId"
+                  placeholder="ID opcional do canal"
+                  type="text"
+                />
+                <span id="sales-channel-helper" class="mt-2 block text-xs text-emerald-900/45">
+                  Use este campo quando o custo variavel for exclusivo de um canal.
+                </span>
+              </label>
+            </div>
+          }
+
+          <div class="mt-8 flex flex-wrap justify-end gap-3 border-t border-emerald-900/10 pt-5">
+            <button
+              class="rounded-xl px-4 py-2.5 text-sm font-bold text-emerald-900/60 transition-colors hover:bg-[#eef8f2] focus:outline-none focus:ring-2 focus:ring-[#004f38]"
+              type="button"
+              (click)="close.emit()"
+            >
+              Cancelar
+            </button>
+
+            <button
+              [disabled]="saving()"
+              class="inline-flex items-center gap-2 rounded-xl bg-[#004f38] px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#00563d] focus:outline-none focus:ring-2 focus:ring-[#004f38] disabled:cursor-not-allowed disabled:opacity-60"
+              type="submit"
+            >
+              @if (saving()) {
+                <lucide-icon [img]="Loader2" class="h-4 w-4 animate-spin" />
+              }
+              Salvar
+            </button>
+          </div>
+        </form>
+      }
+    </div>
+  </div>
+</div>
