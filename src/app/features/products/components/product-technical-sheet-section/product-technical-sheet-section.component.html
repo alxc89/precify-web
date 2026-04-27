@@ -9,9 +9,9 @@
     >
           <div>
         <p class="text-[0.6875rem] font-bold uppercase tracking-[0.22em] text-emerald-900/35">
-          Ficha tecnica
+          Ficha técnica
         </p>
-        <h3 class="mt-1 text-lg font-bold text-[#002116]">Composicao do produto</h3>
+        <h3 class="mt-1 text-lg font-bold text-[#002116]">Composição do produto</h3>
         <p class="mt-1 text-sm text-emerald-900/55">{{ sectionSummaryLabel() }}</p>
       </div>
 
@@ -28,7 +28,7 @@
     </button>
 
     <button
-      [disabled]="saving() || loading() || hasPendingItem()"
+      [disabled]="saving() || loading() || hasPendingItem() || hasEditingItem()"
       class="inline-flex items-center gap-2 rounded-xl bg-[#004f38] px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#00563d] focus:outline-none focus:ring-2 focus:ring-[#004f38] disabled:cursor-not-allowed disabled:opacity-60"
       type="button"
       (click)="addItem.emit()"
@@ -41,11 +41,11 @@
   @if (expanded()) {
     @if (ingredientOptions().length === 0) {
       <div class="py-10 text-center text-sm text-emerald-900/45">
-        Nenhum ingrediente foi encontrado para compor a ficha tecnica.
+        Nenhum ingrediente foi encontrado para compor a ficha técnica.
       </div>
     } @else if (ingredientControls().length === 0 && !pendingIngredientControl()) {
       <div class="py-10 text-center text-sm text-emerald-900/45">
-        Adicione os ingredientes que compoem este produto.
+        Adicione os ingredientes que compõem este produto.
       </div>
     } @else {
       <div class="mt-4 max-h-[18rem] overflow-auto rounded-2xl border border-emerald-900/10">
@@ -57,7 +57,7 @@
               <th class="px-4 py-3">Quantidade</th>
               <th class="px-4 py-3">Unidade base</th>
               <th class="px-4 py-3">Status</th>
-              <th class="px-4 py-3 text-right">Acoes</th>
+              <th class="px-4 py-3 text-right">Ações</th>
             </tr>
           </thead>
 
@@ -128,7 +128,7 @@
 
                 <td class="px-4 py-4 align-top">
                   @if (resolveIngredientOption(pendingIngredientGroup.controls['ingredientId']?.value); as option) {
-                    <span class="text-sm text-[#3f4943]">{{ option.baseUnit || 'Nao informada' }}</span>
+                    <span class="text-sm text-[#3f4943]">{{ option.baseUnit || 'Não informada' }}</span>
                   } @else {
                     <span class="text-sm text-emerald-900/45">-</span>
                   }
@@ -175,9 +175,36 @@
             }
 
             @for (ingredientGroup of ingredientControls(); track $index) {
-              <tr [class.opacity-60]="!resolveIngredientOption(ingredientGroup.controls['ingredientId']?.value)?.isActive">
+              <tr
+                [class.opacity-60]="!resolveIngredientOption(ingredientGroup.controls['ingredientId']?.value)?.isActive && !isEditingRow($index)"
+                [formGroup]="ingredientGroup"
+              >
                 <td class="px-4 py-4 align-top">
-                  @if (resolveIngredientOption(ingredientGroup.controls['ingredientId']?.value); as option) {
+                  @if (isEditingRow($index)) {
+                    <label class="block">
+                      <span class="sr-only">Ingrediente</span>
+                      <select
+                        [class]="
+                          controlHasError(ingredientGroup, 'ingredientId')
+                            ? 'w-full rounded-xl border border-[#ba1a1a]/30 bg-white pl-2 py-3 text-sm text-[#002116] outline-none focus:ring-2 focus:ring-[#ba1a1a]'
+                            : 'w-full rounded-xl border-none bg-[#e7fff2] pl-2 py-3 text-sm text-[#002116] outline-none focus:ring-2 focus:ring-[#004f38]'
+                        "
+                        formControlName="ingredientId"
+                      >
+                        <option value="">Selecione um ingrediente</option>
+                        @for (option of ingredientOptions(); track option.id) {
+                          <option [value]="option.id">
+                            {{ option.label }}{{ option.isActive ? '' : ' (inativo)' }}
+                          </option>
+                        }
+                      </select>
+                      @if (controlHasError(ingredientGroup, 'ingredientId', 'required')) {
+                        <span class="mt-2 block text-xs font-medium text-[#ba1a1a]">
+                          Selecione um ingrediente para salvar o item.
+                        </span>
+                      }
+                    </label>
+                  } @else if (resolveIngredientOption(ingredientGroup.controls['ingredientId']?.value); as option) {
                     <div class="flex flex-col gap-1">
                       <span class="text-sm font-semibold text-[#002116]">{{ option.label }}</span>
                       @if (!option.isActive) {
@@ -185,7 +212,7 @@
                       }
                     </div>
                   } @else {
-                    <span class="text-sm text-emerald-900/45">Ingrediente nao encontrado</span>
+                    <span class="text-sm text-emerald-900/45">Ingrediente não encontrado</span>
                   }
                 </td>
 
@@ -198,14 +225,42 @@
                 </td>
 
                 <td class="px-4 py-4 align-top">
-                  <span class="text-sm font-semibold text-[#002116]">
-                    {{ ingredientGroup.controls['quantity']?.value ?? '-' }}
-                  </span>
+                  @if (isEditingRow($index)) {
+                    <label class="block">
+                      <span class="sr-only">Quantidade</span>
+                      <input
+                        [class]="
+                          controlHasError(ingredientGroup, 'quantity')
+                            ? 'w-full min-w-28 rounded-xl border border-[#ba1a1a]/30 bg-white px-4 py-3 text-sm text-[#002116] outline-none focus:ring-2 focus:ring-[#ba1a1a]'
+                            : 'w-full min-w-28 rounded-xl border-none bg-[#e7fff2] px-4 py-3 text-sm text-[#002116] outline-none focus:ring-2 focus:ring-[#004f38]'
+                        "
+                        formControlName="quantity"
+                        inputmode="decimal"
+                        min="0.0001"
+                        placeholder="Ex.: 1,5"
+                        step="0.0001"
+                        type="number"
+                      />
+                      @if (controlHasError(ingredientGroup, 'quantity', 'required')) {
+                        <span class="mt-2 block text-xs font-medium text-[#ba1a1a]">
+                          Informe a quantidade do ingrediente.
+                        </span>
+                      } @else if (controlHasError(ingredientGroup, 'quantity', 'min')) {
+                        <span class="mt-2 block text-xs font-medium text-[#ba1a1a]">
+                          A quantidade deve ser maior que zero.
+                        </span>
+                      }
+                    </label>
+                  } @else {
+                    <span class="text-sm font-semibold text-[#002116]">
+                      {{ ingredientGroup.controls['quantity']?.value ?? '-' }}
+                    </span>
+                  }
                 </td>
 
                 <td class="px-4 py-4 align-top">
                   @if (resolveIngredientOption(ingredientGroup.controls['ingredientId']?.value); as option) {
-                    <span class="text-sm text-[#3f4943]">{{ option.baseUnit || 'Nao informada' }}</span>
+                    <span class="text-sm text-[#3f4943]">{{ option.baseUnit || 'Não informada' }}</span>
                   } @else {
                     <span class="text-sm text-emerald-900/45">-</span>
                   }
@@ -228,17 +283,67 @@
                 </td>
 
                 <td class="px-4 py-4 align-top">
-                  <div class="flex justify-end gap-2">
-                    <button
-                      [attr.aria-label]="'Remover item ' + ($index + 1)"
-                      [disabled]="saving()"
-                      class="rounded-lg px-3 py-2 text-sm font-semibold text-[#8a2900] transition-colors hover:bg-[#fff2ea] focus:outline-none focus:ring-2 focus:ring-[#8a2900] disabled:cursor-not-allowed disabled:opacity-50"
-                      type="button"
-                      (click)="removeItem.emit($index)"
-                    >
-                      Remover
-                    </button>
-                  </div>
+                  @if (isEditingRow($index)) {
+                    <div class="flex justify-end gap-2">
+                      <button
+                        [disabled]="saving()"
+                        class="rounded-lg px-3 py-2 text-sm font-semibold text-[#004f38] transition-colors hover:bg-[#e7fff2] focus:outline-none focus:ring-2 focus:ring-[#004f38] disabled:cursor-not-allowed disabled:opacity-50"
+                        type="button"
+                        (click)="cancelEditingItem.emit()"
+                      >
+                        Cancelar
+                      </button>
+
+                      <button
+                        [disabled]="saving() || ingredientGroup.invalid"
+                        class="rounded-lg bg-[#004f38] px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#00563d] focus:outline-none focus:ring-2 focus:ring-[#004f38] disabled:cursor-not-allowed disabled:opacity-60"
+                        type="button"
+                        (click)="confirmEditingItem.emit()"
+                      >
+                        Salvar
+                      </button>
+                    </div>
+                  } @else {
+                    <div class="flex justify-end">
+                      <button
+                        [attr.aria-label]="'Abrir ações do item ' + ($index + 1)"
+                        [cdkMenuTriggerFor]="rowActionsMenu"
+                        [disabled]="saving() || hasPendingItem() || hasEditingItem()"
+                        class="rounded-lg p-1 text-emerald-800/30 transition-colors hover:bg-emerald-50 hover:text-emerald-900 focus:outline-none focus:ring-2 focus:ring-[#004f38] disabled:cursor-default disabled:opacity-40"
+                        type="button"
+                      >
+                        <lucide-icon [img]="MoreVertical" class="h-4 w-4" />
+                      </button>
+
+                      <ng-template #rowActionsMenu>
+                        <div
+                          cdkMenu
+                          aria-label="Ações do item"
+                          class="min-w-44 rounded-xl bg-white p-1.5 shadow-[0_24px_40px_-16px_rgba(0,79,56,0.2)] outline-none"
+                        >
+                          <button
+                            cdkMenuItem
+                            class="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-medium text-[#002116] transition-colors hover:bg-emerald-50/70 focus:bg-emerald-50/70 focus:outline-none"
+                            type="button"
+                            (click)="editItem.emit($index)"
+                          >
+                            <lucide-icon [img]="Pencil" class="h-4 w-4 text-emerald-800/60" />
+                            <span>Editar</span>
+                          </button>
+
+                          <button
+                            cdkMenuItem
+                            class="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-medium text-[#8a2900] transition-colors hover:bg-[#fff2ea] focus:bg-[#fff2ea] focus:outline-none"
+                            type="button"
+                            (click)="removeItem.emit($index)"
+                          >
+                            <lucide-icon [img]="Trash2" class="h-4 w-4 text-[#8a2900]/70" />
+                            <span>Remover</span>
+                          </button>
+                        </div>
+                      </ng-template>
+                    </div>
+                  }
                 </td>
               </tr>
             }

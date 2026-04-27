@@ -42,6 +42,8 @@ export class ProductManagementModalComponent {
   protected readonly pendingIngredientControl = signal<ReturnType<
     ProductManagementModalComponent['createIngredientGroup']
   > | null>(null);
+  protected readonly editingIngredientIndex = signal<number | null>(null);
+  private readonly editingIngredientSnapshot = signal<{ ingredientId: string; quantity: number | null } | null>(null);
   protected readonly technicalSheetExpanded = signal(true);
   protected readonly dialogTitle = computed(() =>
     this.mode() === 'create' ? 'Novo Produto' : 'Editar Produto',
@@ -68,6 +70,8 @@ export class ProductManagementModalComponent {
         );
         this.replaceIngredientRows([]);
         this.pendingIngredientControl.set(null);
+        this.editingIngredientIndex.set(null);
+        this.editingIngredientSnapshot.set(null);
         return;
       }
 
@@ -85,6 +89,8 @@ export class ProductManagementModalComponent {
         { emitEvent: false },
       );
       this.pendingIngredientControl.set(null);
+      this.editingIngredientIndex.set(null);
+      this.editingIngredientSnapshot.set(null);
       this.replaceIngredientRows(
         product.technicalSheet.map((item) => ({
           ingredientId: item.ingredientId,
@@ -99,7 +105,7 @@ export class ProductManagementModalComponent {
   }
 
   protected addIngredientRow() {
-    if (this.pendingIngredientControl()) {
+    if (this.pendingIngredientControl() || this.editingIngredientIndex() !== null) {
       return;
     }
 
@@ -132,8 +138,91 @@ export class ProductManagementModalComponent {
     this.pendingIngredientControl.set(null);
   }
 
+  protected startEditingIngredient(index: number) {
+    if (this.pendingIngredientControl() || this.editingIngredientIndex() !== null) {
+      return;
+    }
+
+    const group = this.ingredientsArray.at(index);
+
+    if (!group) {
+      return;
+    }
+
+    const value = group.getRawValue();
+    this.editingIngredientSnapshot.set({
+      ingredientId: value.ingredientId,
+      quantity: value.quantity ?? null,
+    });
+    this.editingIngredientIndex.set(index);
+  }
+
+  protected cancelEditingIngredient() {
+    const index = this.editingIngredientIndex();
+    const snapshot = this.editingIngredientSnapshot();
+
+    if (index === null || snapshot === null) {
+      return;
+    }
+
+    const group = this.ingredientsArray.at(index);
+
+    if (!group) {
+      this.editingIngredientIndex.set(null);
+      this.editingIngredientSnapshot.set(null);
+      return;
+    }
+
+    group.reset(snapshot, { emitEvent: false });
+    group.markAsPristine();
+    group.markAsUntouched();
+    this.editingIngredientIndex.set(null);
+    this.editingIngredientSnapshot.set(null);
+  }
+
+  protected confirmEditingIngredient() {
+    const index = this.editingIngredientIndex();
+
+    if (index === null) {
+      return;
+    }
+
+    const group = this.ingredientsArray.at(index);
+
+    if (!group) {
+      this.editingIngredientIndex.set(null);
+      this.editingIngredientSnapshot.set(null);
+      return;
+    }
+
+    if (group.invalid) {
+      group.markAllAsTouched();
+      return;
+    }
+
+    group.markAsDirty();
+    this.editingIngredientIndex.set(null);
+    this.editingIngredientSnapshot.set(null);
+  }
+
   protected removeIngredientRow(index: number) {
     this.ingredientsArray.removeAt(index);
+
+    const editingIndex = this.editingIngredientIndex();
+
+    if (editingIndex === null) {
+      return;
+    }
+
+    if (editingIndex === index) {
+      this.editingIngredientIndex.set(null);
+      this.editingIngredientSnapshot.set(null);
+      return;
+    }
+
+    if (editingIndex > index) {
+      this.editingIngredientIndex.set(editingIndex - 1);
+    }
   }
 
   protected toggleTechnicalSheetSection() {
