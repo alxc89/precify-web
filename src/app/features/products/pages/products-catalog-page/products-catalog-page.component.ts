@@ -357,6 +357,7 @@ export class ProductsCatalogPageComponent {
         technicalSheetItems.length === 1
           ? '1 item na ficha tecnica'
           : `${technicalSheetItems.length} itens na ficha tecnica`,
+      totalCostLabel: this.formatCurrency(product.totalCost),
       updatedAtLabel: this.formatDate(product.updatedAt ?? product.createdAt),
     };
   }
@@ -398,6 +399,17 @@ export class ProductsCatalogPageComponent {
   private formatQuantity(value: number) {
     return new Intl.NumberFormat('pt-BR', {
       maximumFractionDigits: 4,
+    }).format(value);
+  }
+
+  private formatCurrency(value?: number) {
+    if (value === undefined || value === null) {
+      return 'Não calculado';
+    }
+
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
     }).format(value);
   }
 }

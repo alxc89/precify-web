@@ -44,14 +44,25 @@
       } @else {
         <form class="rounded-[1.25rem] bg-white p-6 shadow-sm" [formGroup]="productForm" (ngSubmit)="submit()">
           <div class="grid gap-5 md:grid-cols-2">
-            <div class="block">
-              <span class="mb-2 block text-sm font-semibold text-[#002116]">Ultima atualizacao</span>
-              <div class="rounded-xl bg-[#eef8f2] px-4 py-3">
-                <p class="font-['Manrope'] text-xl font-black text-[#002116]">
-                  {{ product()?.updatedAtLabel ?? 'Sem data' }}
-                </p>
-              </div>
-            </div>
+            <label class="block">
+              <span class="mb-2 block text-sm font-semibold text-[#002116]">Codigo</span>
+              <input
+                class="w-full rounded-xl border-none bg-[#e7fff2] px-4 py-3 text-sm text-[#002116] outline-none placeholder:text-emerald-900/30 focus:ring-2 focus:ring-[#004f38]"
+                formControlName="code"
+                placeholder="Ex.: PRD-001"
+                type="text"
+              />
+            </label>
+
+            <label class="block">
+              <span class="mb-2 block text-sm font-semibold text-[#002116]">Nome</span>
+              <input
+                class="w-full rounded-xl border-none bg-[#e7fff2] px-4 py-3 text-sm text-[#002116] outline-none placeholder:text-emerald-900/30 focus:ring-2 focus:ring-[#004f38]"
+                formControlName="name"
+                placeholder="Ex.: Salmao grelhado"
+                type="text"
+              />
+            </label>
 
             <div class="block">
               <span class="mb-2 block text-sm font-semibold text-[#002116]">Status</span>
@@ -88,25 +99,23 @@
               </div>
             </div>
 
-            <label class="block">
-              <span class="mb-2 block text-sm font-semibold text-[#002116]">Codigo</span>
-              <input
-                class="w-full rounded-xl border-none bg-[#e7fff2] px-4 py-3 text-sm text-[#002116] outline-none placeholder:text-emerald-900/30 focus:ring-2 focus:ring-[#004f38]"
-                formControlName="code"
-                placeholder="Ex.: PRD-001"
-                type="text"
-              />
-            </label>
+            <div class="block">
+              <span class="mb-2 block text-sm font-semibold text-[#002116]">Ultima atualizacao</span>
+              <div class="rounded-xl bg-[#eef8f2] px-4 py-3">
+                <p class="font-['Manrope'] text-xl font-black text-[#002116]">
+                  {{ product()?.updatedAtLabel ?? 'Sem data' }}
+                </p>
+              </div>
+            </div>
 
-            <label class="block">
-              <span class="mb-2 block text-sm font-semibold text-[#002116]">Nome</span>
-              <input
-                class="w-full rounded-xl border-none bg-[#e7fff2] px-4 py-3 text-sm text-[#002116] outline-none placeholder:text-emerald-900/30 focus:ring-2 focus:ring-[#004f38]"
-                formControlName="name"
-                placeholder="Ex.: Salmao grelhado"
-                type="text"
-              />
-            </label>
+            <div class="block">
+              <span class="mb-2 block text-sm font-semibold text-[#002116]">Custo total</span>
+              <div class="rounded-xl bg-[#eef8f2] px-4 py-3">
+                <p class="font-['Manrope'] text-xl font-black text-[#002116]">
+                  {{ product()?.totalCostLabel ?? 'Não calculado' }}
+                </p>
+              </div>
+            </div>
 
             <label class="block md:col-span-2">
               <span class="mb-2 block text-sm font-semibold text-[#002116]">Descricao</span>

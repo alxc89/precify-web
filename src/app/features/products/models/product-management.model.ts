@@ -27,6 +27,7 @@ export interface ProductManagementDetailVm {
   readonly photoUrl: string | null;
   readonly technicalSheet: readonly ProductTechnicalSheetItemVm[];
   readonly technicalSheetCountLabel: string;
+  readonly totalCostLabel: string;
   readonly updatedAtLabel: string;
 }
 

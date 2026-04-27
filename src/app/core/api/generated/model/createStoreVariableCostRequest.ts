@@ -19,8 +19,8 @@ export interface CreateStoreVariableCostRequest {
     amount?: number;
     incidenceType?: VariableIncidenceType;
     calculationOrder?: number | null;
+    isActive: boolean;
 }
 export namespace CreateStoreVariableCostRequest {
 }
-
 

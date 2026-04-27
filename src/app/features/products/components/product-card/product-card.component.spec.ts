@@ -8,7 +8,7 @@ describe('ProductCardComponent', () => {
     }).compileComponents();
   });
 
-  it('renders fallback card information for products without commercial metrics', () => {
+  it('renders fallback card information for products without total cost', () => {
     const fixture = TestBed.createComponent(ProductCardComponent);
 
     fixture.componentRef.setInput('item', {
@@ -21,8 +21,8 @@ describe('ProductCardComponent', () => {
       isActive: true,
       name: 'Salmão grelhado',
       photoUrl: null,
-      priceHeading: 'Preço de venda',
-      priceValueLabel: 'Não configurado',
+      priceHeading: 'Custo total',
+      priceValueLabel: 'Não calculado',
       secondaryLabel: 'Atualizado',
       secondaryValueLabel: '14/04/2026',
       statusLabel: 'Ativo',
@@ -33,7 +33,7 @@ describe('ProductCardComponent', () => {
     expect(fixture.nativeElement.textContent).toContain('Salmão grelhado');
     expect(fixture.nativeElement.textContent).toContain('Sem categoria');
     expect(fixture.nativeElement.textContent).toContain('Sem imagem');
-    expect(fixture.nativeElement.textContent).toContain('Não configurado');
+    expect(fixture.nativeElement.textContent).toContain('Não calculado');
     expect(fixture.nativeElement.textContent).toContain('14/04/2026');
   });
 
@@ -50,8 +50,8 @@ describe('ProductCardComponent', () => {
       isActive: true,
       name: 'Risoto de cogumelos',
       photoUrl: 'https://example.com/product.jpg',
-      priceHeading: 'Preço de venda',
-      priceValueLabel: 'Não configurado',
+      priceHeading: 'Custo total',
+      priceValueLabel: 'Não calculado',
       secondaryLabel: 'Atualizado',
       secondaryValueLabel: '14/04/2026',
       statusLabel: 'Ativo',
@@ -82,7 +82,7 @@ describe('ProductCardComponent', () => {
       isActive: true,
       name: 'Bruschetta',
       photoUrl: null,
-      priceHeading: 'Preço de venda',
+      priceHeading: 'Custo total',
       priceValueLabel: 'R$ 32,00',
       secondaryLabel: 'Atualizado',
       secondaryValueLabel: '14/04/2026',

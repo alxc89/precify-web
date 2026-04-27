@@ -7133,8 +7133,14 @@
           },
           "periodicity": {
             "$ref": "#/components/schemas/Periodicity"
+          },
+          "isActive": {
+            "type": "boolean"
           }
         },
+        "required": [
+          "isActive"
+        ],
         "additionalProperties": false
       },
       "CreateStoreRequest": {
@@ -7225,8 +7231,14 @@
             "type": "integer",
             "format": "int32",
             "nullable": true
+          },
+          "isActive": {
+            "type": "boolean"
           }
         },
+        "required": [
+          "isActive"
+        ],
         "additionalProperties": false
       },
       "CreateUnitOfMeasureRequest": {
@@ -7930,6 +7942,11 @@
             "description": "URL da foto representativa do produto.",
             "nullable": true
           },
+          "totalCost": {
+            "type": "number",
+            "description": "Custo total consolidado da ficha técnica do produto.",
+            "format": "double"
+          },
           "isActive": {
             "type": "boolean",
             "description": "Indica se o produto permanece ativo no catálogo mestre."
@@ -8289,6 +8306,9 @@
             "format": "date-time"
           }
         },
+        "required": [
+          "isActive"
+        ],
         "additionalProperties": false
       },
       "StoreLinkResponse": {
@@ -8421,6 +8441,9 @@
             "format": "date-time"
           }
         },
+        "required": [
+          "isActive"
+        ],
         "additionalProperties": false
       },
       "UnitOfMeasureResponse": {
@@ -8597,6 +8620,9 @@
           },
           "periodicity": {
             "$ref": "#/components/schemas/Periodicity"
+          },
+          "isActive": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -8631,6 +8657,9 @@
             "type": "integer",
             "format": "int32",
             "nullable": true
+          },
+          "isActive": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false

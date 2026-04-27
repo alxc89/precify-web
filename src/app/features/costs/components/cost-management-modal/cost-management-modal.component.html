@@ -54,19 +54,20 @@
               <div class="mt-2 flex items-center gap-3">
                 <button
                   [attr.aria-label]="statusToggleAriaLabel()"
-                  [attr.aria-pressed]="activeStatus()"
+                  [attr.aria-pressed]="currentIsActive()"
                   [class]="
-                    activeStatus()
-                      ? 'relative inline-flex h-7 w-14 items-center rounded-full bg-[#004f38] p-0.5 transition-colors disabled:cursor-not-allowed disabled:opacity-80'
-                      : 'relative inline-flex h-7 w-14 items-center rounded-full bg-[#c8d5ce] p-0.5 transition-colors disabled:cursor-not-allowed disabled:opacity-80'
+                    currentIsActive()
+                      ? 'relative inline-flex h-7 w-14 items-center rounded-full bg-[#004f38] p-0.5 transition-colors focus:outline-none focus:ring-2 focus:ring-[#004f38] disabled:cursor-not-allowed disabled:opacity-80'
+                      : 'relative inline-flex h-7 w-14 items-center rounded-full bg-[#c8d5ce] p-0.5 transition-colors focus:outline-none focus:ring-2 focus:ring-[#004f38] disabled:cursor-not-allowed disabled:opacity-80'
                   "
-                  disabled
+                  [disabled]="loading() || saving()"
                   type="button"
+                  (click)="toggleStatus()"
                 >
                   <span class="sr-only">{{ statusToggleAriaLabel() }}</span>
                   <span
                     [class]="
-                      activeStatus()
+                      currentIsActive()
                         ? 'inline-block h-6 w-6 translate-x-7 rounded-full bg-white shadow-sm transition-transform'
                         : 'inline-block h-6 w-6 translate-x-0 rounded-full bg-white shadow-sm transition-transform'
                     "
@@ -74,21 +75,13 @@
                 </button>
 
                 <div class="flex flex-col gap-1">
-                  <app-status-badge [active]="activeStatus()" />
+                  <app-status-badge [active]="currentIsActive()" />
+                  <span class="text-xs text-emerald-900/45">
+                    {{ currentIsActive() ? 'Custo ativo para uso na loja.' : 'Custo inativo e fora das regras de calculo.' }}
+                  </span>
                 </div>
               </div>
             </div>
-
-            @if (isEditMode()) {
-              <button
-                [disabled]="deactivateDisabled()"
-                class="rounded-xl border border-[#d96b34]/20 px-4 py-2 text-sm font-bold text-[#8a2900] transition-colors hover:bg-[#fff2ea] focus:outline-none focus:ring-2 focus:ring-[#8a2900] disabled:cursor-not-allowed disabled:opacity-50"
-                type="button"
-                (click)="deactivate.emit()"
-              >
-                Desativar
-              </button>
-            }
           </div>
 
           @if (kind() === 'fixed') {

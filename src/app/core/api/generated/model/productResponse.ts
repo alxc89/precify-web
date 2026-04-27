@@ -38,6 +38,10 @@ export interface ProductResponse {
      */
     photoUrl?: string | null;
     /**
+     * Custo total consolidado da ficha técnica do produto.
+     */
+    totalCost?: number;
+    /**
      * Indica se o produto permanece ativo no catálogo mestre.
      */
     isActive?: boolean;

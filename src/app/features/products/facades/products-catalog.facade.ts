@@ -173,6 +173,7 @@ export class ProductsCatalogFacade {
     const name = product.name?.trim() || 'Produto sem nome';
     const updatedAtLabel = this.formatDate(product.updatedAt ?? product.createdAt);
     const isActive = product.isActive ?? false;
+    const totalCostLabel = this.formatCurrency(product.totalCost);
 
     return {
       actionsEnabled: true,
@@ -184,13 +185,24 @@ export class ProductsCatalogFacade {
       isActive,
       name,
       photoUrl: product.photoUrl?.trim() || null,
-      priceHeading: 'Preço de venda',
-      priceValueLabel: 'Não configurado',
+      priceHeading: 'Custo total',
+      priceValueLabel: totalCostLabel,
       secondaryLabel: 'Atualizado',
       secondaryValueLabel: updatedAtLabel,
       statusLabel: isActive ? 'Ativo' : 'Inativo',
       statusTone: isActive ? 'active' : 'inactive',
     };
+  }
+
+  private formatCurrency(value?: number) {
+    if (value === undefined || value === null) {
+      return 'Não calculado';
+    }
+
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    }).format(value);
   }
 
   private formatDate(value?: string) {

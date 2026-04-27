@@ -16,6 +16,7 @@ export type CostManagementMode = 'create' | 'edit';
 export interface FixedCostFormValue {
   readonly amount: number;
   readonly category: string;
+  readonly isActive: boolean;
   readonly name: string;
   readonly periodicity: Periodicity;
 }
@@ -25,6 +26,7 @@ export interface VariableCostFormValue {
   readonly calculationOrder: number | null;
   readonly category: string;
   readonly incidenceType: VariableIncidenceType;
+  readonly isActive: boolean;
   readonly name: string;
   readonly salesChannelId: string | null;
   readonly valueType: VariableValueType;
@@ -33,6 +35,7 @@ export interface VariableCostFormValue {
 interface FixedCostFormModel {
   readonly amount: FormControl<number>;
   readonly category: FormControl<string>;
+  readonly isActive: FormControl<boolean>;
   readonly name: FormControl<string>;
   readonly periodicity: FormControl<Periodicity>;
 }
@@ -42,6 +45,7 @@ interface VariableCostFormModel {
   readonly calculationOrder: FormControl<number>;
   readonly category: FormControl<string>;
   readonly incidenceType: FormControl<VariableIncidenceType>;
+  readonly isActive: FormControl<boolean>;
   readonly name: FormControl<string>;
   readonly salesChannelId: FormControl<string>;
   readonly valueType: FormControl<VariableValueType>;
@@ -65,13 +69,13 @@ export class CostManagementModalComponent {
   readonly variableCost = input<StoreVariableCostResponse | null>(null);
 
   readonly close = output<void>();
-  readonly deactivate = output<void>();
   readonly saveFixedCost = output<FixedCostFormValue>();
   readonly saveVariableCost = output<VariableCostFormValue>();
 
   readonly fixedCostForm: FormGroup<FixedCostFormModel> = this.fb.group({
     amount: this.fb.control(0, { validators: [Validators.required, Validators.min(0.01)] }),
     category: this.fb.control('', { validators: [Validators.required, Validators.maxLength(80)] }),
+    isActive: this.fb.control(true, { validators: [Validators.required] }),
     name: this.fb.control('', { validators: [Validators.required, Validators.maxLength(120)] }),
     periodicity: this.fb.control<Periodicity>(Periodicity.Monthly, { validators: [Validators.required] }),
   });
@@ -83,6 +87,7 @@ export class CostManagementModalComponent {
     incidenceType: this.fb.control<VariableIncidenceType>(VariableIncidenceType.OnSalesPrice, {
       validators: [Validators.required],
     }),
+    isActive: this.fb.control(true, { validators: [Validators.required] }),
     name: this.fb.control('', { validators: [Validators.required, Validators.maxLength(120)] }),
     salesChannelId: this.fb.control(''),
     valueType: this.fb.control<VariableValueType>(VariableValueType.Percentage, {
@@ -95,7 +100,6 @@ export class CostManagementModalComponent {
   protected readonly periodicityOptions = Object.values(Periodicity);
   protected readonly incidenceOptions = Object.values(VariableIncidenceType);
   protected readonly valueTypeOptions = Object.values(VariableValueType);
-  protected readonly isEditMode = computed(() => this.mode() === 'edit');
   protected readonly dialogTitle = computed(() => {
     const actionLabel = this.mode() === 'create' ? 'Novo' : 'Editar';
     return this.kind() === 'fixed' ? `${actionLabel} Custo Fixo` : `${actionLabel} Custo Variavel`;
@@ -105,18 +109,8 @@ export class CostManagementModalComponent {
       ? 'Cadastre despesas recorrentes da operacao da loja.'
       : 'Cadastre encargos variaveis e percentuais aplicados nas vendas.',
   );
-  protected readonly activeStatus = computed(() =>
-    this.mode() === 'create'
-      ? true
-      : this.kind() === 'fixed'
-        ? this.fixedCost()?.isActive ?? null
-        : this.variableCost()?.isActive ?? null,
-  );
-  protected readonly deactivateDisabled = computed(() =>
-    this.saving() || !this.isEditMode() || this.activeStatus() !== true,
-  );
   protected readonly statusToggleAriaLabel = computed(() =>
-    this.activeStatus() ? 'Status ativo sem edicao disponivel' : 'Status inativo sem edicao disponivel',
+    this.currentIsActive() ? 'Definir custo como inativo' : 'Definir custo como ativo',
   );
 
   constructor() {
@@ -131,6 +125,7 @@ export class CostManagementModalComponent {
           {
             amount: cost?.amount ?? 0,
             category: cost?.category ?? '',
+            isActive: cost?.isActive ?? true,
             name: cost?.name ?? '',
             periodicity: cost?.periodicity ?? Periodicity.Monthly,
           },
@@ -145,6 +140,7 @@ export class CostManagementModalComponent {
             calculationOrder: cost?.calculationOrder ?? 0,
             category: cost?.category ?? '',
             incidenceType: cost?.incidenceType ?? VariableIncidenceType.OnSalesPrice,
+            isActive: cost?.isActive ?? true,
             name: cost?.name ?? '',
             salesChannelId: cost?.salesChannelId ?? '',
             valueType: cost?.valueType ?? VariableValueType.Percentage,
@@ -207,6 +203,7 @@ export class CostManagementModalComponent {
       this.saveFixedCost.emit({
         amount: value.amount,
         category: value.category.trim(),
+        isActive: value.isActive,
         name: value.name.trim(),
         periodicity: value.periodicity,
       });
@@ -224,9 +221,29 @@ export class CostManagementModalComponent {
       calculationOrder: value.calculationOrder === null ? null : Number(value.calculationOrder),
       category: value.category.trim(),
       incidenceType: value.incidenceType,
+      isActive: value.isActive,
       name: value.name.trim(),
       salesChannelId: value.salesChannelId.trim() || null,
       valueType: value.valueType,
     });
+  }
+
+  protected currentIsActive() {
+    return this.kind() === 'fixed'
+      ? this.fixedCostForm.controls.isActive.value
+      : this.variableCostForm.controls.isActive.value;
+  }
+
+  protected toggleStatus() {
+    if (this.loading() || this.saving()) {
+      return;
+    }
+
+    const control =
+      this.kind() === 'fixed' ? this.fixedCostForm.controls.isActive : this.variableCostForm.controls.isActive;
+
+    control.setValue(!control.value);
+    control.markAsDirty();
+    control.markAsTouched();
   }
 }

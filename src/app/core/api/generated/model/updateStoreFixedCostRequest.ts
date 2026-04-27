@@ -15,8 +15,8 @@ export interface UpdateStoreFixedCostRequest {
     category?: string | null;
     amount?: number;
     periodicity?: Periodicity;
+    isActive: boolean;
 }
 export namespace UpdateStoreFixedCostRequest {
 }
-
 

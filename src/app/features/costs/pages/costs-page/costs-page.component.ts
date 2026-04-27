@@ -195,6 +195,7 @@ export class CostsPageComponent {
     const request = {
       amount: value.amount,
       category: value.category,
+      isActive: value.isActive,
       name: value.name,
       periodicity: value.periodicity,
     };
@@ -231,6 +232,7 @@ export class CostsPageComponent {
       calculationOrder: value.calculationOrder,
       category: value.category,
       incidenceType: value.incidenceType,
+      isActive: value.isActive,
       name: value.name,
       salesChannelId: value.salesChannelId,
       valueType: value.valueType,
@@ -253,67 +255,6 @@ export class CostsPageComponent {
         this.saving.set(false);
       },
     });
-  }
-
-  protected deactivateSelectedCost() {
-    const kind = this.modalKind();
-
-    if (kind === 'fixed') {
-      const cost = this.selectedFixedCost();
-
-      if (!cost?.id || !cost.isActive) {
-        return;
-      }
-
-      if (!globalThis.confirm(`Deseja desativar o custo fixo "${cost.name ?? 'sem nome'}"?`)) {
-        return;
-      }
-
-      this.saving.set(true);
-      this.costsData
-        .deactivateFixedCost(cost.id)
-        .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe({
-          next: () => {
-            this.closeModal();
-            this.loadSnapshot();
-          },
-          error: (error: { error?: { detail?: string }; message?: string }) => {
-            this.modalError.set(
-              error.error?.detail || error.message || 'Nao foi possivel desativar o custo fixo.',
-            );
-            this.saving.set(false);
-          },
-        });
-      return;
-    }
-
-    const cost = this.selectedVariableCost();
-
-    if (!cost?.id || !cost.isActive) {
-      return;
-    }
-
-    if (!globalThis.confirm(`Deseja desativar o custo variavel "${cost.name ?? 'sem nome'}"?`)) {
-      return;
-    }
-
-    this.saving.set(true);
-    this.costsData
-      .deactivateVariableCost(cost.id)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: () => {
-          this.closeModal();
-          this.loadSnapshot();
-        },
-        error: (error: { error?: { detail?: string }; message?: string }) => {
-          this.modalError.set(
-            error.error?.detail || error.message || 'Nao foi possivel desativar o custo variavel.',
-          );
-          this.saving.set(false);
-        },
-      });
   }
 
   protected setStatusFilter(filter: CostStatusFilter) {
